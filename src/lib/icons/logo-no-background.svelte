@@ -1,6 +1,6 @@
 <script lang="ts">
-  let className: string = "";
-  export { className as class };
+	let className: string = '';
+	export { className as class };
 </script>
 
 <svg
@@ -8,10 +8,9 @@
 	version="1.1"
 	xmlns:xlink="http://www.w3.org/1999/xlink"
 	xmlns:svgjs="http://svgjs.dev/svgjs"
-	width="1500"
 	height="939"
 	viewBox="0 0 1500 939"
-  class={className}
+	class={className}
 	><g transform="matrix(1,0,0,1,-0.9090909090909918,-1.5145161290323017)"
 		><svg
 			viewBox="0 0 396 248"
