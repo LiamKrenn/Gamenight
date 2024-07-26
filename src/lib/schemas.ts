@@ -7,37 +7,30 @@ const number = new RegExp(/[0-9]/);
 
 export const loginSchema = z.object({
 	email: z.string(),
-	password: z
-		.string()
-		.min(6, { message: 'Muss mindestens 6 Zeichen lang sein' })
-		.regex(lowercase, { message: 'Muss mindestens einen Kleinbuchstaben enthalten' })
-		.regex(uppercase, { message: 'Muss mindestens einen Großbuchstaben enthalten' })
-		.regex(number, { message: 'Muss mindestens eine Zahl enthalten' })
-		.regex(specialCharacter, { message: 'Muss mindestens ein Sonderzeichen enthalten' })
+	password: z.string()
 });
 export type LoginSchema = typeof loginSchema;
 
 export const signupSchema = z
-	.object({
-		username: z.string().min(3, { message: 'Muss mindestens 3 Zeichen lang sein' }),
-		email: z.string().email({ message: 'Muss eine gültige E-Mail-Adresse sein' }),
-		password: z
-			.string()
-			.min(6, { message: 'Muss mindestens 6 Zeichen lang sein' })
-			.regex(lowercase, { message: 'Muss mindestens einen Kleinbuchstaben enthalten' })
-			.regex(uppercase, { message: 'Muss mindestens einen Großbuchstaben enthalten' })
-			.regex(number, { message: 'Muss mindestens eine Zahl enthalten' })
-			.regex(specialCharacter, { message: 'Muss mindestens ein Sonderzeichen enthalten' }),
-		confirmPassword: z.string()
-	})
-	.refine((data) => data.password === data.confirmPassword, {
-		message: 'Passwörter stimmen nicht überein',
-    path: ["confirmPassword"],
-	});
+  .object({
+    username: z.string().min(4, { message: 'Must be at least 4 characters long' }).max(20, { message: 'Must be at most 20 characters long' }),
+    email: z.string().email({ message: 'Must be a valid email address' }),
+    password: z
+      .string()
+      .min(6, { message: 'Must be at least 6 characters long' })
+      .regex(lowercase, { message: 'Must contain at least one lowercase letter' })
+      .regex(uppercase, { message: 'Must contain at least one uppercase letter' })
+      .regex(number, { message: 'Must contain at least one number' }),
+    confirmPassword: z.string()
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+  path: ["confirmPassword"],
+  });
 export type SignupSchema = typeof signupSchema;
 
 export const signupConfirmSchema = z.object({
-  email: z.string().email({ message: 'Muss eine gültige E-Mail-Adresse sein' }),
+  email: z.string().email({ message: 'Must be a valid email' }),
   code: z.number().int()
 })
 export type SignupConfirmSchema = typeof signupConfirmSchema;

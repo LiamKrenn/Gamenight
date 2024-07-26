@@ -2,7 +2,7 @@ import type { PageServerLoad, Actions } from './$types';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { loginSchema } from '$lib/schemas';
-import { fail, type RequestHandler } from '@sveltejs/kit';
+import { fail, redirect, type RequestHandler } from '@sveltejs/kit';
 import { AUTH_URL } from '$env/static/private';
 
 export const load = (async () => {
@@ -51,6 +51,6 @@ export const actions: Actions = {
 			expires: new Date(new Date().getTime() + json.expires * 1000)
 		});
 
-		return { form, success: true}
+		return redirect(300, "/")
 	} 
 };
