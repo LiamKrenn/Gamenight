@@ -7,6 +7,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { Button } from '$lib/components/ui/button';
 	import { Eye, EyeOff } from 'lucide-svelte';
+	import { page } from '$app/stores';
 
 	export let signupConfirmForm: SuperValidated<Infer<SignupConfirmSchema>>;
   export let email: string;
@@ -22,7 +23,7 @@
   $formData.email = email
 </script>
 
-<form method="POST" action="?/signupConfirmation" use:enhance>
+<form method="POST" action="?/signupConfirm" use:enhance>
 	<Form.Field {form} name="email" >
 		<Form.Control let:attrs>
 			<Form.Label class="text-lg ">Email</Form.Label>
@@ -42,12 +43,15 @@
 			<Input
 				class="focusring !mt-1 rounded-lg bg-slate-800 text-base"
 				{...attrs}
-				bind:value={$formData.email}
+				bind:value={$formData.code}
 			/>
 		</Form.Control>
 		<Form.Description />
 		<Form.FieldErrors class="!mb-2" />
 	</Form.Field>
+  {#if $page.form?.error}
+     <p class="text-red-400">{$page.form?.error}</p>
+  {/if}
 	<Form.Button class="focusring mt-2 w-full">Confirm</Form.Button>
 </form>
 

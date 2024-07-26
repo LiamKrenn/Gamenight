@@ -1,6 +1,5 @@
 <script lang="ts">
-  import SignupForm from './SignupForm.svelte';
-
+	import SignupConfirmationForm from '../../SignupConfirmationForm.svelte';
 	import type { ActionData, PageData } from './$types';
 
 	export let data: PageData;
@@ -8,11 +7,10 @@
 
 <div class="flex h-full w-full flex-col items-center justify-center">
 	<div class="w-[80%] max-w-96 rounded-lg bg-slate-700 p-4 ring-2 ring-slate-600">
-		<h1 class="mb-4 w-full text-center text-4xl font-bold">Sign Up</h1>
-    <SignupForm signupForm={data.form}/>
+		<h1 class="mb-4 w-full text-center text-4xl font-bold">Sign Up Confirm</h1>
+		<SignupConfirmationForm signupConfirmForm={data.confirmForm} email={data.email} />
 	</div>
 	<div class="mt-2 flex w-[80%] max-w-96 items-center justify-center">
 		<a href="/login" class="underline">Already have an account?</a>
 	</div>
 </div>
-

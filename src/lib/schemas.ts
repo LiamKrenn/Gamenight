@@ -20,7 +20,8 @@ export const signupSchema = z
       .min(6, { message: 'Must be at least 6 characters long' })
       .regex(lowercase, { message: 'Must contain at least one lowercase letter' })
       .regex(uppercase, { message: 'Must contain at least one uppercase letter' })
-      .regex(number, { message: 'Must contain at least one number' }),
+      .regex(number, { message: 'Must contain at least one number' })
+      .regex(specialCharacter, { message: 'Must contain at least one special character' }),
     confirmPassword: z.string()
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -31,6 +32,7 @@ export type SignupSchema = typeof signupSchema;
 
 export const signupConfirmSchema = z.object({
   email: z.string().email({ message: 'Must be a valid email' }),
-  code: z.number().int()
+  code: z.string()
+    .regex(/^\d{4}$/, { message: 'Must be 6 digits long' })
 })
 export type SignupConfirmSchema = typeof signupConfirmSchema;

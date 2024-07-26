@@ -7,9 +7,9 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { Button } from '$lib/components/ui/button';
 	import { Eye, EyeOff } from 'lucide-svelte';
+	import { page } from '$app/stores';
 
 	export let signupForm: SuperValidated<Infer<SignupSchema>>;
-  export let action: ActionData;
 
 	const form = superForm(signupForm, {
 		validators: zodClient(signupSchema),
@@ -120,8 +120,8 @@
 		<Form.Description />
 		<Form.FieldErrors class="!mb-2" />
 	</Form.Field>
-  {#if action?.error}
-     <p class="text-red-400">{action.error}asdfasdf</p>
+  {#if $page.form?.error}
+     <p class="text-red-400">{$page.form?.error}</p>
   {/if}
 	<Form.Button class="focusring mt-2 w-full">Sign Up</Form.Button>
 </form>
