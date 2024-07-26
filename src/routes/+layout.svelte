@@ -1,42 +1,56 @@
 <script lang="ts">
+  import AccountDropdown from './AccountDropdown.svelte';
+
 	import Navlogo from '$lib/icons/nav/navlogo.svelte';
 	import Navtext from '$lib/icons/nav/navtext.svelte';
-	import { AlignJustify, Bell, MessageCircle, User } from 'lucide-svelte';
-  import '../app.css';
+	import { AlignJustify, Bell, MessageCircle, User, LogIn, LogOut, UserPlus } from 'lucide-svelte';
+	import '../app.css';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Navitems from '$lib/components/navitems.svelte';
 	import { page } from '$app/stores';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import type { PageData } from './$types';
 
-  const routes: string[][] = [
-    ['Games', '/games'],
-    ['Shop', '/shop'],
-    ['Friends', '/friends'],
-  ]
+	export let data: PageData;
+
+	const routes: string[][] = [
+		['Games', '/games'],
+		['Shop', '/shop'],
+		['Friends', '/friends']
+	];
 </script>
 
 <title>Gamenight</title>
 
-<div class="h-full w-full flex flex-col">
-  <div class="w-full flex items-center justify-between h-16 cshadow">
-    <div class="flex items-center">
-      <AlignJustify class="w-12 h-12 p-2 m-2 mr-0 hover:bg-slate-700 rounded-lg duration-150 hover:cursor-pointer"/>
-      <a href="/" class="flex ml-1 items-center hover:bg-slate-700 p-2 rounded-lg hover:cursor-pointer duration-150">
-        <Navlogo />
-        <Navtext class="ml-2"/>
-      </a>
-      <Navitems id={$page.route.id} {routes}/>
-    </div>
-    <div class="flex items-center">
-      <MessageCircle class="w-12 h-12 p-2 m-2"/>
-      <Bell class="w-12 h-12 p-2 "/>
-      <User class="w-12 h-12 p-2 m-2"/>
-    </div>
-  </div>
-  <slot/>
+<div class="flex h-full w-full flex-col">
+	<div class="cshadow flex h-16 w-full items-center justify-between">
+		<div class="flex items-center">
+			<AlignJustify
+				class="m-2 mr-0 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700"
+			/>
+			<a
+				href="/"
+				class="ml-1 flex items-center rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700"
+			>
+				<Navlogo />
+				<Navtext class="ml-2" />
+			</a>
+			<Navitems id={$page.route.id} {routes} />
+		</div>
+		<div class="flex items-center">
+			<MessageCircle
+				class="m-2 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700"
+			/>
+			<Bell class="h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700" />
+
+			<AccountDropdown user={data.user}></AccountDropdown>
+		</div>
+	</div>
+	<slot />
 </div>
 
 <style>
-  :global(.cshadow) {
-    box-shadow: 0 4px 4px 0px rgba(0, 0, 0, 0.25);
-  }
+	:global(.cshadow) {
+		box-shadow: 0 4px 4px 0px rgba(0, 0, 0, 0.25);
+	}
 </style>

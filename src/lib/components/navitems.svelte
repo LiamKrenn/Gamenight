@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button } from './ui/button';
 
-	export let id: string;
+	export let id: string | null;
 	export let routes: string[][];
 </script>
 
