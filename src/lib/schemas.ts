@@ -33,6 +33,6 @@ export type SignupSchema = typeof signupSchema;
 export const signupConfirmSchema = z.object({
   email: z.string().email({ message: 'Must be a valid email' }),
   code: z.string()
-    .regex(/^\d{4}$/, { message: 'Must be 6 digits long' })
+    .regex(/^\d{4}$/, { message: 'Must be 4 digits long' })
 })
 export type SignupConfirmSchema = typeof signupConfirmSchema;
