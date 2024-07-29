@@ -17,6 +17,9 @@ dependencies:
   lucide-svelte:
     specifier: ^0.414.0
     version: 0.414.0(svelte@4.2.18)
+  overlayscrollbars:
+    specifier: ^2.10.0
+    version: 2.10.0
   sveltekit-superforms:
     specifier: ^2.16.1
     version: 2.16.1(@sveltejs/kit@2.5.18)(svelte@4.2.18)
@@ -1972,6 +1975,10 @@ packages:
       type-check: 0.4.0
       word-wrap: 1.2.5
     dev: true
+
+  /overlayscrollbars@2.10.0:
+    resolution: {integrity: sha512-diNMeEafWTE0A4GJfwRpdBp2rE/BEvrhptBdBcDu8/UeytWcdCy9Td8tZWnztJeJ26f8/uHCWfPnPUC/dtgJdw==}
+    dev: false
 
   /p-limit@3.1.0:
     resolution: {integrity: sha512-TYOanM3wGwNGsZN2cVTYPArw454xnXj5qmWF1bEoAc4+cU/ol7GVh7odevjp1FNHduHc3KZMcFduxU5Xc6uJRQ==}

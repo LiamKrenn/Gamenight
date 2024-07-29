@@ -7,7 +7,7 @@
 	import '../app.css';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import Navitems from '$lib/components/navitems.svelte';
-	import { page } from '$app/stores';
+	import { navigating, page } from '$app/stores';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import type { PageData } from './$types';
 	import MessageCircleActive from '$lib/icons/mobnav/message-circle-active.svg?raw';
@@ -18,6 +18,16 @@
 	import ShoppingCartInactive from '$lib/icons/mobnav/shopping-cart-inactive.svg?raw';
 	import UsersActive from '$lib/icons/mobnav/users-active.svg?raw';
 	import UsersInactive from '$lib/icons/mobnav/users-inactive.svg?raw';
+	import MobNavItems from '$lib/components/mobNavItems.svelte';
+
+  import 'overlayscrollbars/overlayscrollbars.css';
+  import { 
+    OverlayScrollbars, 
+    ScrollbarsHidingPlugin, 
+    SizeObserverPlugin, 
+    ClickScrollPlugin 
+  } from 'overlayscrollbars';
+	import { onMount } from 'svelte';
 
 	export let data: PageData;
 
@@ -26,6 +36,11 @@
 		['Shop', '/shop'],
 		['Friends', '/friends']
 	];
+
+  let mainArea: HTMLDivElement;
+  onMount(() => {
+    const osInstance = OverlayScrollbars(mainArea, {});
+  });
 </script>
 
 <title>Gamenight</title>
@@ -56,43 +71,16 @@
 			<AccountDropdown user={data.user}></AccountDropdown>
 		</div>
 	</div>
-  <div class="h-full flex shrink">
-    <slot />
-  </div>
+	<div bind:this={mainArea} class="flex flex-col h-full shrink grow-0 overflow-y-auto " data-overlayscrollbars-initialize>
+		<slot />
+	</div>
 	<div
-		class="flex h-16 w-full shrink-0 items-center justify-between border-t-2 border-slate-700 mobile:hidden"
+		class="flex h-16 w-full shrink-0 items-center justify-between fshadow mobile:hidden "
 	>
-		<a href="/games" data-sveltekit-preload-code data-sveltekit-preload-data class="h-16 w-full grow flex items-center justify-center">
-			{#if $page.url.pathname === '/games'}
-        {@html Gamepad_2Active}
-			{:else}
-				{@html Gamepad_2Inactive}
-			{/if}
-		</a>
-
-		<a href="/chats" data-sveltekit-preload-code data-sveltekit-preload-data class="h-16 w-full grow flex items-center justify-center">
-			{#if $page.url.pathname === '/chats'}
-				{@html MessageCircleActive}
-			{:else}
-				{@html MessageCircleInactive}
-			{/if}
-		</a>
-
-		<a href="/shop" data-sveltekit-preload-code data-sveltekit-preload-data class="h-16 w-full grow flex items-center justify-center">
-			{#if $page.url.pathname === '/shop'}
-				{@html ShoppingCartActive}
-			{:else}
-				{@html ShoppingCartInactive}
-			{/if}
-		</a>
-
-		<a href="/friends" data-sveltekit-preload-code data-sveltekit-preload-data class="h-16 w-full grow flex items-center justify-center">
-			{#if $page.url.pathname === '/friends'}
-      {@html UsersActive}
-			{:else}
-      {@html UsersInactive}
-			{/if}
-		</a>
+		<MobNavItems route="/games" active={Gamepad_2Active} inactive={Gamepad_2Inactive} />
+		<MobNavItems route="/shop" active={ShoppingCartActive} inactive={ShoppingCartInactive} />
+		<MobNavItems route="/friends" active={UsersActive} inactive={UsersInactive} />
+		<MobNavItems route="/chats" active={MessageCircleActive} inactive={MessageCircleInactive} />
 	</div>
 </div>
 
@@ -100,4 +88,38 @@
 	:global(.cshadow) {
 		box-shadow: 0 4px 4px 0px rgba(0, 0, 0, 0.25);
 	}
+  :global(.fshadow) {
+    box-shadow: 0px -2px 0px 0px #334155;
+  }
+
+  :global(.os-scrollbar) {
+    --os-size: 16px;
+    --os-padding-perpendicular: 4px;
+    --os-padding-axis: 6px;
+    --os-handle-bg: #33415580;
+    --os-handle-bg-hover: none;
+    --os-handle-bg-active: none;
+    --os-handle-interactive-area-offset: 16px;
+  }
+
+  /* :global(.gutter) {
+    overflow-y: scroll;
+  }
+
+  :global(*::-webkit-scrollbar) {
+		@apply w-4 !absolute bg-transparent;
+	}
+	:global(*::-webkit-scrollbar-thumb) {
+		@apply  max-h-8 rounded-full bg-slate-700 ;
+    border: 4px solid transparent;
+    background-clip: padding-box;
+	}
+
+  :global(*::-webkit-scrollbar-track-piece:start) {
+      background: transparent;
+    }
+
+  :global(*::-webkit-scrollbar-track-piece:end) {
+    background: transparent;
+  } */
 </style>
