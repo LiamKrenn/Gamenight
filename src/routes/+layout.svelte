@@ -56,7 +56,7 @@
 			<AccountDropdown user={data.user}></AccountDropdown>
 		</div>
 	</div>
-  <div class="h-full">
+  <div class="h-full flex shrink">
     <slot />
   </div>
 	<div
