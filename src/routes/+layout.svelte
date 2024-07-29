@@ -44,7 +44,7 @@
 				<Navtext class="ml-2" />
 			</a>
 			<div class="hidden mobile:flex">
-				<Navitems id={$page.route.id} {routes} />
+				<Navitems id={$page.url.pathname} {routes} />
 			</div>
 		</div>
 		<div class="flex items-center">
@@ -60,37 +60,37 @@
     <slot />
   </div>
 	<div
-		class="flex h-20 w-full shrink-0 items-center justify-between space-x-4 border-t-2 border-slate-700 px-[6%] sm:px-[10%] mobile:hidden"
+		class="flex h-16 w-full shrink-0 items-center justify-between border-t-2 border-slate-700 mobile:hidden"
 	>
-		<a href="/games" class="h-12 w-12">
-			{#if $page.route.id === '/games'}
-				{@html Gamepad_2Active}
+		<a href="/games" data-sveltekit-preload-code data-sveltekit-preload-data class="h-16 w-full grow flex items-center justify-center">
+			{#if $page.url.pathname === '/games'}
+        {@html Gamepad_2Active}
 			{:else}
 				{@html Gamepad_2Inactive}
 			{/if}
 		</a>
 
-		<a href="/chats" class="h-12 w-12">
-			{#if $page.route.id === '/chats'}
+		<a href="/chats" data-sveltekit-preload-code data-sveltekit-preload-data class="h-16 w-full grow flex items-center justify-center">
+			{#if $page.url.pathname === '/chats'}
 				{@html MessageCircleActive}
 			{:else}
 				{@html MessageCircleInactive}
 			{/if}
 		</a>
 
-		<a href="/shop" class="h-12 w-12">
-			{#if $page.route.id === '/shop'}
+		<a href="/shop" data-sveltekit-preload-code data-sveltekit-preload-data class="h-16 w-full grow flex items-center justify-center">
+			{#if $page.url.pathname === '/shop'}
 				{@html ShoppingCartActive}
 			{:else}
 				{@html ShoppingCartInactive}
 			{/if}
 		</a>
 
-		<a href="/friends" class="h-12 w-12">
-			{#if $page.route.id === '/friends'}
-				{@html UsersActive}
+		<a href="/friends" data-sveltekit-preload-code data-sveltekit-preload-data class="h-16 w-full grow flex items-center justify-center">
+			{#if $page.url.pathname === '/friends'}
+      {@html UsersActive}
 			{:else}
-				{@html UsersInactive}
+      {@html UsersInactive}
 			{/if}
 		</a>
 	</div>
