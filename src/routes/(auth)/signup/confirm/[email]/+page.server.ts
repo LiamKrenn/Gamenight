@@ -27,7 +27,7 @@ export const actions: Actions = {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				email: form.data.email,
+				identifier: form.data.email,
         code: form.data.code
 			})
 		});

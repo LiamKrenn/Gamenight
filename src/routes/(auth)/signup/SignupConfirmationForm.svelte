@@ -39,7 +39,7 @@
 	</Form.Field>
   <Form.Field {form} name="code">
 		<Form.Control let:attrs>
-			<Form.Label class="text-lg ">2FA-Code</Form.Label>
+			<Form.Label class="text-lg ">Confirmation Code</Form.Label>
 			<Input
 				class="focusring !mt-1 rounded-lg bg-slate-800 text-base"
 				{...attrs}
