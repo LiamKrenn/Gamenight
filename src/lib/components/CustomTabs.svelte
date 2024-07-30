@@ -8,7 +8,7 @@
 </script>
 
 <Tabs.Root value={tabs[0][1]} class="h-min w-full ">
-	<Tabs.List class="w-full bg-slate-700 mb-2">
+	<Tabs.List class="w-full bg-slate-700">
 		{#each tabs as tab}
 			<Tabs.Trigger class="w-full data-[state=active]:bg-slate-800" value={tab[1]}>
 				{tab[0]}

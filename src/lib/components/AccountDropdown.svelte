@@ -12,17 +12,12 @@
 	>
 	<DropdownMenu.Content class="rounded-lg border-slate-700 bg-slate-800">
 		<DropdownMenu.Group>
-      {#if !user}
-			  <DropdownMenu.Label>My Account</DropdownMenu.Label>
-      {:else}
-			  <DropdownMenu.Label >{user.username}</DropdownMenu.Label>
-      {/if}
+			{#if !user}
+				<DropdownMenu.Label>Account Settings</DropdownMenu.Label>
+			{:else}
+				<DropdownMenu.Label>{user.username}</DropdownMenu.Label>
+			{/if}
 			<DropdownMenu.Separator class="bg-slate-700" />
-			<a href="/profile">
-				<DropdownMenu.Item class="rounded-lg bg-slate-800 duration-150 hover:!bg-slate-700"
-					><User class="mr-2" /> Profile</DropdownMenu.Item
-				>
-			</a>
 			{#if !user}
 				<a href="/login">
 					<DropdownMenu.Item class="rounded-lg bg-slate-800 duration-150 hover:!bg-slate-700"
@@ -35,7 +30,17 @@
 					>
 				</a>
 			{:else}
-				<a href="/logout" data-sveltekit-preload-data="false" data-sveltekit-preload-code="false" data-sveltekit-reload>
+				<a href="/profile">
+					<DropdownMenu.Item class="rounded-lg bg-slate-800 duration-150 hover:!bg-slate-700"
+						><User class="mr-2" /> Profile</DropdownMenu.Item
+					>
+				</a>
+				<a
+					href="/logout"
+					data-sveltekit-preload-data="false"
+					data-sveltekit-preload-code="false"
+					data-sveltekit-reload
+				>
 					<DropdownMenu.Item class="rounded-lg bg-slate-800 duration-150 hover:!bg-slate-700"
 						><LogOut class="mr-2" />Logout</DropdownMenu.Item
 					>

@@ -14,7 +14,7 @@ const config = {
 			}
 		},
     screens: {
-      'logo': '430px',
+      'logo': '480px',
 
       'xs': '535px',
 
