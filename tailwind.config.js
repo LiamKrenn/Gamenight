@@ -16,6 +16,8 @@ const config = {
     screens: {
       'logo': '430px',
 
+      'xs': '535px',
+
       'sm': '640px',
       // => @media (min-width: 640px) { ... }
 
