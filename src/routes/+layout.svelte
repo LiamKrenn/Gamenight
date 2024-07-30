@@ -97,29 +97,8 @@
     --os-padding-perpendicular: 4px;
     --os-padding-axis: 6px;
     --os-handle-bg: #33415580;
-    --os-handle-bg-hover: none;
-    --os-handle-bg-active: none;
+    --os-handle-bg-hover: #33415580;
+    --os-handle-bg-active: #33415580;
     --os-handle-interactive-area-offset: 16px;
   }
-
-  /* :global(.gutter) {
-    overflow-y: scroll;
-  }
-
-  :global(*::-webkit-scrollbar) {
-		@apply w-4 !absolute bg-transparent;
-	}
-	:global(*::-webkit-scrollbar-thumb) {
-		@apply  max-h-8 rounded-full bg-slate-700 ;
-    border: 4px solid transparent;
-    background-clip: padding-box;
-	}
-
-  :global(*::-webkit-scrollbar-track-piece:start) {
-      background: transparent;
-    }
-
-  :global(*::-webkit-scrollbar-track-piece:end) {
-    background: transparent;
-  } */
 </style>
