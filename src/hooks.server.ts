@@ -6,7 +6,7 @@ export const handle: Handle = async ({ event, resolve }) => {
     method: 'GET',
     credentials: 'include',
     headers: {
-      'cookie': `session=${event.cookies.get('token')}`
+      'cookie': `session=${event.cookies.get('session')}`
     }
   })
 

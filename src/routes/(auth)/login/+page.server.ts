@@ -46,7 +46,7 @@ export const actions: Actions = {
 		}
 
 		console.log(json, response.status);
-		event.cookies.set('token', json.session_token, {
+		event.cookies.set('session', json.session_session, {
 			path: '/',
 			expires: new Date(new Date().getTime() + json.expires * 1000)
 		});

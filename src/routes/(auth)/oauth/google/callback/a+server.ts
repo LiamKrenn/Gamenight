@@ -4,10 +4,10 @@ export async function GET(req) {
   let jj = await fetch(AUTH_URL + `/oauth/google/callback${req.url.search}`, )
 	console.log(jj);
   
-  let token = '1234567890';
+  let session = '1234567890';
 	let resp = new Response(null, {
 		status: 302,
-		headers: { Location: '/', 'Set-Cookie': `token=${token}` }
+		headers: { Location: '/', 'Set-Cookie': `session=${session}` }
 	});
 
 	return resp;

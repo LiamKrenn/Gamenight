@@ -4,13 +4,13 @@ import { goto, invalidateAll } from '$app/navigation';
 import { AUTH_URL } from '$env/static/private';
 
 export const load = (async ({ cookies }) => {
-	cookies.set('token', '', { path: '/' });
+	cookies.set('session', '', { path: '/' });
 
   await fetch(AUTH_URL + '/logout', {
     method: 'GET',
     credentials: 'include',
     headers: {
-      'cookie': `session=${cookies.get('token')}`
+      'cookie': `session=${cookies.get('session')}`
     }
   })
 
