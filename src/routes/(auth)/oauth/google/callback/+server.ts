@@ -1,6 +1,8 @@
 import { AUTH_URL } from '$env/static/private';
 
 export async function GET(req) {
+  console.log(req.params);
+  
   const params = new URLSearchParams(req.params)
   let jj = await fetch(AUTH_URL + `/oauth/google/callback?${params.toString()}`, )
 	console.log(jj);
