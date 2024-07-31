@@ -2,7 +2,7 @@ import { AUTH_URL } from '$env/static/private';
 
 export async function GET(req) {
   const params = new URLSearchParams(req.params)
-  let jj = await fetch(AUTH_URL + `oauth/google/callback?${params.toString()}`, )
+  let jj = await fetch(AUTH_URL + `/oauth/google/callback?${params.toString()}`, )
 	console.log(jj);
   
   let token = '1234567890';
