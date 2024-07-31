@@ -1,5 +1,17 @@
-import adapter from '@sveltejs/adapter-auto';
+import adapaterAuto from '@sveltejs/adapter-auto';
+import adapterNode from '@sveltejs/adapter-node';
+import adapterVercel from '@sveltejs/adapter-vercel';
+import 'dotenv/config';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+
+let adapter = null;
+if (process.env.ADAPTER === 'node') {
+  adapter = adapterNode;
+} else if (process.env.ADAPTER === 'vercel') {
+  adapter = adapterVercel;
+} else {
+  adapter = adapaterAuto;
+}
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {

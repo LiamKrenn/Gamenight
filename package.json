@@ -36,8 +36,10 @@
 	"type": "module",
 	"dependencies": {
 		"@sveltejs/adapter-node": "^5.2.0",
+		"@sveltejs/adapter-vercel": "^5.4.1",
 		"bits-ui": "^0.21.12",
 		"clsx": "^2.1.1",
+		"dotenv": "^16.4.5",
 		"formsnap": "^1.0.1",
 		"lucide-svelte": "^0.414.0",
 		"overlayscrollbars": "^2.10.0",
