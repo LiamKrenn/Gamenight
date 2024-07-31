@@ -8,7 +8,7 @@ export async function GET(req) {
       'cookie': `session=${req.cookies.get('session')}`
     }
   })
-	console.log(jj);
+	console.log(await jj.json());
   
   let session = '1234567890';
 	let resp = new Response(null, {
