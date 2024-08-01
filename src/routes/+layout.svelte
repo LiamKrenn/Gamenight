@@ -57,11 +57,14 @@
 	<!-- Nav -->
 	<div class="cshadow !z-40 flex h-16 w-full shrink-0 items-center justify-between">
 		<div class="flex items-center">
-			<button on:click={() => ($openSidebar = !$openSidebar)}>
+			<button
+				class="ml-2 h-12 w-12 rounded-lg p-2 hover:bg-slate-700"
+				on:click={() => ($openSidebar = !$openSidebar)}
+			>
 				{#if $openSidebar}
-					<X class="m-2 mr-0 h-12 w-12  rounded-lg p-2 hover:bg-slate-700" />
+					<X class="h-8 w-8" />
 				{:else}
-					<AlignJustify class="m-2 mr-0 h-12 w-12  rounded-lg p-2 hover:bg-slate-700" />
+					<AlignJustify class="h-8 w-8" />
 				{/if}
 			</button>
 
