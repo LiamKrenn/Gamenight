@@ -6,16 +6,14 @@
 
 	export let friends = ['Jonas', 'Johan', 'Johanna', 'Johannes'];
 	export let loggedIn: boolean;
-
-	const height = 500;
-	const width = 400;
 </script>
 
 <div
-	class="fixed bottom-0 right-0 hidden overflow-hidden mobile:flex h-[{height + 16}px] w-[{width +
-		16}px] {$openChat ? 'bottom-4' : `-bottom-[${height + 16}px]`}"
+	class="fixed bottom-0 right-0 hidden overflow-hidden mobile:flex h-[516px] w-[416px] {$openChat
+		? 'bottom-4'
+		: `-bottom-[516px]`}"
 >
-	<div class="absolute left-0 h-[{height}px] w-[{width}px] flex flex-col rounded-lg bg-slate-700">
+	<div class="absolute left-0 h-[500px] w-[400px] flex flex-col rounded-lg bg-slate-700">
 		<div class="cshadow flex h-14 w-full shrink-0 items-center justify-between pl-4 pr-2">
 			<!-- Header -->
 			<h2 class="text-2xl font-semibold">Chats</h2>
@@ -46,7 +44,7 @@
 			</div>
 		{:else}
 			<div class="flex h-full w-full flex-col items-center justify-start">
-				<MessagesSquare class="h-32 w-32 mt-24 stroke-slate-500 stroke-1" />
+				<MessagesSquare class="mt-24 h-32 w-32 stroke-slate-500 stroke-1" />
 				<h3 class="mt-8 w-full text-center text-xl">
 					Please
 					<a class="underline" href="/login">log in</a>
