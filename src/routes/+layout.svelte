@@ -5,7 +5,7 @@
 	import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	import 'overlayscrollbars/overlayscrollbars.css';
-	import { openChat, openSidebar } from '$lib/stores';
+	import { disableModals, openChat, openSidebar } from '$lib/stores';
 	import Navlogo from '$lib/icons/nav/navlogo.svelte';
 	import Navtext from '$lib/icons/nav/navtext.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
@@ -31,7 +31,24 @@
 		const osInstance = OverlayScrollbars(mainArea, {});
 	});
 
-  $: loggedIn = data.user !== null;
+	$: loggedIn = data.user !== null;
+
+	$: if (disableModals.includes($page.url.pathname)) {
+		$openSidebar = false;
+		$openChat = false;
+	}
+
+	openSidebar.subscribe((value) => {
+		if (value && disableModals.includes($page.url.pathname)) {
+			openSidebar.set(false);
+		}
+	});
+
+	openChat.subscribe((value) => {
+		if (value && disableModals.includes($page.url.pathname)) {
+			openChat.set(false);
+		}
+	});
 </script>
 
 <title>Gamenight</title>
