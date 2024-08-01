@@ -16,7 +16,8 @@
 	import CustomTabs from '$lib/components/CustomTabs.svelte';
 	import AllMobNavItems from '$lib/components/AllMobNavItems.svelte';
 	import AccountDropdown from '$lib/components/AccountDropdown.svelte';
-	import { AlignJustify, Bell, MessageCircle, X } from 'lucide-svelte';
+	import { AlignJustify, Bell, LogIn, MessageCircle, X } from 'lucide-svelte';
+	import Button from '$lib/components/ui/button/button.svelte';
 
 	export let data: PageData;
 
@@ -80,19 +81,26 @@
 			</div>
 		</div>
 		<div class="flex items-center">
-			<button on:click={() => ($openChat = !$openChat)}>
-				<MessageCircle
-					class="m-1 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700 {$openChat
-						? 'fill-slate-50'
-						: ''}"
+			{#if loggedIn}
+				<button on:click={() => ($openChat = !$openChat)}>
+					<MessageCircle
+						class="m-1 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700 {$openChat
+							? 'fill-slate-50'
+							: ''}"
+					/>
+				</button>
+
+				<Bell
+					class="m-1 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700"
 				/>
-			</button>
-
-			<Bell
-				class="m-1 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700"
-			/>
-
-			<AccountDropdown user={data.user}></AccountDropdown>
+				<AccountDropdown user={data.user} />
+			{:else}
+				<a href="/login">
+					<Button class="ml-1 mr-3 rounded-lg bg-sky-700 text-slate-50 hover:bg-sky-800">
+						Sign In <LogIn class="ml-2" />
+					</Button>
+				</a>
+			{/if}
 		</div>
 	</div>
 	<div
