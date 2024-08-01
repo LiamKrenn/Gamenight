@@ -4,8 +4,6 @@ import { goto, invalidateAll } from '$app/navigation';
 import { AUTH_URL } from '$env/static/private';
 
 export const load = (async ({ cookies }) => {
-	cookies.set('session', '', { path: '/' });
-
   await fetch(AUTH_URL + '/logout', {
     method: 'GET',
     credentials: 'include',
@@ -13,7 +11,8 @@ export const load = (async ({ cookies }) => {
       'cookie': `session=${cookies.get('session')}`
     }
   })
-
+  
+  cookies.set('session', '', { path: '/' });
 	return redirect(302, '/');
   
 }) satisfies PageServerLoad;
