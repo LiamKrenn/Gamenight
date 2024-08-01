@@ -55,7 +55,7 @@
 	</div>
 </div>
 
-<Sidebar class="left-0 top-0 flex mobile:hidden" open={$openChat}>
+<Sidebar class="top-0 flex mobile:hidden" open={$openChat}>
 	<div class="h-full w-full p-4">
 		<div class=" flex w-full shrink-0 items-center justify-between pl-2">
 			<!-- Header -->
