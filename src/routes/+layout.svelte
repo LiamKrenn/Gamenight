@@ -82,13 +82,15 @@
 		<div class="flex items-center">
 			<button on:click={() => ($openChat = !$openChat)}>
 				<MessageCircle
-					class="m-2 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700 {$openChat
+					class="m-1 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700 {$openChat
 						? 'fill-slate-50'
 						: ''}"
 				/>
 			</button>
 
-			<Bell class="h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700" />
+			<Bell
+				class="m-1 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700"
+			/>
 
 			<AccountDropdown user={data.user}></AccountDropdown>
 		</div>

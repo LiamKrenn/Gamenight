@@ -5,19 +5,17 @@
 </script>
 
 <DropdownMenu.Root>
-	<DropdownMenu.Trigger
-		>
-    {#if !user}
-    <LogIn
-    class="m-2 h-12 w-12 rounded-lg p-2 pr-2.5 pl-1.5 duration-150 hover:cursor-pointer hover:bg-slate-700"
-  />
-    {:else}
-    <User
-    class="m-2 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700"
-  />
-    {/if}
-    </DropdownMenu.Trigger
-	>
+	<DropdownMenu.Trigger>
+		{#if !user}
+			<LogIn
+				class="m-1 mr-2 h-12 w-12 rounded-lg p-2 pl-1.5 pr-2.5 duration-150 hover:cursor-pointer hover:bg-slate-700"
+			/>
+		{:else}
+			<User
+				class="m-1 mr-2 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700"
+			/>
+		{/if}
+	</DropdownMenu.Trigger>
 	<DropdownMenu.Content class="rounded-lg border-slate-700 bg-slate-800">
 		<DropdownMenu.Group>
 			{#if !user}
