@@ -1,4 +1,10 @@
 export let News: { title: string; content: string; date: string }[] = [
+  {
+		title: 'OAuth available',
+		content:
+			'You can now sign up and login to the website using Github or Google Accounts. Already existing accounts will automatically be merged, if the email is the same.',
+		date: '01-08'
+	},
 	{
 		title: 'Signup and Login available',
 		content:
