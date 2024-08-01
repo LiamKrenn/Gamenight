@@ -9,7 +9,7 @@
 		? 'left-0'
 		: '-left-[550px]'}"
 >
-	<div class="absolute h-full w-full border-slate-700 bg-slate-800 duration-150 xs:border-r-2 overflow-scroll">
+	<div class="absolute h-full w-full border-slate-700 bg-slate-800 duration-150 xs:border-r-2 overflow-auto">
 		<slot />
 	</div>
 </div>
