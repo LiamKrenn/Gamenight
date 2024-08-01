@@ -5,39 +5,44 @@
 	import Sidebar from './Sidebar.svelte';
 
 	export let friends = ['Jonas', 'Johan', 'Johanna', 'Johannes'];
+
+	const height = 500;
+	const width = 400;
 </script>
 
 <div
-	class="absolute bottom-4 right-4 hidden h-[500px] w-[400px] flex-col rounded-lg bg-slate-700 mobile:flex {$openChat
-		? 'opacity-100'
-		: 'opacity-0'}"
+	class="fixed bottom-0 right-0 hidden overflow-hidden mobile:flex h-[{height + 16}px] w-[{width +
+		16}px] {$openChat ? 'bottom-4' : `-bottom-[${height + 16}px]`}"
 >
-	<div class="cshadow flex h-14 w-full shrink-0 items-center justify-between pl-4 pr-2">
-		<!-- Header -->
-		<h2 class="text-2xl font-semibold">Chats</h2>
-		<div class="flex">
-			<!-- TODO: implement -->
-			<UserPlus class="h-10 w-10 cursor-pointer rounded-lg p-2 hover:bg-slate-600" />
-			<button on:click={() => ($openChat = false)}>
-				<Minus class="h-10 w-10 cursor-pointer rounded-lg p-2 hover:bg-slate-600" />
-			</button>
+	<div class="absolute left-0 h-[{height}px] w-[{width}px] flex-col flex rounded-lg bg-slate-700">
+		<div class="cshadow flex h-14 w-full shrink-0 items-center justify-between pl-4 pr-2">
+			<!-- Header -->
+			<h2 class="text-2xl font-semibold">Chats</h2>
+			<div class="flex">
+				<!-- TODO: implement -->
+				<UserPlus class="h-10 w-10 cursor-pointer rounded-lg p-2 hover:bg-slate-600" />
+				<button on:click={() => ($openChat = false)}>
+					<Minus class="h-10 w-10 cursor-pointer rounded-lg p-2 hover:bg-slate-600" />
+				</button>
+			</div>
 		</div>
-	</div>
-	<div class="flex h-full">
-		<div class="h-full w-32 shrink-0 space-y-2 border-r-[1px] border-slate-600 p-2">
-			{#each friends as friend}
-				<Button
-					variant="outline"
-					class="w-full border-slate-600 bg-slate-700 text-slate-100 hover:bg-slate-600"
-					>{friend}</Button
-				>
-			{/each}
-		</div>
-		<div class="h-full w-full">
-			<!-- Chat -->
+		<div class="flex h-full">
+			<div class="h-full w-32 shrink-0 space-y-2 border-r-[1px] border-slate-600 p-2">
+				{#each friends as friend}
+					<Button
+						variant="outline"
+						class="w-full border-slate-600 bg-slate-700 text-slate-100 hover:bg-slate-600"
+						>{friend}</Button
+					>
+				{/each}
+			</div>
+			<div class="h-full w-full">
+				<!-- Chat -->
+			</div>
 		</div>
 	</div>
 </div>
+
 <Sidebar class="absolute left-0 top-0 flex mobile:hidden" open={$openChat}>
 	<div class="h-full w-full p-4">
 		<div class=" flex w-full shrink-0 items-center justify-between pl-2">
