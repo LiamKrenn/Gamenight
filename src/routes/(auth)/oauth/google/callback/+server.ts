@@ -1,22 +1,23 @@
 import { AUTH_URL } from '$env/static/private';
 
-export async function GET(req) {  
-  let jj = await fetch(AUTH_URL + `/oauth/google/callback${req.url.search}`, {
-    method: 'GET',
-    credentials: 'include',
-    headers: {
-      'cookie': `session=${req.cookies.get('session')}`
-    }
-  })
-	console.log(await jj.json());
-  
-  let session = '1234567908';
-	let resp = new Response(null, {
-		status: 302,
-		headers: { Location: '/', 'Set-Cookie': `session=${session}` }
+export async function GET(req) {
+	let jj = await fetch(AUTH_URL + `/oauth/google/callback${req.url.search}`, {
+		method: 'GET',
+		credentials: 'include',
+		headers: {
+			cookie: `session=${req.cookies.get('session')}`
+		}
 	});
 
-  req.cookies.set('session', session, {path: '/'});
+	let json = await jj.json();
+	let resp = new Response(null, {
+		status: 302
+	});
+
+	req.cookies.set('session', json.session_token, {
+		path: '/',
+		expires: new Date(new Date().getTime() + json.expires * 1000)
+	});
 
 	return resp;
 }
