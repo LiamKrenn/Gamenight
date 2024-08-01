@@ -4,6 +4,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { loginSchema } from '$lib/schemas';
 import { fail, redirect, type RequestHandler } from '@sveltejs/kit';
 import { AUTH_URL } from '$env/static/private';
+import { invalidateAll } from '$app/navigation';
 
 export const load = (async () => {
 	return {
@@ -46,11 +47,11 @@ export const actions: Actions = {
 		}
 
 		console.log(json, response.status);
-		event.cookies.set('session', json.session_session, {
+		event.cookies.set('session', json.session_token, {
 			path: '/',
 			expires: new Date(new Date().getTime() + json.expires * 1000)
 		});
 
-		return redirect(300, "/")
+		return redirect(302, '/');
 	} 
 };

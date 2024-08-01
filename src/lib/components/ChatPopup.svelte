@@ -1,10 +1,11 @@
 <script lang="ts">
-	import { Minus, UserPlus, X, ChevronRight } from 'lucide-svelte';
+	import { Minus, UserPlus, X, ChevronRight, MessagesSquare } from 'lucide-svelte';
 	import Button from './ui/button/button.svelte';
 	import { openChat } from '$lib/stores';
 	import Sidebar from './Sidebar.svelte';
 
 	export let friends = ['Jonas', 'Johan', 'Johanna', 'Johannes'];
+	export let loggedIn: boolean;
 
 	const height = 500;
 	const width = 400;
@@ -14,32 +15,45 @@
 	class="fixed bottom-0 right-0 hidden overflow-hidden mobile:flex h-[{height + 16}px] w-[{width +
 		16}px] {$openChat ? 'bottom-4' : `-bottom-[${height + 16}px]`}"
 >
-	<div class="absolute left-0 h-[{height}px] w-[{width}px] flex-col flex rounded-lg bg-slate-700">
+	<div class="absolute left-0 h-[{height}px] w-[{width}px] flex flex-col rounded-lg bg-slate-700">
 		<div class="cshadow flex h-14 w-full shrink-0 items-center justify-between pl-4 pr-2">
 			<!-- Header -->
 			<h2 class="text-2xl font-semibold">Chats</h2>
 			<div class="flex">
-				<!-- TODO: implement -->
-				<UserPlus class="h-10 w-10 cursor-pointer rounded-lg p-2 hover:bg-slate-600" />
+				{#if loggedIn}
+					<!-- TODO: implement -->
+					<UserPlus class="h-10 w-10 cursor-pointer rounded-lg p-2 hover:bg-slate-600" />
+				{/if}
 				<button on:click={() => ($openChat = false)}>
 					<Minus class="h-10 w-10 cursor-pointer rounded-lg p-2 hover:bg-slate-600" />
 				</button>
 			</div>
 		</div>
-		<div class="flex h-full">
-			<div class="h-full w-32 shrink-0 space-y-2 border-r-[1px] border-slate-600 p-2">
-				{#each friends as friend}
-					<Button
-						variant="outline"
-						class="w-full border-slate-600 bg-slate-700 text-slate-100 hover:bg-slate-600"
-						>{friend}</Button
-					>
-				{/each}
+		{#if loggedIn}
+			<div class="flex h-full">
+				<div class="h-full w-32 shrink-0 space-y-2 border-r-[1px] border-slate-600 p-2">
+					{#each friends as friend}
+						<Button
+							variant="outline"
+							class="w-full border-slate-600 bg-slate-700 text-slate-100 hover:bg-slate-600"
+							>{friend}</Button
+						>
+					{/each}
+				</div>
+				<div class="h-full w-full">
+					<!-- Chat -->
+				</div>
 			</div>
-			<div class="h-full w-full">
-				<!-- Chat -->
+		{:else}
+			<div class="flex h-full w-full flex-col items-center justify-start">
+				<MessagesSquare class="h-32 w-32 mt-24 stroke-slate-500 stroke-1" />
+				<h3 class="mt-8 w-full text-center text-xl">
+					Please
+					<a class="underline" href="/login">log in</a>
+					to chat.
+				</h3>
 			</div>
-		</div>
+		{/if}
 	</div>
 </div>
 

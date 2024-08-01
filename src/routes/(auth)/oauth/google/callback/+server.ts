@@ -10,11 +10,13 @@ export async function GET(req) {
   })
 	console.log(await jj.json());
   
-  let session = '1234567890';
+  let session = '1234567908';
 	let resp = new Response(null, {
 		status: 302,
 		headers: { Location: '/', 'Set-Cookie': `session=${session}` }
 	});
+
+  req.cookies.set('session', session, {path: '/'});
 
 	return resp;
 }

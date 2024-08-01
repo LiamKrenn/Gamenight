@@ -44,7 +44,7 @@
       <p class="text-[0.7rem] mx-2 text-slate-300">OR</p>
       <div class="w-full bg-slate-500 h-0.5 rounded-full"/>
     </div>
-		<form method="POST" action="?/login" use:enhance>
+		<form method="POST" action="?/login" use:enhance >
 			<Form.Field {form} name="email">
 				<Form.Control let:attrs>
 					<Form.Label class="text-lg ">Email / Username</Form.Label>

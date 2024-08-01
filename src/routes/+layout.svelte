@@ -30,6 +30,8 @@
 	onMount(() => {
 		const osInstance = OverlayScrollbars(mainArea, {});
 	});
+
+  $: loggedIn = data.user !== null;
 </script>
 
 <title>Gamenight</title>
@@ -108,7 +110,7 @@
 		<!-- Page -->
 		<slot />
 		<!-- Message Popup -->
-		<ChatPopup />
+		<ChatPopup {loggedIn} />
 	</div>
 	<!-- Footer for Mobile -->
 	<div class="fshadow !z-40 flex h-16 w-full shrink-0 items-center justify-between mobile:hidden">
