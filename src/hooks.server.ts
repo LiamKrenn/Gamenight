@@ -1,15 +1,9 @@
 import { AUTH_URL } from '$env/static/private';
+import { authorizedFetch } from '$lib/server/utils';
 import type { Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
-  let resp = await event.fetch(AUTH_URL + '/profile', {
-    method: 'GET',
-    credentials: 'include',
-    headers: {
-      'cookie': `session=${event.cookies.get('session')}`
-    }
-  })
-
+  let resp = await authorizedFetch(event, '/profile');
   let json = await resp.json();
 
 

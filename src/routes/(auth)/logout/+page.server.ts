@@ -2,17 +2,10 @@ import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { goto, invalidateAll } from '$app/navigation';
 import { AUTH_URL } from '$env/static/private';
+import { authorizedFetch } from '$lib/server/utils';
 
-export const load = (async ({ cookies }) => {
-  await fetch(AUTH_URL + '/logout', {
-    method: 'GET',
-    credentials: 'include',
-    headers: {
-      'cookie': `session=${cookies.get('session')}`
-    }
-  })
-  
-  cookies.set('session', '', { path: '/' });
+export const load = (async (event) => {
+  await authorizedFetch(event, '/logout');
+  event.cookies.set('session', '', { path: '/' });
 	return redirect(302, '/');
-  
 }) satisfies PageServerLoad;

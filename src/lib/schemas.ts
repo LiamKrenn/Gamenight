@@ -5,6 +5,11 @@ const lowercase = new RegExp(/[a-z]/);
 const uppercase = new RegExp(/[A-Z]/);
 const number = new RegExp(/[0-9]/);
 
+export const profileSchema = z.object({
+  username: z.string().min(4, { message: 'Must be at least 4 characters long' }).max(20, { message: 'Must be at most 20 characters long' }),
+  email: z.string().email({ message: 'Must be a valid email address' })
+})
+
 export const loginSchema = z.object({
 	email: z.string(),
 	password: z.string()
