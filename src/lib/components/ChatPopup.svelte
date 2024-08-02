@@ -10,8 +10,8 @@
 
 <div
 	class="fixed bottom-0 right-0 hidden h-[516px] w-[416px] overflow-hidden mobile:flex {$openChat
-		? 'bottom-4'
-		: `-bottom-[516px]`}"
+		? ''
+		: `bottom-[-516px]`}"
 >
 	<div class="absolute left-0 flex h-[500px] w-[400px] flex-col rounded-lg bg-slate-700">
 		<div class="cshadow flex h-14 w-full shrink-0 items-center justify-between pl-4 pr-2">
@@ -86,9 +86,9 @@
 		</div>
 	{:else}
 		<div class="flex h-full w-full flex-col items-center justify-start">
-      <button class="absolute top-4 right-4" on:click={() => ($openChat = false)}>
-        <X class="h-10 w-10 cursor-pointer rounded-lg p-2 hover:bg-slate-700" />
-      </button>
+			<button class="absolute right-4 top-4" on:click={() => ($openChat = false)}>
+				<X class="h-10 w-10 cursor-pointer rounded-lg p-2 hover:bg-slate-700" />
+			</button>
 			<MessagesSquare class="mt-24 h-32 w-32 stroke-slate-500 stroke-1" />
 			<h3 class="mt-8 w-full text-center text-xl">
 				Please
