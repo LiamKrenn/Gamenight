@@ -105,8 +105,7 @@
 	<div
 		class="mt-2 flex w-[80%] max-w-96 flex-col-reverse justify-between px-2 text-center md:flex-row"
 	>
-		<!-- TODO: Reset Password -->
-		<a href="/forgot-password" class="mt-1 underline md:mt-0">Forgot password?</a>
+		<a href="/change-password" class="mt-1 underline md:mt-0">Forgot password?</a>
 		<a href="/signup" class="mt-1 underline md:mt-0">Create an account</a>
 	</div>
 </div>

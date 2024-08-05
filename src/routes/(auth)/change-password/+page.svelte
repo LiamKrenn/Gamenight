@@ -16,4 +16,13 @@
 		</h1>
 		<ForgotPassForm forgotForm={data.form} lockEmail={data.changePassword} />
 	</div>
+	<div
+		class="mt-2 flex w-[80%] max-w-96 flex-col-reverse justify-center px-2 text-center md:flex-row"
+	>
+		{#if !data.changePassword}
+			<a href="/login" class="mt-1 underline md:mt-0">Remembered password?</a>
+		{:else}
+			<a href="/profile" class="mt-1 underline md:mt-0">Back to profile</a>
+		{/if}
+	</div>
 </div>
