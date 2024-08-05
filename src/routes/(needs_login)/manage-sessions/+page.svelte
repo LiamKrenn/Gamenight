@@ -50,7 +50,7 @@
 <div class="flex h-full w-full flex-col items-center justify-start p-4">
 	<h1 class="we-full my-6 text-center text-5xl font-semibold">Manage Sessions</h1>
 
-	<div class="mt-2 w-[90%] max-w-64">
+	<div class="mt-2 w-[90%] max-w-72">
 		<div class="flex w-full">
 			<a href="/profile" class="w-full">
 				<Button variant="secondary" class="mb-2 w-full bg-slate-700 hover:bg-slate-700/70">
