@@ -1,27 +1,28 @@
 import type { Actions, PageServerLoad } from './$types';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { signupConfirmSchema, signupSchema } from '$lib/schemas';
+import { forgotPasswordConfirmSchema, signupConfirmSchema, signupSchema } from '$lib/schemas';
 import { error, fail, redirect } from '@sveltejs/kit';
 import { AUTH_URL } from '$env/static/private';
 
-export const load = (async ({ params }) => {
+export const load = (async ({ params, locals }) => {
 	return {
 		email: params.email,
-		confirmForm: await superValidate(zod(signupConfirmSchema))
+		changePassword: locals.user?.email ? true : false,
+		confirmForm: await superValidate(zod(forgotPasswordConfirmSchema))
 	};
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
-	signupConfirm: async (event) => {
-		const form = await superValidate(event, zod(signupConfirmSchema));
+	forgotPassConfirm: async (event) => {
+		const form = await superValidate(event, zod(forgotPasswordConfirmSchema));
 		if (!form.valid) {
 			return fail(400, {
 				form
 			});
 		}
 
-		let response = await fetch(AUTH_URL + '/signup/confirm', {
+		let response = await fetch(AUTH_URL + '/confirm-password', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -32,10 +33,9 @@ export const actions: Actions = {
 			})
 		});
 
-		let json = await response.json();
-		console.log(json, response.status);
-
 		if (response.status !== 204 && response.status !== 200) {
+			let json = await response.json();
+			console.log(json, response.status);
 			if (typeof json.detail === 'string') {
 				return {
 					form,
@@ -49,12 +49,10 @@ export const actions: Actions = {
 			}
 		}
 
-		console.log(json, response.status);
-		event.cookies.set('session', json.session_token, {
-			path: '/',
-			expires: new Date(new Date().getTime() + json.expires * 1000)
-		});
-
-		return redirect(300, '/');
+		if (event.locals.user?.email) {
+			return redirect(300, '/profile');
+		} else {
+			return redirect(300, '/login');
+		}
 	}
 };

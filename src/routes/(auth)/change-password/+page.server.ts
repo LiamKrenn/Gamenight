@@ -1,19 +1,22 @@
 import type { Actions, PageServerLoad } from './$types';
 import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { signupConfirmSchema, signupSchema } from '$lib/schemas';
+import { forgotPasswordSchema, signupConfirmSchema, signupSchema } from '$lib/schemas';
 import { error, fail, redirect } from '@sveltejs/kit';
 import { AUTH_URL } from '$env/static/private';
 
-export const load = (async () => {
+export const load = (async ({ locals }) => {
+	let forgotPassForm = await superValidate(zod(forgotPasswordSchema));
+	forgotPassForm.data.email = locals.user?.email || '';
 	return {
-		form: await superValidate(zod(signupSchema))
+		form: forgotPassForm,
+		changePassword: locals.user?.email ? true : false
 	};
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
-	signup: async (event) => {
-		const form = await superValidate(event, zod(signupSchema));
+	forgotPass: async (event) => {
+		const form = await superValidate(event, zod(forgotPasswordSchema));
 		if (!form.valid) {
 			return fail(400, {
 				form,
@@ -21,15 +24,14 @@ export const actions: Actions = {
 			});
 		}
 
-		let response = await fetch(AUTH_URL + '/signup', {
+		let response = await fetch(AUTH_URL + '/forgot-password', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				email: form.data.email,
-				password: form.data.password,
-				username: form.data.username
+				identifier: form.data.email,
+				password: form.data.new_password
 			})
 		});
 
@@ -51,6 +53,6 @@ export const actions: Actions = {
 			}
 		}
 
-		return redirect(300, '/signup/confirm/' + form.data.email);
+		return redirect(300, '/change-password/confirm/' + form.data.email);
 	}
 };

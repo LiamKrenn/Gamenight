@@ -7,7 +7,7 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { page } from '$app/stores';
 	import { profileSchema } from '$lib/schemas';
-	import { Edit, Save, ChevronLeft, CircleUserRound } from 'lucide-svelte';
+	import { Edit, Save, ChevronLeft, CircleUserRound, UserPen, Key, KeyRound } from 'lucide-svelte';
 	import { goto } from '$app/navigation';
 
 	export let data: PageData;
@@ -22,10 +22,10 @@
 
 	let edit = false;
 
-  $: if ($page.url.search === '?success=true') {
-    edit = false;
-    goto('/profile')
-  }
+	$: if ($page.url.search === '?success=true') {
+		edit = false;
+		goto('/profile');
+	}
 </script>
 
 <div class="flex h-full w-full flex-col items-center justify-start p-4">
@@ -85,20 +85,27 @@
 				inert
 				bind:value={data.profile.username}
 			/>
-      <a href="/profile/{data.profile.username}">
-        <Button
-				variant="secondary"
-				class="focusring relative mt-4 h-fit w-full text-wrap bg-sky-700 px-12 py-2.5 hover:bg-sky-800"
-				><CircleUserRound class="absolute right-4" /> View Public Profile</Button
-			>
-      </a>
-			
+			<a href="/profile/{data.profile.username}">
+				<Button
+					variant="secondary"
+					class="focusring relative mt-4 h-fit w-full text-wrap bg-sky-700 px-12 py-2.5 hover:bg-sky-800"
+					><CircleUserRound class="absolute right-4" /> View Public Profile</Button
+				>
+			</a>
+
 			<Button
 				on:click={() => (edit = true)}
 				variant="secondary"
-				class="relative mt-2 w-full bg-slate-700 text-wrap hover:bg-slate-700/70 px-12 py-2.5"
-				>Edit Profile <Edit class="absolute right-4" /></Button
+				class="relative mt-2 w-full text-wrap bg-slate-700 px-12 py-2.5 hover:bg-slate-700/70"
+				>Edit Profile <UserPen class="absolute right-4" /></Button
 			>
+			<a href="/change-password">
+				<Button
+					variant="secondary"
+					class="relative mt-2 w-full text-wrap bg-orange-500/50 px-12 py-2.5 hover:bg-orange-600/50"
+					>Change Password <KeyRound class="absolute right-4" /></Button
+				>
+			</a>
 		</div>
 	{/if}
 </div>

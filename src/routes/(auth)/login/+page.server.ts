@@ -14,7 +14,6 @@ export const load = (async () => {
 
 export const actions: Actions = {
 	login: async (event) => {
-   
 		const form = await superValidate(event, zod(loginSchema));
 
 		if (!form.valid) {
@@ -38,12 +37,18 @@ export const actions: Actions = {
 		let json = await response.json();
 
 		if (response.status !== 200) {
-      console.log(json);
-      
-			return {
-				form,
-				error: json.detail
-			};
+			console.log(json);
+			if (typeof json.detail === 'string') {
+				return {
+					form,
+					error: json.detail
+				};
+			} else {
+				return {
+					form,
+					error: 'An unexpected error occurred.'
+				};
+			}
 		}
 
 		console.log(json, response.status);
@@ -53,5 +58,5 @@ export const actions: Actions = {
 		});
 
 		return redirect(302, '/');
-	} 
+	}
 };

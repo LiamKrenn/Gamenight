@@ -8,23 +8,21 @@ import type { Actions } from '@sveltejs/kit';
 import { fail, redirect, type RequestHandler } from '@sveltejs/kit';
 
 export const load = (async (event) => {
-    let response = await authorizedFetch(event, '/profile');
-    // TODO: wrong profile error handling
-    const profile = await response.json();
-    const profileForm = await superValidate(zod(profileSchema))
-    profileForm.data.email = profile.email;
-    profileForm.data.username = profile.username;
-  
+	let response = await authorizedFetch(event, '/profile');
+	// TODO: wrong profile error handling
+	const profile = await response.json();
+	const profileForm = await superValidate(zod(profileSchema));
+	profileForm.data.email = profile.email;
+	profileForm.data.username = profile.username;
 
-    return {
-      profile: profile,
-      profileForm: profileForm
-    };
+	return {
+		profile: profile,
+		profileForm: profileForm
+	};
 }) satisfies PageServerLoad;
 
 export const actions: Actions = {
 	profile: async (event) => {
-   
 		const form = await superValidate(event, zod(profileSchema));
 
 		if (!form.valid) {
@@ -33,29 +31,36 @@ export const actions: Actions = {
 			});
 		}
 
-    let response = await authorizedFetch(event,
-      '/profile',
-      JSON.stringify({
-        email: form.data.email,
-        username: form.data.username,
-      }),
-      {
-        'Content-Type': 'application/json'
-      },
-      'PATCH'
-    );
+		let response = await authorizedFetch(
+			event,
+			'/profile',
+			JSON.stringify({
+				email: form.data.email,
+				username: form.data.username
+			}),
+			{
+				'Content-Type': 'application/json'
+			},
+			'PATCH'
+		);
 
 		let json = await response.json();
 
 		if (response.status !== 200) {
-      console.log(json);
-      
-			return {
-				form,
-				error: json.detail
-			};
+			console.log(json);
+			if (typeof json.detail === 'string') {
+				return {
+					form,
+					error: json.detail
+				};
+			} else {
+				return {
+					form,
+					error: 'An unexpected error occurred.'
+				};
+			}
 		}
 
 		return redirect(302, '/profile?success=true');
-	} 
+	}
 };
