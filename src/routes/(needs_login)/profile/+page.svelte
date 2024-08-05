@@ -70,7 +70,10 @@
 			{/if}
 			<div class="flex w-full flex-wrap-reverse xs:flex-nowrap xs:space-x-2">
 				<Button
-					on:click={() => (edit = false)}
+					on:click={() => {
+						$formData = data.profile;
+						edit = false;
+					}}
 					variant="secondary"
 					class="focusring relative w-full bg-slate-700 hover:bg-slate-700/70"
 					><ChevronLeft class="absolute left-2" /> Cancel</Button
