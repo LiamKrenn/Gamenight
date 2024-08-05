@@ -72,10 +72,10 @@
 				<Button
 					on:click={() => (edit = false)}
 					variant="secondary"
-					class="focusring relative mt-2 w-full bg-slate-700 hover:bg-slate-700/70"
+					class="focusring relative w-full bg-slate-700 hover:bg-slate-700/70"
 					><ChevronLeft class="absolute left-2" /> Cancel</Button
 				>
-				<Form.Button class="focusring relative mt-2 w-full"
+				<Form.Button class="focusring relative w-full"
 					>Save <Save class="absolute right-2" /></Form.Button
 				>
 			</div>

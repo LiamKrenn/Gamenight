@@ -3,9 +3,9 @@ import { authorizedFetch } from '$lib/server/utils.js';
 import { redirect } from '@sveltejs/kit';
 
 export async function GET(req) {
-	let jj = await authorizedFetch(req, `/oauth/google/callback${req.url.search}`, {}, {
-    'User-Agent': req.request.headers.get('User-Agent') || ''
-  });
+	let jj = await authorizedFetch(req, `/oauth/google/callback${req.url.search}`, null, {
+		'User-Agent': req.request.headers.get('User-Agent') || ''
+	});
 	let json = await jj.json();
 	req.cookies.set('session', json.session_token, {
 		path: '/',
