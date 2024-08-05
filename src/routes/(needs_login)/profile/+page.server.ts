@@ -8,15 +8,16 @@ import type { Actions } from '@sveltejs/kit';
 import { fail, redirect, type RequestHandler } from '@sveltejs/kit';
 
 export const load = (async (event) => {
-	let response = await authorizedFetch(event, '/profile');
-	// TODO: wrong profile error handling
-	const profile = await response.json();
+	const profile = event.locals.user;
+	if (!profile) {
+		return redirect(302, '/login');
+	}
 	const profileForm = await superValidate(zod(profileSchema));
-	profileForm.data.email = profile.email;
-	profileForm.data.username = profile.username;
+	profileForm.data = profile;
 
 	return {
 		profile: profile,
+		joinDate: new Date(profile.createdAt).toISOString().slice(0, 10).split('-').reverse().join('/'),
 		profileForm: profileForm
 	};
 }) satisfies PageServerLoad;

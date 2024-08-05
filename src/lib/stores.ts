@@ -6,7 +6,7 @@ const isDesktop = mediaQuery('(min-width: 850px)');
 
 export const openSidebar = persisted('sidebarOpen', false);
 export const openChat = persisted('chatOpen', false);
-export const disableModals = ['/login', '/signup'];
+export const disableModals = ['/login', '/signup', '/forgot-password'];
 
 // Close chat on mobile when both are opened
 isDesktop.subscribe((value) => {

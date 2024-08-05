@@ -7,7 +7,16 @@
 	import { zodClient } from 'sveltekit-superforms/adapters';
 	import { page } from '$app/stores';
 	import { profileSchema } from '$lib/schemas';
-	import { Edit, Save, ChevronLeft, CircleUserRound, UserPen, Key, KeyRound } from 'lucide-svelte';
+	import {
+		Edit,
+		Save,
+		ChevronLeft,
+		CircleUserRound,
+		UserPen,
+		Key,
+		KeyRound,
+		MonitorCog
+	} from 'lucide-svelte';
 	import { goto } from '$app/navigation';
 
 	export let data: PageData;
@@ -85,6 +94,16 @@
 				inert
 				bind:value={data.profile.username}
 			/>
+			<Button
+				on:click={() => (edit = true)}
+				variant="secondary"
+				class="relative mt-2 w-full text-wrap bg-slate-700 px-12 py-2.5 hover:bg-slate-700/70"
+				>Edit Profile <UserPen class="absolute right-4" /></Button
+			>
+			<div class="mt-4 flex w-full items-center justify-between">
+				<p class="text-lg font-semibold">Join Date</p>
+				<p class="text-base font-semibold text-slate-400">{data.joinDate}</p>
+			</div>
 			<a href="/profile/{data.profile.username}">
 				<Button
 					variant="secondary"
@@ -92,18 +111,18 @@
 					><CircleUserRound class="absolute right-4" /> View Public Profile</Button
 				>
 			</a>
-
-			<Button
-				on:click={() => (edit = true)}
-				variant="secondary"
-				class="relative mt-2 w-full text-wrap bg-slate-700 px-12 py-2.5 hover:bg-slate-700/70"
-				>Edit Profile <UserPen class="absolute right-4" /></Button
-			>
 			<a href="/change-password">
 				<Button
 					variant="secondary"
-					class="relative mt-2 w-full text-wrap bg-orange-500/50 px-12 py-2.5 hover:bg-orange-600/50"
+					class="relative mt-2 w-full text-wrap bg-yellow-500/50 px-12 py-2.5 hover:bg-yellow-500/40"
 					>Change Password <KeyRound class="absolute right-4" /></Button
+				>
+			</a>
+			<a href="/manage-sessions">
+				<Button
+					variant="secondary"
+					class="relative mt-2 w-full text-wrap bg-orange-500/50 px-12 py-2.5 hover:bg-orange-600/50"
+					>Manage Sessions <MonitorCog class="absolute right-4" /></Button
 				>
 			</a>
 		</div>
