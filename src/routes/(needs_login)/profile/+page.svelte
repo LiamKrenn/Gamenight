@@ -31,7 +31,7 @@
 
 	const { form: formData, enhance } = form;
 
-	let edit = false;
+	let edit = true;
 
 	$: if ($page.url.search === '?success=true') {
 		edit = false;
@@ -54,7 +54,7 @@
 			<form class="mt-1 w-full max-w-64" method="POST" action="?/profile" use:enhance>
 				<Form.Field {form} name="username">
 					<Form.Control let:attrs>
-						<div class="flex">
+						<div class="flex flex-col xs:flex-row">
 							<Input
 								class="focusring rounded-lg bg-slate-700 text-base"
 								{...attrs}
@@ -66,8 +66,9 @@
 									edit = false;
 								}}
 								variant="secondary"
-								class="focusring ml-2 w-min bg-slate-700 px-2 hover:bg-slate-700/70"
-								><X class="" /></Button
+								class="focusring relative mt-1.5 w-full bg-slate-700 px-2 hover:bg-slate-700/70 xs:ml-2 xs:mt-0 xs:w-min"
+								><X class="absolute right-2 xs:static" />
+								<p class="flex xs:hidden">Cancel</p></Button
 							>
 						</div>
 					</Form.Control>
@@ -100,9 +101,8 @@
 			</div>
 		{/if}
 
-		
 		<p class="mt-2 text-lg font-semibold">Join Date</p>
-    <Input
+		<Input
 			class="focusring !mt-1 rounded-lg bg-slate-900 text-base"
 			inert
 			bind:value={data.joinDate}
