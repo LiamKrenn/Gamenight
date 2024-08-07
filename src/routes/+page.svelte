@@ -7,7 +7,7 @@
 	<div class="h-full w-[90vh] max-w-[95%] mobile:max-w-[90%]">
 		<div class="mb-4 flex w-full items-center justify-between">
 			<h2 class="flex items-center text-xl font-semibold mobile:text-3xl">
-				<Dices class="mr-3 shrink-0 mobile:h-8 mobile:w-8" /> Games
+				<Dices class="mr-3 ml-2 shrink-0 mobile:h-8 mobile:w-8" /> Games
 			</h2>
 			<HorizontalScrollButtons />
 		</div>
@@ -24,24 +24,28 @@
 		</div>
 		<div class="mb-4 flex w-full items-center justify-between">
 			<h2 class="flex items-center text-xl font-semibold mobile:text-3xl">
-				<Percent class="mr-3 shrink-0 mobile:h-8 mobile:w-8" /> Shop Offers
+				<Percent class="mr-3 ml-2 shrink-0 mobile:h-8 mobile:w-8" /> Shop Offers
 			</h2>
 			<HorizontalScrollButtons />
 		</div>
 		<div class="mb-6 flex h-[240px] w-full space-x-4 overflow-hidden">
 			<!-- Shop Offers -->
-			Shop Offers
+			<div class="shrink-0">
+        <img src="/Shop.png" alt="Shop Offers" class="">
+      </div>
 		</div>
 		<div class="mb-4 flex w-full items-center justify-between">
 			<h2 class="flex items-center text-xl font-semibold mobile:text-3xl">
-				<Users class="mr-3 shrink-0 mobile:h-8 mobile:w-8" /> Public Parties
+				<Users class="mr-3 ml-2 shrink-0 mobile:h-8 mobile:w-8" /> Public Parties
 			</h2>
 			<HorizontalScrollButtons />
 		</div>
-		<div class="mb-6 flex h-[240px] w-full space-x-4 overflow-hidden">
+		<div class="mb-6 flex h-[128px] w-full space-x-4 overflow-hidden">
 			<!-- Public Parties -->
-			Public Parties
-		</div>
+       <div class="shrink-0">
+         <img src="/Partys.png" alt="Public Parties" class="">
+       </div>
+      </div>
 	</div>
 </div>
 
