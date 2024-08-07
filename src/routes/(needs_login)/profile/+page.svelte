@@ -31,7 +31,7 @@
 
 	const { form: formData, enhance } = form;
 
-	let edit = true;
+	let edit = false;
 
 	$: if ($page.url.search === '?success=true') {
 		edit = false;
