@@ -16,7 +16,7 @@
 </script>
 
 <div class="flex h-full w-full items-start justify-center py-8">
-	<div class="flex w-96 flex-col items-center">
+	<div class="flex w-96 max-w-[90%] flex-col items-center">
 		<div class="mb-4 flex w-full items-center justify-evenly px-4 xs:justify-between">
 			<a href="/friends/requests">
 				<Button
