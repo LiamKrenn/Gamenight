@@ -23,10 +23,10 @@
 <div class="flex h-full w-full items-start justify-center py-8">
 	<div class="flex w-96 max-w-[90%] flex-col items-center">
 		<div class="flex flex-col px-4 w-full">
-			<h1 class="static mx-4 mt-0.5 text-center text-4xl font-semibold mobile:hidden">
+			<h1 class="static mx-4 mt-0.5 text-center text-4xl font-semibold xs:hidden">
 				Friend Requests
 			</h1>
-			<div class="mt-6 flex items-start justify-evenly mobile:mt-0">
+			<div class="mt-6 flex items-start justify-evenly xs:mt-0">
 				<a href="/friends">
 					<Button
 						variant="ghost"
@@ -35,7 +35,7 @@
 						<BookUser class="h-8 w-8" />
 					</Button>
 				</a>
-				<h1 class="mx-4 mt-0.5 hidden text-center text-4xl font-semibold mobile:block">
+				<h1 class="mx-4 mt-0.5 hidden text-center text-4xl font-semibold xs:block">
 					Friend Requests
 				</h1>
 				<AddFriendModal onSuccess={refreshData}>
