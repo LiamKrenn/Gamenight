@@ -26,7 +26,7 @@
 			<h1 class="static mx-4 mt-0.5 text-center text-4xl font-semibold mobile:hidden">
 				Friend Requests
 			</h1>
-			<div class="mt-6 flex items-center justify-evenly mobile:mt-0">
+			<div class="mt-6 flex items-start justify-evenly mobile:mt-0">
 				<a href="/friends">
 					<Button
 						variant="ghost"
