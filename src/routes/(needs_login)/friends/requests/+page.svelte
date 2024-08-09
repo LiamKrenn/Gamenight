@@ -7,7 +7,7 @@
 
 	import type { PageData } from './$types';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { UserPlus } from 'lucide-svelte';
+	import { BookUser, UserPlus } from 'lucide-svelte';
 	import IncomingRequest from './IncomingRequest.svelte';
 
 	export let data: PageData;
@@ -22,16 +22,31 @@
 
 <div class="flex h-full w-full items-start justify-center py-8">
 	<div class="flex w-96 flex-col items-center">
-		<div class="flex">
-			<h1 class="mr-4 mt-0.5 text-4xl font-semibold">Friend Request</h1>
-			<AddFriendModal onSuccess={refreshData}>
-				<Button
-					variant="ghost"
-					class="flex h-12 w-12 items-center justify-center rounded-lg border-2 border-sky-700 p-0 hover:bg-sky-700"
-				>
-					<UserPlus class="h-8 w-8" />
-				</Button>
-			</AddFriendModal>
+		<div class="flex flex-col px-4 w-full">
+			<h1 class="static mx-4 mt-0.5 text-center text-4xl font-semibold mobile:hidden">
+				Friend Requests
+			</h1>
+			<div class="mt-6 flex items-center justify-evenly mobile:mt-0">
+				<a href="/friends">
+					<Button
+						variant="ghost"
+						class="flex h-14 w-14 items-center justify-center rounded-lg border-2 border-slate-700 p-2 hover:bg-slate-700 "
+					>
+						<BookUser class="h-8 w-8" />
+					</Button>
+				</a>
+				<h1 class="mx-4 mt-0.5 hidden text-center text-4xl font-semibold mobile:block">
+					Friend Request
+				</h1>
+				<AddFriendModal onSuccess={refreshData}>
+					<Button
+						variant="ghost"
+						class="flex h-14 w-14 items-center justify-center rounded-lg  bg-slate-700 p-2 hover:bg-slate-600 "
+					>
+						<UserPlus class="h-8 w-8" />
+					</Button>
+				</AddFriendModal>
+			</div>
 		</div>
 
 		<Tabs.Root {value} class="h-min w-full ">
@@ -55,12 +70,16 @@
 				<!-- INCOMING -->
 				{#each data.incoming || [] as request}
 					<IncomingRequest {request} {refreshData} />
+        {:else}
+          <p class="w-full text-center">No incoming requests.</p>
 				{/each}
 			</Tabs.Content>
 			<Tabs.Content value="outgoing">
 				<!-- OUTGOING -->
 				{#each data.outgoing || [] as request}
 					<OutgoingRequest {request} {refreshData} />
+        {:else}
+          <p class="w-full text-center">No outgoing requests.</p>
 				{/each}
 			</Tabs.Content>
 		</Tabs.Root>

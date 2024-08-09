@@ -15,7 +15,7 @@ export const GET: RequestHandler = async (event) => {
 export const POST: RequestHandler = async (event) => {
 	let body = await event.request.json();
 
-	if (body?.action === 'cancel' || body?.action === 'decline') {
+	if (body?.action === 'cancel' || body?.action === 'decline' || body?.action === 'remove') {
 		let resp = await authorizedFetch(
 			event,
 			`/ext/friends/remove`,

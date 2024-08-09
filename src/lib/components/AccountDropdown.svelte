@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { User, LogIn, LogOut, UserPlus } from 'lucide-svelte';
+	import { User, LogIn, LogOut, UserPlus, List } from 'lucide-svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	export let user;
 </script>
@@ -33,6 +33,11 @@
 				<a href="/profile">
 					<DropdownMenu.Item class="rounded-lg bg-slate-800 duration-150 hover:!bg-slate-700"
 						><User class="mr-2" /> Profile</DropdownMenu.Item
+					>
+				</a>
+        <a href="/friends/requests">
+					<DropdownMenu.Item class="rounded-lg bg-slate-800 duration-150 hover:!bg-slate-700"
+						><List class="mr-2" /> Friend Requests</DropdownMenu.Item
 					>
 				</a>
 				<a
