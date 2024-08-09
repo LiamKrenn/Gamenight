@@ -36,7 +36,7 @@
 					</Button>
 				</a>
 				<h1 class="mx-4 mt-0.5 hidden text-center text-4xl font-semibold mobile:block">
-					Friend Request
+					Friend Requests
 				</h1>
 				<AddFriendModal onSuccess={refreshData}>
 					<Button
