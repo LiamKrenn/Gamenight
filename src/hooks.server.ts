@@ -5,6 +5,7 @@ import type { Handle } from '@sveltejs/kit';
 export const handle: Handle = async ({ event, resolve }) => {
 	let resp = await authorizedFetch(event, '/profile');
 	let json = await resp.json();
+  
 
 	if (json?.detail === 'Unauthorized') {
 		event.cookies.delete('session', { path: '/' });

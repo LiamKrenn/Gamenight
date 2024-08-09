@@ -2,6 +2,12 @@ import { AUTH_URL } from '$env/static/private';
 import type { PageServerLoad } from './$types';
 
 export const load = (async (event) => {
-    const username = event.params.username;
-    return {};
+    let userResp = await fetch(AUTH_URL + '/profile/profile/' + event.params.username);  
+    console.log(userResp);
+    let user = await userResp.json();
+    console.log(user);
+    
+    return {
+      user: user
+    };
 }) satisfies PageServerLoad;
