@@ -41,7 +41,7 @@
 				<AddFriendModal onSuccess={refreshData}>
 					<Button
 						variant="ghost"
-						class="flex h-14 w-14 items-center justify-center rounded-lg  bg-slate-700 p-2 hover:bg-slate-600 "
+						class="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-lg  bg-slate-700 p-2 hover:bg-slate-600 "
 					>
 						<UserPlus class="h-8 w-8" />
 					</Button>
