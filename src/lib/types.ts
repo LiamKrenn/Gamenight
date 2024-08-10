@@ -9,3 +9,9 @@ export type Request = {
   receiver: User,
   sender: User
 }
+
+export type CardType = {
+  skin: "default",
+  color: "hearts" | "diamonds" | "clubs" | "spades" | undefined,
+  value: 2 | 3 | 4 | 10 | 11 | undefined
+}

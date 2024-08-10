@@ -35,6 +35,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@neodrag/svelte": "^2.0.6",
 		"@sveltejs/adapter-node": "^5.2.0",
 		"@sveltejs/adapter-vercel": "^5.4.1",
 		"bits-ui": "^0.21.12",

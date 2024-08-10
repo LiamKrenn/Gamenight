@@ -19,8 +19,9 @@
 			<h2 class="text-2xl font-semibold">Chats</h2>
 			<div class="flex">
 				{#if loggedIn}
-					<!-- TODO: implement -->
-					<UserPlus class="h-10 w-10 cursor-pointer rounded-lg p-2 hover:bg-slate-600" />
+					<a on:click={() => ($openChat = false)} href="/friends/requests">
+						<UserPlus class="h-10 w-10 cursor-pointer rounded-lg p-2 hover:bg-slate-600" />
+					</a>
 				{/if}
 				<button on:click={() => ($openChat = false)}>
 					<Minus class="h-10 w-10 cursor-pointer rounded-lg p-2 hover:bg-slate-600" />
@@ -55,15 +56,16 @@
 	</div>
 </div>
 
-<Sidebar class="top-0 flex mobile:hidden" open={$openChat}>
+<Sidebar class="top-0 flex mobile:hidden" width_full={true} open={$openChat}>
 	{#if loggedIn}
 		<div class="h-full w-full p-4">
 			<div class=" flex w-full shrink-0 items-center justify-between pl-2">
 				<!-- Header -->
 				<h2 class="text-2xl font-semibold">Chats</h2>
 				<div class="flex">
-					<!-- TODO: implement -->
-					<UserPlus class="h-10 w-10 cursor-pointer rounded-lg p-2 hover:bg-slate-700" />
+					<a on:click={() => ($openChat = false)} href="/friends/requests">
+						<UserPlus class="h-10 w-10 cursor-pointer rounded-lg p-2 hover:bg-slate-700" />
+					</a>
 					<button on:click={() => ($openChat = false)}>
 						<X class="h-10 w-10 cursor-pointer rounded-lg p-2 hover:bg-slate-700" />
 					</button>

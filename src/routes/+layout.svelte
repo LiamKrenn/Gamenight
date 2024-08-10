@@ -142,10 +142,12 @@
 		<!-- Message Popup -->
 		<ChatPopup {loggedIn} />
 	</div>
-	<!-- Footer for Mobile -->
-	<div class="fshadow !z-40 flex h-16 w-full shrink-0 items-center justify-between mobile:hidden">
-		<AllMobNavItems />
-	</div>
+	{#if !($page.url.pathname + '/').startsWith('/game/')}
+		<!-- Footer for Mobile -->
+		<div class="fshadow !z-40 flex h-16 w-full shrink-0 items-center justify-between mobile:hidden">
+			<AllMobNavItems />
+		</div>
+	{/if}
 </div>
 
 <style>
