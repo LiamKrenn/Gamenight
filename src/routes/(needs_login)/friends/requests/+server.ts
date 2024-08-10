@@ -5,8 +5,11 @@ export const GET: RequestHandler = async (event) => {
   let friendRequestResponse = await authorizedFetch(event, '/ext/friends/requests');
 	let friendRequests: {
     outgoing: Request[] | undefined,
-    ingoing: Request[] | undefined
+    ingoing: Request[] | undefined,
+    incoming: Request[] | undefined
   } = await friendRequestResponse.json();
+
+  friendRequests.incoming = friendRequests.ingoing;
 
 	return new Response(JSON.stringify(friendRequests), { status: 200 });
 }
