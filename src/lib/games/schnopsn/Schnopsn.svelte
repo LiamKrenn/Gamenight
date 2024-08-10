@@ -57,12 +57,15 @@
 			value: undefined
 		}
 	];
+
+  let cardSizeX = 200;
+  $: cardSizeY = cardSizeX * 1.39;
 </script>
 
 <div class="h-full w-full overflow-hidden p-4 relative flex justify-center">
-  <div class="w-[800px] h-[278px] absolute bottom-16 flex space-x-[-50px]">
+  <div class="w-[{cardSizeX * 4}px] h-[{cardSizeY}px] max-w-[90%] absolute bottom-16 flex space-x-[{cardSizeX / -4}px]">
     {#each mockupOwnHand as card}
-       <Card {card} />
+       <Card {card}  />
     {/each}
   </div>
 </div>

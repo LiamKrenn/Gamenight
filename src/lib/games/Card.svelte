@@ -5,6 +5,7 @@
 
 	export let card: CardType;
 	let className: string = '';
+	let defaultClasses = 'shrink-0';
 	export { className as class };
 	export let position = { x: 0, y: 0 };
 
@@ -51,7 +52,7 @@
 	}}
 >
 	<img
-		class={cn('absolute ', frontCard, className)}
+		class={cn('absolute', frontCard, className)}
 		src="/card_skins/{card.skin}/{frontCardValue}.svg"
 		alt="{card.color} {card.value}"
 		inert
