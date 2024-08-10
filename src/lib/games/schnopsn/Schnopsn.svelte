@@ -58,22 +58,45 @@
 		}
 	];
 
-  let handWidth = 0;
-  $: cardSizeX = handWidth / 5;
-  $: cardSizeY = cardSizeX * 1.39;
+  let emptyCard: CardType = {
+    skin: 'default',
+    color: undefined,
+    value: undefined
+  }
+
+  let stackCard: CardType = {
+    skin: 'default',
+    color: 'spades',
+    value: 2
+  }
+
+	let handWidth = 0;
+	$: cardSizeX = handWidth / 5;
+	$: cardSizeY = cardSizeX * 1.39;
 </script>
 
-<div bind:clientWidth={handWidth} class="h-full w-full overflow-hidden p-4 relative flex justify-center">
-  <div class="w-[800px] h-[{cardSizeY}px] max-w-[90%] absolute xs:-top-16 top-8 flex space-x-[-50px]">
-    {#each mockupOpponentHand as card}
-       <Card {card} draggable={false} />
-    {/each}
-  </div>
-  <div class="w-[800px] h-[{cardSizeY}px] max-w-[90%] absolute bottom-16 flex space-x-[-50px]">
-    {#each mockupOwnHand as card}
-       <Card {card} draggable={true} />
-    {/each}
-  </div>
+<div
+	bind:clientWidth={handWidth}
+	class="relative flex h-full w-full justify-center items-center overflow-hidden p-4"
+>
+  <!-- Opponent Hand -->
+	<div
+		class="w-[800px] h-[{cardSizeY}px] absolute top-8 flex max-w-[57%] space-x-[-50px] xs:-top-16"
+	>
+		{#each mockupOpponentHand as card}
+			<Card {card} draggable={false} width={cardSizeX} />
+		{/each}
+	</div>
+
+  <!-- Stack -->
+ 
+
+  <!-- Own Hand -->
+	<div class="w-[800px] h-[{cardSizeY}px] absolute bottom-16 flex max-w-[57%] space-x-[-50px]">
+		{#each mockupOwnHand as card}
+			<Card {card} draggable={true} width={cardSizeX} height={cardSizeY}  />
+		{/each}
+	</div>
 </div>
 
 <style>

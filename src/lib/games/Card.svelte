@@ -7,7 +7,7 @@
   let isDraggable = false;
   export { isDraggable as draggable };
 	let className: string = '';
-	let defaultClasses = 'shrink-0';
+	export let width: number = 200;
 	export { className as class };
 	export let position = { x: 0, y: 0 };
 
@@ -38,7 +38,7 @@
 </script>
 
 <div
-	class={cn('cshadow relative h-fit w-fit rounded-2xl', parent)}
+	class={cn('cshadow relative h-fit w-fit rounded-2xl', parent, `w-[${width}px]`)}
 	use:draggable={{
 		position,
     disabled: !isDraggable,
