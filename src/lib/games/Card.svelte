@@ -4,10 +4,15 @@
 	import { draggable } from '@neodrag/svelte';
 
 	export let card: CardType;
-  let isDraggable = false;
-  export { isDraggable as draggable };
+	let isDraggable = false;
+	export { isDraggable as draggable };
 	let className: string = '';
+	let styleString: string = '';
+	export let parentClass: string = '';
 	export let width: number = 200;
+	export let rotate: number = 0;
+  export let shadow = true;
+	export { styleString as style };
 	export { className as class };
 	export let position = { x: 0, y: 0 };
 
@@ -18,7 +23,9 @@
 	let backCard = '';
 	let frontCard = '';
 	let drag = false;
-	$: parent = drag ? '!duration-0 cursor-grab z-10' : '!duration-150 ' + (isDraggable ? 'cursor-pointer' : 'cursor-default');
+	$: parent = drag
+		? '!duration-0 cursor-grab z-10'
+		: '!duration-150 ' + (isDraggable ? 'cursor-pointer' : 'cursor-default');
 
 	$: if (hidden) {
 		frontCard = 'flipClose';
@@ -38,10 +45,11 @@
 </script>
 
 <div
-	class={cn('cshadow relative h-fit w-fit rounded-2xl', parent, `w-[${width}px]`)}
+	class={cn('relative h-fit', parent, parentClass)}
+	style="width: {width}px; {styleString}"
 	use:draggable={{
 		position,
-    disabled: !isDraggable,
+		disabled: !isDraggable,
 		onDrag: ({ offsetX, offsetY }) => {
 			position = { x: offsetX, y: offsetY };
 		},
@@ -54,18 +62,20 @@
 		}
 	}}
 >
-	<img
-		class={cn('absolute', frontCard, className)}
-		src="/card_skins/{card.skin}/{frontCardValue}.svg"
-		alt="{card.color} {card.value}"
-		inert
-	/>
-	<img
-		class={cn(backCard, className)}
-		src="/card_skins/{card.skin}/Back.svg"
-		alt="Hidden Card"
-		inert
-	/>
+	<div class="{shadow ? 'cshadow' : ''} rounded-2xl" style="rotate: {rotate}deg">
+		<img
+			class={cn('absolute', frontCard, className)}
+			src="/card_skins/{card.skin}/{frontCardValue}.svg"
+			alt="{card.color} {card.value}"
+			inert
+		/>
+		<img
+			class={cn(backCard, className)}
+			src="/card_skins/{card.skin}/Back.svg"
+			alt="Hidden Card"
+			inert
+		/>
+	</div>
 </div>
 
 <style>
