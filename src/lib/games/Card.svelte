@@ -4,6 +4,8 @@
 	import { draggable } from '@neodrag/svelte';
 
 	export let card: CardType;
+  let isDraggable = false;
+  export { isDraggable as draggable };
 	let className: string = '';
 	let defaultClasses = 'shrink-0';
 	export { className as class };
@@ -16,7 +18,7 @@
 	let backCard = '';
 	let frontCard = '';
 	let drag = false;
-	$: parent = drag ? '!duration-0 cursor-grab z-10' : '!duration-150 cursor-pointer';
+	$: parent = drag ? '!duration-0 cursor-grab z-10' : '!duration-150 ' + (isDraggable ? 'cursor-pointer' : 'cursor-default');
 
 	$: if (hidden) {
 		frontCard = 'flipClose';
@@ -39,6 +41,7 @@
 	class={cn('cshadow relative h-fit w-fit rounded-2xl', parent)}
 	use:draggable={{
 		position,
+    disabled: !isDraggable,
 		onDrag: ({ offsetX, offsetY }) => {
 			position = { x: offsetX, y: offsetY };
 		},

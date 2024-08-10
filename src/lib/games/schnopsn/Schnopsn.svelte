@@ -64,9 +64,14 @@
 </script>
 
 <div bind:clientWidth={handWidth} class="h-full w-full overflow-hidden p-4 relative flex justify-center">
+  <div class="w-[800px] h-[{cardSizeY}px] max-w-[90%] absolute xs:-top-16 top-8 flex space-x-[-50px]">
+    {#each mockupOpponentHand as card}
+       <Card {card} draggable={false} />
+    {/each}
+  </div>
   <div class="w-[800px] h-[{cardSizeY}px] max-w-[90%] absolute bottom-16 flex space-x-[-50px]">
     {#each mockupOwnHand as card}
-       <Card {card}  />
+       <Card {card} draggable={true} />
     {/each}
   </div>
 </div>
