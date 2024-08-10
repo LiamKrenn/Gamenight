@@ -94,7 +94,7 @@
   <!-- Own Hand -->
 	<div class="w-[800px] h-[{cardSizeY}px] absolute bottom-16 flex max-w-[57%] space-x-[-50px]">
 		{#each mockupOwnHand as card}
-			<Card {card} draggable={true} width={cardSizeX} height={cardSizeY}  />
+			<Card {card} draggable={true} width={cardSizeX}  />
 		{/each}
 	</div>
 </div>
