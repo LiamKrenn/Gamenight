@@ -10,8 +10,7 @@
 	let styleString: string = '';
 	export let parentClass: string = '';
 	export let width: number = 200;
-	export let rotate: number = 0;
-  export let shadow = true;
+	export let shadow = true;
 	export { styleString as style };
 	export { className as class };
 	export let position = { x: 0, y: 0 };
@@ -45,8 +44,8 @@
 </script>
 
 <div
-	class={cn('relative h-fit', parent, parentClass)}
-	style="width: {width}px; {styleString}"
+	class={cn('relative h-fit rounded-2xl', parent, parentClass, shadow ? 'cshadow' : '')}
+	style="width: {width}px"
 	use:draggable={{
 		position,
 		disabled: !isDraggable,
@@ -62,20 +61,18 @@
 		}
 	}}
 >
-	<div class="{shadow ? 'cshadow' : ''} rounded-2xl" style="rotate: {rotate}deg">
-		<img
-			class={cn('absolute', frontCard, className)}
-			src="/card_skins/{card.skin}/{frontCardValue}.svg"
-			alt="{card.color} {card.value}"
-			inert
-		/>
-		<img
-			class={cn(backCard, className)}
-			src="/card_skins/{card.skin}/Back.svg"
-			alt="Hidden Card"
-			inert
-		/>
-	</div>
+	<img
+		class={cn('absolute', frontCard, className)}
+		src="/card_skins/{card.skin}/{frontCardValue}.svg"
+		alt="{card.color} {card.value}"
+		inert
+	/>
+	<img
+		class={cn(backCard, className)}
+		src="/card_skins/{card.skin}/Back.svg"
+		alt="Hidden Card"
+		inert
+	/>
 </div>
 
 <style>
