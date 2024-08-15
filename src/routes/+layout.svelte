@@ -5,7 +5,17 @@
 	import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	import 'overlayscrollbars/overlayscrollbars.css';
-	import { disableModals, openChat, openSidebar } from '$lib/stores';
+	import {
+		chatClient,
+		current_match_chat_id,
+		disableModals,
+		messages,
+		openChat,
+		openSidebar,
+
+		user
+
+	} from '$lib/stores';
 	import Navlogo from '$lib/icons/nav/navlogo.svelte';
 	import Navtext from '$lib/icons/nav/navtext.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
@@ -27,12 +37,56 @@
 		['Friends', '/friends']
 	];
 
+	import ChatClient from 'chat-client-delta';
+	import type { AudioData, ChatMessage, MatchChatData, NotificationChatIds } from '$lib/chat';
+
+	const ServerIP: string = '172.205.243.31';
+	const Port: number = 8081;
+	const UserID: string = '1';
+
+	function connectChatClient() {
+		$chatClient = new ChatClient(ServerIP, Port, UserID);
+
+		$chatClient
+			.connect()
+			.then(() => {
+				if ($chatClient === null) {
+					throw new Error('Chat client is null');
+				}
+				console.log('Chat client connected');
+
+				$chatClient.setOnAudioMessageReceived((audioData: AudioData) => {
+					console.log('Audio data received:', audioData);
+				});
+
+				$chatClient.setOnChatMessageReceived((data: { message: string }) => {
+					console.log('New message received:', data);
+					$messages = [...$messages, { message: data.message }];
+				});
+
+				$chatClient.setOnMatchChat((data: MatchChatData) => {
+					console.log('Match chat event triggered with user IDs:', data.match_chat_id);
+					$current_match_chat_id = data.match_chat_id;
+				});
+
+				$chatClient.setNotificationChatIds((data: NotificationChatIds) => {
+					console.log('New notification received:', data);
+				});
+			})
+			.catch((err) => {
+				console.error('Failed to connect chat client:', err);
+			});
+	}
+
 	let mainArea: HTMLDivElement;
 	onMount(() => {
+    $user = data.user;
+    connectChatClient();
 		const osInstance = OverlayScrollbars(mainArea, {});
 	});
 
-	$: loggedIn = data.user !== null;
+
+	$: loggedIn = $user !== null;
 
 	$: if (disableModals.includes($page.url.pathname)) {
 		$openSidebar = false;
@@ -93,7 +147,7 @@
 				<Bell
 					class="m-1 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700"
 				/>
-				<AccountDropdown user={data.user} />
+				<AccountDropdown user={$user} />
 			{:else}
 				<a href="/login">
 					<Button class="ml-1 mr-3 rounded-lg bg-sky-700 text-slate-50 hover:bg-sky-800">
