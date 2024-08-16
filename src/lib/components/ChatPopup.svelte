@@ -15,7 +15,7 @@
 		? ''
 		: `bottom-[-516px]`}"
 >
-	<div class="absolute left-0 flex h-[500px] w-[400px] flex-col rounded-lg bg-slate-700 ">
+	<div class="absolute left-0 flex h-[500px] w-[400px] flex-col rounded-lg bg-slate-700">
 		<div class="cshadow flex h-14 w-full shrink-0 items-center justify-between pl-4 pr-2">
 			<!-- Header -->
 			<h2 class="text-2xl font-semibold">Chats</h2>
@@ -47,7 +47,7 @@
 
 <Sidebar class="top-0 flex mobile:hidden" width_full={true} open={$openChat}>
 	{#if loggedIn}
-		<Chat sidebar={true}/>
+		<!-- <Chat sidebar={true}/> -->
 	{:else}
 		<div class="flex h-full w-full flex-col items-center justify-start">
 			<button class="absolute right-4 top-4" on:click={() => ($openChat = false)}>

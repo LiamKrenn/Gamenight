@@ -28,6 +28,8 @@
 	import AccountDropdown from '$lib/components/AccountDropdown.svelte';
 	import { AlignJustify, Bell, LogIn, MessageCircle, X } from 'lucide-svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
+	import { goto, invalidateAll } from '$app/navigation';
+	import { browser } from '$app/environment';
 
 	export let data: PageData;
 
@@ -37,52 +39,15 @@
 		['Friends', '/friends']
 	];
 
-	import ChatClient from 'chat-client-delta';
-	import type { AudioData, ChatMessage, MatchChatData, NotificationChatIds } from '$lib/chat';
-
-	const ServerIP: string = '172.205.243.31';
-	const Port: number = 8081;
-	const UserID: string = '1';
-
-	function connectChatClient() {
-		$chatClient = new ChatClient(ServerIP, Port, UserID);
-
-		$chatClient
-			.connect()
-			.then(() => {
-				if ($chatClient === null) {
-					throw new Error('Chat client is null');
-				}
-				console.log('Chat client connected');
-
-				$chatClient.setOnAudioMessageReceived((audioData: AudioData) => {
-					console.log('Audio data received:', audioData);
-				});
-
-				$chatClient.setOnChatMessageReceived((data: { message: string }) => {
-					console.log('New message received:', data);
-					$messages = [...$messages, { message: data.message }];
-				});
-
-				$chatClient.setOnMatchChat((data: MatchChatData) => {
-					console.log('Match chat event triggered with user IDs:', data.match_chat_id);
-					$current_match_chat_id = data.match_chat_id;
-				});
-
-				$chatClient.setNotificationChatIds((data: NotificationChatIds) => {
-					console.log('New notification received:', data);
-				});
-			})
-			.catch((err) => {
-				console.error('Failed to connect chat client:', err);
-			});
-	}
-
+	
 	let mainArea: HTMLDivElement;
 	onMount(() => {
     $user = data.user;
-    connectChatClient();
-		const osInstance = OverlayScrollbars(mainArea, {});
+		const osInstance = OverlayScrollbars(mainArea, {
+      scrollbars: {
+        theme: "os-theme-default"
+      }
+    });
 	});
 
 
@@ -104,6 +69,11 @@
 			openChat.set(false);
 		}
 	});
+
+
+  $: if ($page.url.search.startsWith("?redirect") && browser) {
+    document.location.href = $page.url.search.replace("?redirect=", "");
+	}
 </script>
 
 <title>Gamenight</title>
@@ -212,7 +182,7 @@
 		box-shadow: 0px -2px 0px 0px #334155;
 	}
 
-	:global(.os-scrollbar) {
+  :global(.os-theme-default) {
 		--os-size: 16px;
 		--os-padding-perpendicular: 4px;
 		--os-padding-axis: 6px;
@@ -220,7 +190,9 @@
 		--os-handle-bg-hover: #33415580;
 		--os-handle-bg-active: #33415580;
 		--os-handle-interactive-area-offset: 16px;
-	}
+    --os-handle-border-radius: 0.5rem;
+    --os-handle-min-size: 32px;
+  }
 
 	:global(*) {
 		transition-duration: 150ms;

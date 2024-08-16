@@ -6,7 +6,7 @@
 	import * as Form from '$lib/components/ui/form';
 	import { Input } from '$lib/components/ui/input';
 	import { Button } from '$lib/components/ui/button';
-	import { Eye, EyeOff, Github } from 'lucide-svelte';
+	import { Eye, EyeOff, Github, RefreshCw } from 'lucide-svelte';
 	import * as Tabs from '$lib/components/ui/tabs/index.js';
 	import { applyAction } from '$app/forms';
 	import type { ActionResult } from '@sveltejs/kit';
@@ -17,10 +17,20 @@
 
 	export let data: PageData;
 
+	let loading = false;
+
 	const form = superForm(data.emailForm, {
 		validators: zodClient(loginSchema),
 		dataType: 'json',
-		resetForm: false
+		resetForm: false,
+		onSubmit: () => {
+			loading = true;
+		},
+		onResult: (event: any) => {
+			if (event.result['data'] && event.result.data.error) {
+				loading = false;
+			}
+		}
 	});
 
 	const { form: formData, enhance } = form;
@@ -99,7 +109,12 @@
 			{#if $page.form?.error}
 				<p class="font-semibold text-red-400">{$page.form.error}</p>
 			{/if}
-			<Form.Button class="focusring mt-2 w-full">Log In</Form.Button>
+			<Form.Button class="focusring mt-2 w-full"
+				>Log In
+				{#if loading}
+					<RefreshCw class="ml-2 animate-spin" />
+				{/if}
+			</Form.Button>
 		</form>
 	</div>
 	<div

@@ -8,18 +8,20 @@
 	import { ChevronRight, Send, UserPlus, X } from 'lucide-svelte';
 	import { getFriendsFromRequests } from '$lib/friends';
 	import Input from './ui/input/input.svelte';
+	import { OverlayScrollbars } from 'overlayscrollbars';
+	import { message } from 'sveltekit-superforms';
 
 	export let sidebar: boolean = false;
 
 	type AudioData = any;
-	type ChatMessage = { message: string };
+	type ChatMessage = { message: string; chat_id: string; sender_id: string };
 	type MatchChatData = { match_chat_id: string };
 	type NotificationChatIds = any;
 	type StartFriendChatResult = { chatId: string; oldMessages: ChatMessage[] };
 
 	const ServerIP: string = '172.205.243.31';
 	const Port: number = 8081;
-	const UserID: string = '1';
+	const UserID: string = $user?.username || '';
 
 	let chatClient: ChatClient;
 	let messageInput: string = '';
@@ -27,30 +29,38 @@
 	let messages: ChatMessage[] = [];
 	let audioIsPlaying: boolean = false;
 	let current_match_chat_id: string | null = null;
-  let currentChatId = '';
+	let currentChatId = '';
+	let currentFriendId: string = '';
 
 	let friends: User[] = [];
 
 	let errorConnectingClient = false;
 
+	let chatArea: HTMLDivElement;
+	let chatViewport: HTMLElement;
+
+	function scrollToBottom() {
+		chatViewport.scrollTop = chatViewport.scrollHeight;
+	}
+
 	async function connectClient() {
-		let friendRequests = await fetch('/friends').then((res) => res.json());
-		friends = getFriendsFromRequests(friendRequests);
+		let errorConnectingClient = false;
 
 		chatClient = new ChatClient(ServerIP, Port, UserID);
 
 		chatClient
 			.connect()
-			.then(() => {
+			.then(async () => {
 				console.log('Chat client connected');
 
 				chatClient.setOnAudioMessageReceived((audioData: AudioData) => {
 					console.log('Audio data received:', audioData);
 				});
 
-				chatClient.setOnChatMessageReceived((data: { message: string }) => {
+				chatClient.setOnChatMessageReceived((data: ChatMessage) => {
 					console.log('New message received:', data);
-					messages = [...messages, { message: data.message }];
+					messages = [...messages, data];
+					scrollToBottom();
 				});
 
 				chatClient.setOnMatchChat((data: MatchChatData) => {
@@ -61,6 +71,9 @@
 				chatClient.setNotificationChatIds((data: NotificationChatIds) => {
 					console.log('New notification received:', data);
 				});
+
+				let friendRequests = await fetch('/friends').then((res) => res.json());
+				friends = getFriendsFromRequests(friendRequests);
 			})
 			.catch((err) => {
 				errorConnectingClient = true;
@@ -71,6 +84,15 @@
 	onMount(async () => {
 		await connectClient();
 	});
+
+	$: if (chatArea != undefined) {
+		const osInstance = OverlayScrollbars(chatArea, {
+			scrollbars: {
+				theme: 'os-theme-chat'
+			}
+		});
+		chatViewport = osInstance.elements().viewport;
+	}
 
 	function startAudioCapture(): void {
 		if (current_match_chat_id) {
@@ -93,26 +115,24 @@
 		}
 	}
 
-	async function startChat(): Promise<void | ChatMessage[]> {
-		if (friendUserId) {
-			try {
-				let { chatId, oldMessages }: StartFriendChatResult =
-					await chatClient.startFriendChat(friendUserId);
-        currentChatId = chatId;
-				return oldMessages;
-				console.log(`Friend chat ID: ${chatId}`);
-				console.log('Old messages:', oldMessages);
-			} catch (err) {
-				console.error('Failed to start friend chat:', err);
+	async function startChat(friendId: string): Promise<void> {
+		try {
+			if (friendId == currentFriendId) {
+				messages = [];
 			}
-		} else {
-			alert('Please enter a friend user ID.');
+			let { chatId, oldMessages }: StartFriendChatResult =
+				await chatClient.startFriendChat(friendId);
+			currentChatId = chatId;
+			friendUserId = friendId;
+			messages = oldMessages;
+		} catch (err) {
+			console.error('Failed to start friend chat:', err);
 		}
 	}
 
 	function sendMessage(): void {
 		chatClient.sendFriendMessage(currentChatId, messageInput);
-    messages = [...messages, { message: messageInput }];
+		messageInput = '';
 	}
 </script>
 
@@ -151,8 +171,8 @@
 			{#each friends as friend}
 				<Button
 					on:click={async () => {
-						friendUserId = friend.username;
-						messages = await startChat();
+						await startChat(friend.username);
+						scrollToBottom();
 					}}
 					variant="outline"
 					class="w-full border-slate-600 bg-slate-700 text-slate-100 hover:bg-slate-600"
@@ -160,49 +180,77 @@
 				>
 			{/each}
 		</div>
-		<div class="flex h-full w-full flex-col justify-between p-2 grow-0">
+		<div class="flex h-full w-full grow-0 flex-col justify-between p-0">
 			{#if errorConnectingClient}
 				<p class="mb-2">There was an error connecting to the chat server.</p>
 				<Button on:click={connectClient}>Try again</Button>
 			{:else}
 				<!-- Chat -->
-
-        
 				{#if friendUserId}
-        <div class="h-full max-h-full w-full">
-          <div class=" space-y-2 max-h-[380px] h-[380px] overflow-y-auto">
-						{#each messages as message}
-              <div class="rounded-lg h-10 w-fit bg-slate-600 flex items-center px-3">
-                {message[2]}
-              </div>
-						{:else}
-							Start your conversation with {friendUserId}!
-						{/each}
-            
+					<div class="h-full max-h-full w-full">
+						<div bind:this={chatArea} class=" h-[388px] max-h-[388px] max-w-[272px] px-2 pt-2">
+							<div class="max-w-[272px] space-y-2">
+								{#each messages as message}
+									{#if message.sender_id === UserID}
+										<div
+											class="right-0 ml-auto mr-0 flex w-fit max-w-[80%] items-center rounded-xl rounded-br-sm bg-sky-600 px-3 py-2"
+										>
+											<p class="max-w-full break-words">
+												{message.message}
+											</p>
+										</div>
+									{:else}
+										<div
+											class="left-0 flex w-fit max-w-[80%] items-center rounded-xl rounded-bl-sm bg-slate-600 px-3 py-2"
+										>
+											<p class="max-w-full break-words">{message.message}</p>
+										</div>
+									{/if}
+								{:else}
+									<p class="m-2">
+										Start your conversation with {friendUserId}!
+									</p>
+								{/each}
+							</div>
+						</div>
+
+						<form on:submit|preventDefault={sendMessage} class="mt-2 flex h-10 w-full grow px-2">
+							<Input
+								placeholder="Message"
+								class="focusring mr-2 h-10 w-full rounded-lg border-none bg-slate-600"
+								bind:value={messageInput}
+							/>
+							<Button
+								variant="secondary"
+								on:click={sendMessage}
+								class="h-10 w-10 shrink-0 rounded-lg bg-sky-600 p-0 hover:bg-sky-700"
+							>
+								<Send />
+							</Button>
+						</form>
 					</div>
-
-          <div class="h-10 w-full flex grow mt-2">
-              <Input class="h-10 bg-slate-600 border-none !focusring w-full mr-2 rounded-lg" bind:value={messageInput} />
-              <Button variant="secondary" on:click={sendMessage} class="h-10 w-10 bg-sky-600 hover:bg-sky-700 p-0 shrink-0 rounded-lg">
-                <Send/>
-              </Button>
-            </div>
-        </div>
-          
-
-					
-					
 				{:else}
-					Select a friend to start a conversation!
+					<p class="m-2">Select a friend to start a conversation!</p>
 				{/if}
 			{/if}
 		</div>
 	</div>
 {/if}
 
-
 <style>
 	:global(.focusring:focus) {
 		@apply outline-sky-400;
+	}
+
+	:global(.os-theme-chat) {
+		--os-size: 8px;
+		--os-padding-perpendicular: 3px;
+		--os-padding-axis: 0px;
+		--os-handle-bg: #64748b80;
+		--os-handle-bg-hover: #64748b80;
+		--os-handle-bg-active: #64748b80;
+		--os-handle-interactive-area-offset: 24px;
+		--os-handle-border-radius: 0.5rem;
+		--os-handle-min-size: 32px;
 	}
 </style>

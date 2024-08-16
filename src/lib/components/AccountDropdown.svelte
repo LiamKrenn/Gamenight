@@ -44,7 +44,7 @@
 					href="/logout"
 					data-sveltekit-preload-data="false"
 					data-sveltekit-preload-code="false"
-					data-sveltekit-reload
+          data-sveltekit-reload
 				>
 					<DropdownMenu.Item class="rounded-lg bg-slate-800 duration-150 hover:!bg-slate-700"
 						><LogOut class="mr-2" />Logout</DropdownMenu.Item

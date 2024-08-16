@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { CardType } from '$lib/types';
+	import { onMount } from 'svelte';
 	import Card from '../Card.svelte';
 
 	let mockupOwnHand: CardType[] = [
@@ -8,26 +9,26 @@
 			value: 11,
 			skin: 'default'
 		},
-		{
-			color: 'hearts',
-			value: 4,
-			skin: 'default'
-		},
-		{
-			color: 'clubs',
-			value: 3,
-			skin: 'default'
-		},
-		{
-			color: 'clubs',
-			value: 4,
-			skin: 'default'
-		},
-		{
-			color: 'spades',
-			value: 11,
-			skin: 'default'
-		}
+		// {
+		// 	color: 'hearts',
+		// 	value: 4,
+		// 	skin: 'default'
+		// },
+		// {
+		// 	color: 'clubs',
+		// 	value: 3,
+		// 	skin: 'default'
+		// },
+		// {
+		// 	color: 'clubs',
+		// 	value: 4,
+		// 	skin: 'default'
+		// },
+		// {
+		// 	color: 'spades',
+		// 	value: 11,
+		// 	skin: 'default'
+		// }
 	];
 
 	let mockupOpponentHand: CardType[] = [
@@ -73,11 +74,28 @@
 	let handWidth = 0;
 	$: cardSizeX = handWidth / 4;
 	$: cardSizeY = cardSizeX * 1.39;
+
+  let opponentHandElement: HTMLDivElement;
+  let ownHandElement: HTMLDivElement;
+  let playedCardElement: HTMLDivElement;
+
+  let testStyle = ""
+
+  function test() {
+    let targetCoords = playedCardElement.getBoundingClientRect();
+    let cardCoords = ownHandElement.children[0].getBoundingClientRect();
+
+    let x = targetCoords.left - cardCoords.left;
+    let y = targetCoords.top - cardCoords.top;
+    testStyle = "transform: translate(" + x + "px, " + y + "px);";
+    console.log(targetCoords, cardCoords);
+  }
 </script>
 
 <div class="relative flex h-full w-full items-center justify-center overflow-hidden p-4">
 	<!-- Opponent Hand -->
 	<div
+    bind:this={opponentHandElement}
 		class="w-[60vmin] h-[{cardSizeY}px] absolute flex max-w-[57%] -space-x-[6%]"
 		style="top: -{cardSizeY / 2.4}px"
 	>
@@ -109,6 +127,22 @@
 		/>
 		<Card shadow={false} card={emptyCard} draggable={false} width={cardSizeX} />
 	</div>
+
+  <div bind:this={playedCardElement} class="bg-red-500/10 mb-28">
+    <Card parentClass="opacity-0" card={emptyCard} draggable={false} width={cardSizeX} />
+  </div>
+
+
+
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
+  <!-- svelte-ignore a11y-no-static-element-interactions -->
+  <div
+    class="absolute bottom-16 right-16"
+    style={testStyle}
+    bind:this={ownHandElement}
+    on:click={test}>
+    <Card card={stackCard} draggable={false} width={cardSizeX} />
+  </div>
 
 	<!-- Own Hand -->
 	<div

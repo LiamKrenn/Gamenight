@@ -18,8 +18,8 @@ dependencies:
     specifier: ^0.21.12
     version: 0.21.12(svelte@4.2.18)
   chat-client-delta:
-    specifier: ^1.2.6
-    version: 1.2.6
+    specifier: ^1.2.12
+    version: 1.2.12
   clsx:
     specifier: ^2.1.1
     version: 2.1.1
@@ -1324,8 +1324,8 @@ packages:
       supports-color: 7.2.0
     dev: true
 
-  /chat-client-delta@1.2.6:
-    resolution: {integrity: sha512-LrGVrMorJBg+vAe8beL6Og2fxM5Rhu6aq3JnXfnWBHJTIQy/1p+93hehCtFlyUTKJUgSp35MNHLzKKz666IJGg==}
+  /chat-client-delta@1.2.12:
+    resolution: {integrity: sha512-ioiXWn/aQfLLje0dYJ7VedAxDqlgFgQcZRT74Ey/uDAt3w2Q9ZpbBdtb7vvraqok71pvTVyu6OhuIPuMdFcM8Q==}
     dependencies:
       ws: 8.18.0
     transitivePeerDependencies:

@@ -9,7 +9,11 @@
 
 	let mainArea: HTMLDivElement;
 	onMount(() => {
-		const osInstance = OverlayScrollbars(mainArea, {});
+		const osInstance = OverlayScrollbars(mainArea, {
+			scrollbars: {
+				theme: 'os-theme-default'
+			}
+		});
 	});
 </script>
 
@@ -27,3 +31,6 @@
 		<slot />
 	</div>
 </div>
+
+<style>
+</style>
