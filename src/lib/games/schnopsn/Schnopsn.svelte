@@ -105,7 +105,10 @@
 		return ownPlayedCardDiv.getBoundingClientRect();
 	}
 
+  let currentlyPlayingAnimation = false;
 	function dragCallback(index: number, position: { x: number; y: number }) {
+    if (currentlyPlayingAnimation) return {x: 0, y: 0};
+    currentlyPlayingAnimation = true;
 		try {
 			const target = getOwnPlayedCardBB();
 			const curCoords = ownHandDivs[index].getBoundingClientRect();
@@ -117,6 +120,9 @@
 				setTimeout(() => {
 					ownHand.splice(index, 1);
 					ownHand = [...ownHand];
+          setTimeout(() => {
+            currentlyPlayingAnimation = false;
+          }, 100);
 				}, 100);
 			}, 150);
 		}
