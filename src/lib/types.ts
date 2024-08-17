@@ -11,7 +11,7 @@ export type Request = {
 }
 
 export type CardType = {
-  skin: "default",
+  skin: string,
   color: "hearts" | "diamonds" | "clubs" | "spades" | undefined,
   value: 2 | 3 | 4 | 10 | 11 | undefined
 }

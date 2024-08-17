@@ -15,6 +15,10 @@
 	export { className as class };
 	export let position = { x: 0, y: 0 };
 
+  export let cardDiv: HTMLDivElement | null = null;
+  export let index: number = -1;
+  export let dragCallback: (index: number, position: {x: number, y: number}) => {x: number, y: number} | void = () => {};
+
 	let hidden = card.value == undefined || card.color == undefined;
 
 	let frontCardValue = hidden ? 'Back' : (card.color || 'U').slice(0, 1).toUpperCase() + card.value;
@@ -44,6 +48,7 @@
 </script>
 
 <div
+  bind:this={cardDiv}
 	class={cn('relative h-fit rounded-2xl', parent, parentClass, shadow ? 'cshadow' : '')}
 	style="width: {width}px"
 	use:draggable={{
@@ -57,7 +62,7 @@
 		},
 		onDragEnd: () => {
 			drag = false;
-			position = { x: 0, y: 0 };
+      position = dragCallback(index, position) || {x: 0, y: 0};
 		}
 	}}
 >
