@@ -117,7 +117,7 @@
 				setTimeout(() => {
 					ownHand.splice(index, 1);
 					ownHand = [...ownHand];
-				}, 10);
+				}, 100);
 			}, 150);
 		}
 	}
