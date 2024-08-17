@@ -90,8 +90,8 @@
 
 	let stackClosed: boolean = false;
 
-	let ownPlayedCard: CardType;
-	let opponentPlayedCard: CardType;
+	let ownPlayedCard: CardType | null = null;
+	let opponentPlayedCard: CardType | null = null;
 
 	let ownHandDivs: HTMLDivElement[] = [];
 	let opponentHandDivs: HTMLDivElement[] = [];
@@ -108,6 +108,7 @@
 		try {
 			const target = getOwnPlayedCardBB();
 			const curCoords = ownHandDivs[index].getBoundingClientRect();
+      ownPlayedCard = null;
 			return { x: target.x - curCoords.x, y: target.y - curCoords.y };
 		} finally {
 			setTimeout(() => {
@@ -187,15 +188,14 @@
 		<!-- Own Hand -->
 		<div
 			bind:clientWidth={handWidth}
-			class="w-[60vmin] h-[{cardSizeY}px] min-h-[{cardSizeY}px] mb-[2%] flex max-w-[57%] justify-center -space-x-[6%]"
+			class="w-[60vmin] mb-[2%] flex max-w-[57%] justify-center -space-x-[6%]"
+      style="height: {cardSizeY}px"
 		>
 			{#each ownHand as card, i (card.value + (card.color || 'U'))}
 				<div bind:this={ownHandDivs[i]} animate:flip={{duration: 250}}>
 					<Card index={i} {dragCallback} {card} draggable={true} width={cardSizeX} />
 				</div>
-      {:else}
-        <Card parentClass="opacity-0" card={ownEmptyCard} draggable={false} width={cardSizeX} />
-			{/each}
+      {/each}
 		</div>
 	</div>
 </div>
