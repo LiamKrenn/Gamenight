@@ -2,6 +2,7 @@
 	import type { CardType } from '$lib/types';
 	import { flip } from 'svelte/animate';
 	import Card from '../Card.svelte';
+	import { onMount } from 'svelte';
 
 	const defaultSkin = 'default';
 
@@ -108,13 +109,15 @@
 		try {
 			const target = getOwnPlayedCardBB();
 			const curCoords = ownHandDivs[index].getBoundingClientRect();
-      ownPlayedCard = null;
+			ownPlayedCard = null;
 			return { x: target.x - curCoords.x, y: target.y - curCoords.y };
 		} finally {
 			setTimeout(() => {
 				ownPlayedCard = ownHand[index];
-				ownHand.splice(index, 1);
-				ownHand = [...ownHand];
+				setTimeout(() => {
+					ownHand.splice(index, 1);
+					ownHand = [...ownHand];
+				}, 10);
 			}, 150);
 		}
 	}
@@ -125,30 +128,6 @@
 </script>
 
 <div class="relative flex h-full w-full items-center justify-center overflow-hidden p-0">
-	<!-- Stack -->
-	<div
-		class="absolute mobile:left-[4%]"
-		style="left: -{cardSizeX / 2}px; margin-bottom: {cardSizeY / 2}px"
-	>
-		<div class="absolute left-[54%] mt-3 rotate-90">
-			<Card
-				style="left: {cardSizeY / 2.55}px"
-				card={stackCard}
-				draggable={false}
-				width={cardSizeX}
-			/>
-		</div>
-		<Card parentClass="absolute top-4" card={stackEmptyCard} draggable={false} width={cardSizeX} />
-		<Card
-			shadow={false}
-			parentClass="absolute top-2"
-			card={stackEmptyCard}
-			draggable={false}
-			width={cardSizeX}
-		/>
-		<Card shadow={false} card={stackEmptyCard} draggable={false} width={cardSizeX} />
-	</div>
-
 	<div bind:this={playingAreaDiv} class="flex h-full w-full flex-col items-center justify-between">
 		<!-- Opponent Hand -->
 		<div
@@ -168,34 +147,68 @@
 		</div>
 
 		<!-- Played Cards -->
-		<div class="flex space-x-6">
-			<div bind:this={opponentPlayedCardDiv} class="bg-red-500/20 rounded-lg" style="height: {cardSizeY}px; width: {cardSizeX}px">
+		<div class="relative flex w-full justify-center space-x-6">
+			<div
+				bind:this={opponentPlayedCardDiv}
+				class="flex items-center justify-center rounded-sm bg-slate-700/20"
+				style="height: {cardSizeY}px; width: {cardSizeX}px"
+			>
 				{#if opponentPlayedCard}
 					<Card card={opponentPlayedCard} draggable={false} width={cardSizeX} />
+				{:else}
+					<p class="opacity-10">Opponent</p>
 				{/if}
 			</div>
 			<div
 				bind:this={ownPlayedCardDiv}
-				class="bg-red-500/20 rounded-sm"
+				class="flex items-center justify-center rounded-sm bg-slate-700/20"
 				style="height: {cardSizeY}px; width: {cardSizeX}px"
 			>
 				{#if ownPlayedCard}
 					<Card card={ownPlayedCard} draggable={false} width={cardSizeX} />
+				{:else}
+					<p class="opacity-10">Own</p>
 				{/if}
+			</div>
+
+			<!-- Stack -->
+			<div class="absolute mobile:left-[4%]" style="left: -{cardSizeX / 2}px; ">
+				<div class="absolute left-[54%] mt-3 rotate-90">
+					<Card
+						style="left: {cardSizeY / 2.55}px"
+						card={stackCard}
+						draggable={false}
+						width={cardSizeX}
+					/>
+				</div>
+				<Card
+					parentClass="absolute top-4"
+					card={stackEmptyCard}
+					draggable={false}
+					width={cardSizeX}
+				/>
+				<Card
+					shadow={false}
+					parentClass="absolute top-2"
+					card={stackEmptyCard}
+					draggable={false}
+					width={cardSizeX}
+				/>
+				<Card shadow={false} card={stackEmptyCard} draggable={false} width={cardSizeX} />
 			</div>
 		</div>
 
 		<!-- Own Hand -->
 		<div
 			bind:clientWidth={handWidth}
-			class="w-[60vmin] mb-[2%] flex max-w-[57%] justify-center -space-x-[6%]"
-      style="height: {cardSizeY}px"
+			class="mb-[2%] flex w-[60vmin] max-w-[57%] justify-center -space-x-[6%]"
+			style="height: {cardSizeY}px"
 		>
 			{#each ownHand as card, i (card.value + (card.color || 'U'))}
-				<div bind:this={ownHandDivs[i]} animate:flip={{duration: 250}}>
+				<div bind:this={ownHandDivs[i]} animate:flip={{ duration: 250 }}>
 					<Card index={i} {dragCallback} {card} draggable={true} width={cardSizeX} />
 				</div>
-      {/each}
+			{/each}
 		</div>
 	</div>
 </div>
