@@ -162,7 +162,7 @@
 				{#if opponentPlayedCard}
 					<Card card={opponentPlayedCard} draggable={false} width={cardSizeX} />
 				{:else}
-					<p class="opacity-10">Opponent</p>
+					<p class="opacity-10">Opp.</p>
 				{/if}
 			</div>
 			<div
