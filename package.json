@@ -39,7 +39,7 @@
 		"@sveltejs/adapter-node": "^5.2.2",
 		"@sveltejs/adapter-vercel": "^5.4.3",
 		"bits-ui": "^0.21.13",
-		"chat-client-delta": "^1.2.12",
+		"chat-client-delta": "^1.2.15",
 		"clsx": "^2.1.1",
 		"dotenv": "^16.4.5",
 		"formsnap": "^1.0.1",
