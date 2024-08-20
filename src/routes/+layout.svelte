@@ -11,7 +11,7 @@
 	import { OverlayScrollbars } from 'overlayscrollbars';
 	import NewsCard from '$lib/components/NewsCard.svelte';
 	import Navitems from '$lib/components/NavItems.svelte';
-	import CustomTabs from '$lib/components/CustomTabs.svelte';
+	import MenuSidebarTabs from '$lib/components/MenuSidebarTabs.svelte';
 	import AllMobNavItems from '$lib/components/AllMobNavItems.svelte';
 	import AccountDropdown from '$lib/components/AccountDropdown.svelte';
 	import { AlignJustify, Bell, LogIn, MessageCircle, X } from 'lucide-svelte';
@@ -126,9 +126,9 @@
 		class="relative flex h-full shrink grow-0 flex-col overflow-y-auto"
 		data-overlayscrollbars-initialize
 	>
-    <!-- Sidebar -->
-    <MenuSidebar >
-      <div class="flex h-full w-full flex-col p-4">
+		<!-- Sidebar -->
+		<MenuSidebar>
+			<div class="flex h-full w-full flex-col p-4">
 				<a
 					href="/"
 					class=" mb-4 flex h-min justify-center rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700 logo:hidden"
@@ -141,7 +141,7 @@
 						<Navtext class="ml-2 h-min" />
 					</button>
 				</a>
-				<CustomTabs>
+				<MenuSidebarTabs>
 					<div slot="news">
 						<!-- News -->
 						{#each News as news}
@@ -152,9 +152,9 @@
 						<p>Leaderboard</p>
 						<!-- TODO: implement -->
 					</div>
-				</CustomTabs>
+				</MenuSidebarTabs>
 			</div>
-    </MenuSidebar>
+		</MenuSidebar>
 
 		<!-- Page -->
 		<slot />
@@ -163,7 +163,9 @@
 	</div>
 	{#if !($page.url.pathname + '/').startsWith('/game/')}
 		<!-- Footer for Mobile -->
-		<div class="fshadow !z-40 flex h-16 w-full shrink-0 items-center justify-between mobile:hidden bg-slate-800">
+		<div
+			class="fshadow !z-40 flex h-16 w-full shrink-0 items-center justify-between bg-slate-800 mobile:hidden"
+		>
 			<AllMobNavItems />
 		</div>
 	{/if}
