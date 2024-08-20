@@ -3,9 +3,10 @@
 	import { Send } from 'lucide-svelte';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import Input from '$lib/components/ui/input/input.svelte';
+	import { page } from '$app/stores';
 
 	let username = '';
-	let open = false;
+	let open = $page.url.searchParams.get('open') === 'true';
   let errorMessage = '';
 	$: if (open) {
 		username = '';
@@ -37,9 +38,9 @@
 	<Dialog.Trigger>
 		<slot />
 	</Dialog.Trigger>
-	<Dialog.Content class="border-slate-700 bg-slate-800">
+	<Dialog.Content class="border-slate-700 bg-slate-800 rounded-lg max-w-[90%]">
 		<Dialog.Header>
-			<Dialog.Title class=" text-3xl">Add a Friend</Dialog.Title>
+			<Dialog.Title class=" text-3xl 2xs:text-center text-start">Add a Friend</Dialog.Title>
 		</Dialog.Header>
     <form on:submit|preventDefault={sendRequest}>
       <p class="w-full text-start mb-2">Username</p>

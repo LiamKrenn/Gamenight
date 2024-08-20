@@ -6,10 +6,21 @@
 	export { className as class };
 	export let open = false;
 	export let width_full = false;
+	export let overflow: {
+		x: 'hidden' | 'scroll';
+		y: 'hidden' | 'scroll';
+	} = {
+		x: 'hidden',
+		y: 'scroll'
+	};
 
 	let mainArea: HTMLDivElement;
 	onMount(() => {
 		const osInstance = OverlayScrollbars(mainArea, {
+			overflow: {
+				x: overflow.x,
+				y: overflow.y
+			},
 			scrollbars: {
 				theme: 'os-theme-default'
 			}
@@ -24,7 +35,7 @@
 >
 	<div
 		bind:this={mainArea}
-		class="cscroll absolute h-full w-full overflow-y-auto overflow-x-hidden border-slate-700 bg-slate-800 duration-150 {width_full
+		class="cscroll absolute h-full w-full overflow-y-auto overflow-x-hidden  border-slate-700 bg-slate-800 duration-150 {width_full
 			? ''
 			: 'xs:border-r-2'} "
 	>

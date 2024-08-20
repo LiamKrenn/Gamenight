@@ -5,7 +5,7 @@
 	import type { User } from '$lib/types';
 	import { backendURL } from '$lib';
 	import { openChat, user } from '$lib/stores';
-	import { ChevronRight, Send, UserPlus, X } from 'lucide-svelte';
+	import { ChevronRight, RefreshCw, RotateCw, Send, UserPlus, X } from 'lucide-svelte';
 	import { getFriendsFromRequests } from '$lib/friends';
 	import Input from './ui/input/input.svelte';
 	import { OverlayScrollbars } from 'overlayscrollbars';
@@ -34,6 +34,7 @@
 
 	let friends: User[] = [];
 
+	let loading = false;
 	let errorConnectingClient = false;
 
 	let chatArea: HTMLDivElement;
@@ -44,7 +45,11 @@
 	}
 
 	async function connectClient() {
-		let errorConnectingClient = false;
+		loading = true;
+		errorConnectingClient = false;
+
+		let friendRequests = await fetch('/friends').then((res) => res.json());
+		friends = getFriendsFromRequests(friendRequests);
 
 		chatClient = new ChatClient(ServerIP, Port, UserID);
 
@@ -52,6 +57,7 @@
 			.connect()
 			.then(async () => {
 				console.log('Chat client connected');
+				loading = false;
 
 				chatClient.setOnAudioMessageReceived((audioData: AudioData) => {
 					console.log('Audio data received:', audioData);
@@ -71,12 +77,10 @@
 				chatClient.setNotificationChatIds((data: NotificationChatIds) => {
 					console.log('New notification received:', data);
 				});
-
-				let friendRequests = await fetch('/friends').then((res) => res.json());
-				friends = getFriendsFromRequests(friendRequests);
 			})
 			.catch((err) => {
 				errorConnectingClient = true;
+				loading = false;
 				console.error('Failed to connect chat client:', err);
 			});
 	}
@@ -137,12 +141,12 @@
 </script>
 
 {#if sidebar}
-	<div class="flex h-full w-full flex-col p-4">
+	<div class="flex h-full w-full flex-col p-2 3xs:p-3 2xs:p-4">
 		<div class=" flex w-full shrink-0 items-center justify-between pl-2">
 			<!-- Header -->
-			<h2 class="text-2xl font-semibold">Chats</h2>
+			<h2 class="text-xl font-semibold 3xs:text-2xl">Chats</h2>
 			<div class="flex">
-				<a on:click={() => ($openChat = false)} href="/friends/requests">
+				<a on:click={() => ($openChat = false)} href="/friends/requests?open=true">
 					<UserPlus class="h-10 w-10 cursor-pointer rounded-lg p-2 hover:bg-slate-700" />
 				</a>
 				<button on:click={() => ($openChat = false)}>
@@ -150,40 +154,71 @@
 				</button>
 			</div>
 		</div>
-		<div class="mt-4 space-y-2">
-			{#each friends as friend}
-				<Button
-					variant="outline"
-					class="h-12 w-full justify-start rounded-lg border-slate-700 bg-slate-800 py-0 pl-2 pr-0 text-slate-100 hover:bg-slate-700"
-				>
-					<p class="w-32">{friend.username}</p>
-					<p class="w-full overflow-hidden overflow-ellipsis text-left text-slate-500">
-						Last message bla bla bla bla bla bla bla bla
-					</p>
-					<ChevronRight class="h-10 w-10 shrink-0 rounded-lg stroke-slate-300 p-2" />
-				</Button>
-			{/each}
-		</div>
+		{#if loading}
+			<div class="flex w-full items-center justify-center p-3 text-slate-400">
+				<RefreshCw class="mr-3 h-8 w-8 shrink-0 animate-spin stroke-slate-400" />
+				Connecting...
+			</div>
+		{:else if errorConnectingClient}
+			<div class="flex h-full w-full flex-col items-center p-3">
+				<p class="mb-2 text-center font-semibold text-red-400">
+					There was an error connecting to the chat server.
+				</p>
+				<Button class="w-full max-w-96" on:click={connectClient}>Try again</Button>
+			</div>
+		{:else}
+			<div class="mt-4 space-y-2">
+				{#each friends as friend}
+					<Button
+						variant="outline"
+						class="h-12 w-full justify-start rounded-lg border-slate-700 bg-slate-800 py-0 pl-2 pr-0 text-slate-100 hover:bg-slate-700"
+					>
+						<p class="w-24 shrink-0 xs:w-32">{friend.username}</p>
+						<p class="w-full overflow-hidden overflow-ellipsis text-left text-slate-500">
+							Last message bla bla bla bla bla bla bla bla
+						</p>
+						<ChevronRight class="h-10 w-10 shrink-0 rounded-lg stroke-slate-300 p-2" />
+					</Button>
+				{/each}
+			</div>
+		{/if}
 	</div>
 {:else}
 	<div class="flex h-full">
 		<div class="h-full w-32 shrink-0 space-y-2 border-r-[1px] border-slate-600 p-2">
 			{#each friends as friend}
-				<Button
-					on:click={async () => {
-						await startChat(friend.username);
-						scrollToBottom();
-					}}
-					variant="outline"
-					class="w-full border-slate-600 bg-slate-700 text-slate-100 hover:bg-slate-600"
-					>{friend.username}</Button
-				>
+				{#if friend.username === friendUserId}
+					<Button
+						variant="outline"
+						class="w-full border-slate-600 bg-slate-600 text-slate-100 hover:bg-slate-600"
+						>{friend.username}</Button
+					>
+				{:else}
+					<Button
+						on:click={async () => {
+							await startChat(friend.username);
+							scrollToBottom();
+						}}
+						variant="outline"
+						class="w-full border-slate-600 bg-slate-700 text-slate-100 hover:bg-slate-600"
+						>{friend.username}</Button
+					>
+				{/if}
 			{/each}
 		</div>
 		<div class="flex h-full w-full grow-0 flex-col justify-between p-0">
 			{#if errorConnectingClient}
-				<p class="mb-2">There was an error connecting to the chat server.</p>
-				<Button on:click={connectClient}>Try again</Button>
+				<div class="h-full w-full p-3">
+					<p class="mb-2 text-center font-semibold text-red-400">
+						There was an error connecting to the chat server.
+					</p>
+					<Button variant="secondary" class="w-full" on:click={connectClient}>Try again</Button>
+				</div>
+			{:else if loading}
+				<div class="flex w-full items-center justify-center p-3 text-slate-400">
+					<RefreshCw class="mr-3 h-8 w-8 animate-spin stroke-slate-400" />
+					Connecting...
+				</div>
 			{:else}
 				<!-- Chat -->
 				{#if friendUserId}

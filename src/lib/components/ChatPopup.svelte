@@ -6,7 +6,6 @@
 	import Chat from './Chat.svelte';
 	import type { User } from '$lib/types';
 
-	export let friends = ['Jonas', 'Johan', 'Johanna', 'Johannes'];
 	export let loggedIn: boolean;
 </script>
 
@@ -21,7 +20,7 @@
 			<h2 class="text-2xl font-semibold">Chats</h2>
 			<div class="flex">
 				{#if loggedIn}
-					<a on:click={() => ($openChat = false)} href="/friends/requests">
+					<a on:click={() => ($openChat = false)} href="/friends/requests?open=true">
 						<UserPlus class="h-10 w-10 cursor-pointer rounded-lg p-2 hover:bg-slate-600" />
 					</a>
 				{/if}
@@ -47,7 +46,7 @@
 
 <Sidebar class="top-0 flex mobile:hidden" width_full={true} open={$openChat}>
 	{#if loggedIn}
-		<!-- <Chat sidebar={true}/> -->
+		<Chat sidebar={true}/>
 	{:else}
 		<div class="flex h-full w-full flex-col items-center justify-start">
 			<button class="absolute right-4 top-4" on:click={() => ($openChat = false)}>

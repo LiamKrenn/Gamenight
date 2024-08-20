@@ -44,6 +44,10 @@
 	onMount(() => {
     $user = data.user;
 		const osInstance = OverlayScrollbars(mainArea, {
+      overflow: {
+        x: 'hidden',
+        y: 'scroll'
+      },
       scrollbars: {
         theme: "os-theme-default"
       }

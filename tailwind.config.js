@@ -14,6 +14,12 @@ const config = {
 			}
 		},
     screens: {
+      '4xs': '200px',
+
+      '3xs': '275px',
+
+      '2xs': '375px',
+
       'logo': '480px',
 
       'xs': '535px',
