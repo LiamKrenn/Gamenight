@@ -7,14 +7,23 @@
 
 	let username = '';
 	let open = $page.url.searchParams.get('open') === 'true';
-  let errorMessage = '';
+	let errorMessage = '';
 	$: if (open) {
 		username = '';
-    errorMessage = ''
+		errorMessage = '';
 	}
-  export let onSuccess = () => {};
+	export let onSuccess = () => {};
 
+	let block = false;
 	async function sendRequest() {
+		if (username === '') {
+			errorMessage = 'Username cannot be empty';
+			return;
+		}
+		if (block) return;
+		errorMessage = '';
+		block = true;
+
 		let resp = await fetch('/friends/requests', {
 			method: 'POST',
 			headers: {
@@ -25,12 +34,15 @@
 				username: username
 			})
 		});
-    if (resp.status === 200) {
-      onSuccess();
-      open = false;
-    } else {
-      errorMessage = 'User not found'
-    }
+		if (resp.status === 200) {
+			onSuccess();
+			open = false;
+		} else {
+			errorMessage = 'User not found';
+		}
+		setTimeout(() => {
+			block = false;
+		}, 500);
 	}
 </script>
 
@@ -38,23 +50,23 @@
 	<Dialog.Trigger>
 		<slot />
 	</Dialog.Trigger>
-	<Dialog.Content class="border-slate-700 bg-slate-800 rounded-lg !max-w-[90%] !w-96">
+	<Dialog.Content class="!w-96 !max-w-[90%] rounded-lg border-slate-700 bg-slate-800">
 		<Dialog.Header>
-			<Dialog.Title class=" text-3xl 2xs:text-center text-start">Add a Friend</Dialog.Title>
+			<Dialog.Title class=" text-start text-3xl 2xs:text-center">Add a Friend</Dialog.Title>
 		</Dialog.Header>
-    <form on:submit|preventDefault={sendRequest}>
-      <p class="w-full text-start mb-2">Username</p>
-      <Input bind:value={username} class="focusring bg-slate-900" placeholder="ex. Jeff" />
-      {#if errorMessage != ''}
-         <p class="text-red-400 font-semibold mt-2">{errorMessage}</p>
-      {/if}
-    </form>
-    
+		<form on:submit|preventDefault={sendRequest}>
+			<p class="mb-2 w-full text-start">Username</p>
+			<Input bind:value={username} class="focusring bg-slate-900" placeholder="ex. Jeff" />
+			{#if errorMessage != ''}
+				<p class="-mb-1.5 mt-2 font-semibold text-red-400">{errorMessage}</p>
+			{/if}
+		</form>
+
 		<Dialog.Footer>
 			<Button
 				on:click={sendRequest}
 				variant="secondary"
-				class="w-full bg-slate-700 hover:bg-slate-600">Send Request <Send class="ml-2"/></Button
+				class="w-full bg-slate-700 hover:bg-slate-600">Send Request <Send class="ml-2" /></Button
 			>
 		</Dialog.Footer>
 	</Dialog.Content>
