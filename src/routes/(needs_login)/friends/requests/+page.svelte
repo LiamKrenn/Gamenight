@@ -67,7 +67,7 @@
 				</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="incoming">
-				<!-- INCOMING -->
+				<!-- Incoming -->
 				{#each data.incoming || [] as request}
 					<IncomingRequest {request} {refreshData} />
 				{:else}
@@ -75,7 +75,7 @@
 				{/each}
 			</Tabs.Content>
 			<Tabs.Content value="outgoing">
-				<!-- OUTGOING -->
+				<!-- Outgoing -->
 				{#each data.outgoing || [] as request}
 					<OutgoingRequest {request} {refreshData} />
 				{:else}

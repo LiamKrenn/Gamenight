@@ -8,7 +8,6 @@
 	import { disableModals, friends, openChat, openSidebar, user } from '$lib/stores';
 	import Navlogo from '$lib/icons/nav/navlogo.svelte';
 	import Navtext from '$lib/icons/nav/navtext.svelte';
-	import Sidebar from '$lib/components/Sidebar.svelte';
 	import { OverlayScrollbars } from 'overlayscrollbars';
 	import NewsCard from '$lib/components/NewsCard.svelte';
 	import Navitems from '$lib/components/NavItems.svelte';
@@ -20,6 +19,7 @@
 	import { browser } from '$app/environment';
 	import { fetchFriends } from '$lib/friends';
 	import ChatPopup from '$lib/components/chat/ChatPopup.svelte';
+	import MenuSidebar from '$lib/components/MenuSidebar.svelte';
 
 	export let data: PageData;
 
@@ -126,9 +126,9 @@
 		class="relative flex h-full shrink grow-0 flex-col overflow-y-auto"
 		data-overlayscrollbars-initialize
 	>
-		<!-- Sidebar -->
-		<Sidebar class="" open={$openSidebar}>
-			<div class="flex h-full w-full flex-col p-4">
+    <!-- Sidebar -->
+    <MenuSidebar >
+      <div class="flex h-full w-full flex-col p-4">
 				<a
 					href="/"
 					class=" mb-4 flex h-min justify-center rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700 logo:hidden"
@@ -154,7 +154,8 @@
 					</div>
 				</CustomTabs>
 			</div>
-		</Sidebar>
+    </MenuSidebar>
+
 		<!-- Page -->
 		<slot />
 		<!-- Message Popup -->
@@ -162,7 +163,7 @@
 	</div>
 	{#if !($page.url.pathname + '/').startsWith('/game/')}
 		<!-- Footer for Mobile -->
-		<div class="fshadow !z-40 flex h-16 w-full shrink-0 items-center justify-between mobile:hidden">
+		<div class="fshadow !z-40 flex h-16 w-full shrink-0 items-center justify-between mobile:hidden bg-slate-800">
 			<AllMobNavItems />
 		</div>
 	{/if}
