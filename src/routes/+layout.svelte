@@ -5,31 +5,21 @@
 	import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	import 'overlayscrollbars/overlayscrollbars.css';
-	import {
-		chatClient,
-		current_match_chat_id,
-		disableModals,
-		messages,
-		openChat,
-		openSidebar,
-
-		user
-
-	} from '$lib/stores';
+	import { disableModals, friends, openChat, openSidebar, user } from '$lib/stores';
 	import Navlogo from '$lib/icons/nav/navlogo.svelte';
 	import Navtext from '$lib/icons/nav/navtext.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import { OverlayScrollbars } from 'overlayscrollbars';
 	import NewsCard from '$lib/components/NewsCard.svelte';
 	import Navitems from '$lib/components/NavItems.svelte';
-	import ChatPopup from '$lib/components/ChatPopup.svelte';
 	import CustomTabs from '$lib/components/CustomTabs.svelte';
 	import AllMobNavItems from '$lib/components/AllMobNavItems.svelte';
 	import AccountDropdown from '$lib/components/AccountDropdown.svelte';
 	import { AlignJustify, Bell, LogIn, MessageCircle, X } from 'lucide-svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { goto, invalidateAll } from '$app/navigation';
 	import { browser } from '$app/environment';
+	import { fetchFriends } from '$lib/friends';
+	import ChatPopup from '$lib/components/chat/ChatPopup.svelte';
 
 	export let data: PageData;
 
@@ -39,21 +29,22 @@
 		['Friends', '/friends']
 	];
 
-	
 	let mainArea: HTMLDivElement;
-	onMount(() => {
-    $user = data.user;
+	onMount(async () => {
+		$user = data.user;
 		const osInstance = OverlayScrollbars(mainArea, {
-      overflow: {
-        x: 'hidden',
-        y: 'scroll'
-      },
-      scrollbars: {
-        theme: "os-theme-default"
-      }
-    });
+			overflow: {
+				x: 'hidden',
+				y: 'scroll'
+			},
+			scrollbars: {
+				theme: 'os-theme-default'
+			}
+		});
+		if ($friends === null) {
+			await fetchFriends();
+		}
 	});
-
 
 	$: loggedIn = $user !== null;
 
@@ -74,9 +65,8 @@
 		}
 	});
 
-
-  $: if ($page.url.search.startsWith("?redirect") && browser) {
-    document.location.href = $page.url.search.replace("?redirect=", "");
+	$: if ($page.url.search.startsWith('?redirect') && browser) {
+		document.location.href = $page.url.search.replace('?redirect=', '');
 	}
 </script>
 
@@ -186,7 +176,7 @@
 		box-shadow: 0px -2px 0px 0px #334155;
 	}
 
-  :global(.os-theme-default) {
+	:global(.os-theme-default) {
 		--os-size: 16px;
 		--os-padding-perpendicular: 4px;
 		--os-padding-axis: 6px;
@@ -194,9 +184,9 @@
 		--os-handle-bg-hover: #33415580;
 		--os-handle-bg-active: #33415580;
 		--os-handle-interactive-area-offset: 16px;
-    --os-handle-border-radius: 0.5rem;
-    --os-handle-min-size: 32px;
-  }
+		--os-handle-border-radius: 0.5rem;
+		--os-handle-min-size: 32px;
+	}
 
 	:global(*) {
 		transition-duration: 150ms;

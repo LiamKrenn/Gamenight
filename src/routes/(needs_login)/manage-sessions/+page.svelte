@@ -11,7 +11,7 @@
 		RefreshCw
 	} from 'lucide-svelte';
 	import type { PageData } from './$types';
-	import { backendURL } from '$lib';
+	import { ezauthURL } from '$lib';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 

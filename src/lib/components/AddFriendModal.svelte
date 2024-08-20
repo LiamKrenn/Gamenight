@@ -38,7 +38,7 @@
 	<Dialog.Trigger>
 		<slot />
 	</Dialog.Trigger>
-	<Dialog.Content class="border-slate-700 bg-slate-800 rounded-lg max-w-[90%]">
+	<Dialog.Content class="border-slate-700 bg-slate-800 rounded-lg !max-w-[90%] !w-96">
 		<Dialog.Header>
 			<Dialog.Title class=" text-3xl 2xs:text-center text-start">Add a Friend</Dialog.Title>
 		</Dialog.Header>
