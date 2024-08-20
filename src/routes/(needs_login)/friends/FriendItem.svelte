@@ -2,12 +2,14 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import type { Request, User } from '$lib/types';
 	import { ArrowLeft, MessageCircle, Trash2, UserMinus } from 'lucide-svelte';
+	import { chatClient, openChat } from '$lib/stores';
 
 	export let friend: Request;
 	export let user: User | null;
 	export let refreshData: () => void;
 
-	let realFriend = user != null && (friend.receiver.username === user.username) ? friend.sender : friend.receiver;
+	let realFriend =
+		user != null && friend.receiver.username === user.username ? friend.sender : friend.receiver;
 
 	let sure = false;
 	let hide = false;
@@ -61,12 +63,16 @@
 				<Trash2 />
 			</Button>
 		{:else}
-			<!-- TODO:  -->
-			<a href="/" class="absolute right-12">
-				<Button variant="ghost" class="p-2 hover:bg-slate-600 ">
-					<MessageCircle />
-				</Button>
-			</a>
+			<Button
+				on:click={() => {
+					$openChat = true;
+					$chatClient.startChat(realFriend.username);
+				}}
+				variant="ghost"
+				class="absolute right-12 p-2 hover:bg-slate-600 "
+			>
+				<MessageCircle />
+			</Button>
 
 			<Button
 				on:click={async () => {

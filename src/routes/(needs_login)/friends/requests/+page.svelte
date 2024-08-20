@@ -22,7 +22,7 @@
 
 <div class="flex h-full w-full items-start justify-center py-8">
 	<div class="flex w-96 max-w-[90%] flex-col items-center">
-		<div class="flex flex-col px-4 w-full">
+		<div class="flex w-full flex-col px-4">
 			<h1 class="static mx-4 mt-0.5 text-center text-4xl font-semibold xs:hidden">
 				Friend Requests
 			</h1>
@@ -70,16 +70,16 @@
 				<!-- INCOMING -->
 				{#each data.incoming || [] as request}
 					<IncomingRequest {request} {refreshData} />
-        {:else}
-          <p class="w-full text-center">No incoming requests.</p>
+				{:else}
+					<p class="w-full text-center">No incoming requests.</p>
 				{/each}
 			</Tabs.Content>
 			<Tabs.Content value="outgoing">
 				<!-- OUTGOING -->
 				{#each data.outgoing || [] as request}
 					<OutgoingRequest {request} {refreshData} />
-        {:else}
-          <p class="w-full text-center">No outgoing requests.</p>
+				{:else}
+					<p class="w-full text-center">No outgoing requests.</p>
 				{/each}
 			</Tabs.Content>
 		</Tabs.Root>

@@ -1,18 +1,22 @@
 <script lang="ts">
-  import FriendItem from './FriendItem.svelte';
+	import FriendItem from './FriendItem.svelte';
 
 	import { onMount } from 'svelte';
 	import type { PageData } from './$types';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { List } from 'lucide-svelte';
+	import { friends } from '$lib/stores';
+	import { getFriendsFromRequests } from '$lib/friends';
 
 	export let data: PageData;
 
 	async function refreshData() {
-    let resp = await fetch('/friends');
-    data = await resp.json();
+		let resp = await fetch('/friends');
+		data = await resp.json();
+		$friends = getFriendsFromRequests(data.friends);
+	}
 
-  }
+	$friends = getFriendsFromRequests(data.friends);
 </script>
 
 <div class="flex h-full w-full items-start justify-center py-8">
@@ -34,9 +38,9 @@
 		</div>
 
 		{#each data.friends || [] as friend}
-			<FriendItem {friend} user={data.user} {refreshData}/>
-    {:else}
-      <p>No friends yet. <a class="underline" href="/friends/requests">Add some!</a></p>
+			<FriendItem {friend} user={data.user} {refreshData} />
+		{:else}
+			<p>No friends yet. <a class="underline" href="/friends/requests">Add some!</a></p>
 		{/each}
 	</div>
 </div>
