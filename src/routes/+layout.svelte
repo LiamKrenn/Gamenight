@@ -20,6 +20,9 @@
 	import { fetchFriends } from '$lib/friends';
 	import ChatPopup from '$lib/components/chat/ChatPopup.svelte';
 	import MenuSidebar from '$lib/components/MenuSidebar.svelte';
+	import { onlineStore } from 'svelte-legos';
+	import LogoNoBackground from '$lib/icons/logo-no-background.svelte';
+	import { set } from 'zod';
 
 	export let data: PageData;
 
@@ -29,8 +32,19 @@
 		['Friends', '/friends']
 	];
 
+  let isOnline: boolean;
+  let isLoading = true;
+
+  onlineStore().subscribe((value) => {
+    isOnline = value;
+  });
+
 	let mainArea: HTMLDivElement;
 	onMount(async () => {
+    setTimeout(() => {
+      isLoading = false;
+    }, 600);
+  
 		$user = data.user;
 		const osInstance = OverlayScrollbars(mainArea, {
 			overflow: {
@@ -77,7 +91,13 @@
 <title>Gamenight</title>
 
 <div class="flex h-full w-full flex-col">
-	<!-- Nav -->
+  {#if isLoading}
+    <div class="absolute top-0 left-0 z-50 w-full h-full flex items-center justify-center p-32 bg-slate-800 fade-out">
+        <LogoNoBackground class="scale-up-center"/>
+    </div>
+  {/if}
+  {#if isOnline}
+     <!-- Nav -->
 	<div class="cshadow !z-40 flex h-16 w-full shrink-0 items-center justify-between">
 		<div class="flex items-center">
 			<button
@@ -173,6 +193,11 @@
 			<AllMobNavItems />
 		</div>
 	{/if}
+  
+  {:else}
+     offline
+  {/if}
+	
 </div>
 
 <style>
@@ -198,4 +223,63 @@
 	:global(*) {
 		transition-duration: 150ms;
 	}
+
+  :global(.fade-out) {
+	-webkit-animation: fade-out 0.6s ease-out both;
+	        animation: fade-out 0.6s ease-out both;
+}
+
+  :global(.scale-up-center) {
+	-webkit-animation: scale-up-center 0.6s ease-in-out both;
+	        animation: scale-up-center 0.6s ease-in-out both;
+}
+
+
+  @-webkit-keyframes fade-out {
+    0% {
+      opacity: 1;
+    }
+    80% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  @keyframes fade-out {
+    0% {
+      opacity: 1;
+    }
+    80% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+
+
+
+ @-webkit-keyframes scale-up-center {
+  0% {
+    -webkit-transform: scale(0.5);
+            transform: scale(0.5);
+  }
+  100% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+  }
+}
+  @keyframes scale-up-center {
+    0% {
+      -webkit-transform: scale(0.5);
+              transform: scale(0.5);
+    }
+    100% {
+      -webkit-transform: scale(1);
+              transform: scale(1);
+    }
+  }
+
 </style>

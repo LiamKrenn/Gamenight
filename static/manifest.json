@@ -1,0 +1,39 @@
+{
+  "name": "Gamenight",
+  "short_name": "Gamenight",
+  "description": "Gamenight is a online multiplayer game platform, for playing games with friends.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1e293b",
+  "theme_color": "#1e293b",
+  "icons": [
+    {
+      "src": "pwa-large.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "pwa-large.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "pwa-large.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "pwa-large.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "pwa-large.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
