@@ -49,7 +49,7 @@
 						><LogOut class="mr-2" />Logout</DropdownMenu.Item
 					>
 				</a>
-				{#if isInStandaloneMode}
+				{#if !isInStandaloneMode}
 					<DropdownMenu.Separator class="bg-slate-700" />
 					<a href="/install">
 						<DropdownMenu.Item class="rounded bg-sky-600/80 duration-150 hover:!bg-sky-700/80"
