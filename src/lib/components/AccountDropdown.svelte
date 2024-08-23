@@ -2,7 +2,7 @@
 	import { User, LogIn, LogOut, UserPlus, List, ArrowDownToLine } from 'lucide-svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	export let user;
-	export let isInStandaloneMode = false;
+	export let isInStandaloneMode;
 </script>
 
 <DropdownMenu.Root>
