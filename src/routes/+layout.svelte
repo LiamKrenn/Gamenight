@@ -50,12 +50,14 @@
 	$: loggedIn = $user != null || data.user != null;
 	let isInStandaloneMode = true;
 
+  function isPwa() {
+    var displayModes = ["fullscreen", "standalone", "minimal-ui"];
+    return displayModes.some((displayMode) => window.matchMedia('(display-mode: ' + displayMode + ')').matches) || document.referrer.includes('android-app://');
+}
+
 	let mainArea: HTMLDivElement;
 	onMount(async () => {
-		isInStandaloneMode =
-			window.matchMedia('(display-mode: standalone)').matches ||
-			document.referrer.includes('android-app://');
-		console.log('isInStandaloneMode', isInStandaloneMode);
+		isInStandaloneMode = isPwa();
 
 		setTimeout(() => {
 			isLoading = false;
