@@ -49,12 +49,14 @@
 						><LogOut class="mr-2" />Logout</DropdownMenu.Item
 					>
 				</a>
-				<DropdownMenu.Separator class="bg-slate-700" />
-				<a href="/install">
-					<DropdownMenu.Item class="rounded bg-sky-600/80 duration-150 hover:!bg-sky-700/80"
-						><ArrowDownToLine class="mr-2" /> Install!</DropdownMenu.Item
-					>
-				</a>
+				{#if isInStandaloneMode}
+					<DropdownMenu.Separator class="bg-slate-700" />
+					<a href="/install">
+						<DropdownMenu.Item class="rounded bg-sky-600/80 duration-150 hover:!bg-sky-700/80"
+							><ArrowDownToLine class="mr-2" /> Install!</DropdownMenu.Item
+						>
+					</a>
+				{/if}
 			{/if}
 		</DropdownMenu.Group>
 	</DropdownMenu.Content>
