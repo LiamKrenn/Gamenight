@@ -46,7 +46,7 @@
 		}
 	});
 
-	$: loggedIn = $user || data.user;
+	$: loggedIn = $user != null || data.user != null;
 
 	$: if (disableModals.includes($page.url.pathname)) {
 		$openSidebar = false;
