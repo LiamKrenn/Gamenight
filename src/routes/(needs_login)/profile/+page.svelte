@@ -8,18 +8,15 @@
 	import { page } from '$app/stores';
 	import { profileSchema } from '$lib/schemas';
 	import {
-		Edit,
 		Save,
-		ChevronLeft,
 		CircleUserRound,
-		UserPen,
-		Key,
 		KeyRound,
 		MonitorCog,
 		Pencil,
 		X
 	} from 'lucide-svelte';
 	import { goto } from '$app/navigation';
+	import { updateUserStore } from '$lib/user';
 
 	export let data: PageData;
 
@@ -35,6 +32,7 @@
 
 	$: if ($page.url.search === '?success=true') {
 		edit = false;
+    updateUserStore();
 		goto('/profile');
 	}
 </script>

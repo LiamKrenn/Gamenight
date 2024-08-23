@@ -15,7 +15,8 @@ export function getFriendsFromRequests(requests: Request[]): User[] {
 }
 
 export async function fetchFriends(): Promise<User[] | null> {
-	let friendRequests = await fetch('/friends').then((res) => res.json());
-	friends.set(getFriendsFromRequests(friendRequests));
+  if (get(user) == null) return null;
+	let friendRequests = await fetch('/friends');
+	friends.set(getFriendsFromRequests(await friendRequests.json()));
 	return get(friends);
 }

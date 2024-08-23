@@ -46,7 +46,7 @@
 		}
 	});
 
-	$: loggedIn = $user !== null;
+	$: loggedIn = $user || data.user;
 
 	$: if (disableModals.includes($page.url.pathname)) {
 		$openSidebar = false;
@@ -68,6 +68,10 @@
 	$: if ($page.url.search.startsWith('?redirect') && browser) {
 		document.location.href = $page.url.search.replace('?redirect=', '');
 	}
+
+  $: if (data.user) {
+    $user = data.user;
+  }
 </script>
 
 <title>Gamenight</title>

@@ -58,6 +58,6 @@ export const actions: Actions = {
 			expires: new Date(new Date().getTime() + json.expires * 1000)
 		});
 
-		return redirect(302, '?redirect=/');
+		return redirect(302, '/');
 	}
 };
