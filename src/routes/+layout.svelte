@@ -14,7 +14,15 @@
 	import MenuSidebarTabs from '$lib/components/MenuSidebarTabs.svelte';
 	import AllMobNavItems from '$lib/components/AllMobNavItems.svelte';
 	import AccountDropdown from '$lib/components/AccountDropdown.svelte';
-	import { AlignJustify, Bell, LogIn, MessageCircle, X } from 'lucide-svelte';
+	import {
+		AlignJustify,
+		ArrowDownToLine,
+		Bell,
+		LogIn,
+		MessageCircle,
+		User,
+		X
+	} from 'lucide-svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { browser } from '$app/environment';
 	import { fetchFriends } from '$lib/friends';
@@ -32,19 +40,27 @@
 		['Friends', '/friends']
 	];
 
-  let isOnline: boolean;
-  let isLoading = true;
+	let isOnline: boolean;
+	let isLoading = true;
 
-  onlineStore().subscribe((value) => {
-    isOnline = value;
-  });
+	onlineStore().subscribe((value) => {
+		isOnline = value;
+	});
+
+	$: loggedIn = $user != null || data.user != null;
+	let isInStandaloneMode = true;
 
 	let mainArea: HTMLDivElement;
 	onMount(async () => {
-    setTimeout(() => {
-      isLoading = false;
-    }, 600);
-  
+		isInStandaloneMode =
+			window.matchMedia('(display-mode: standalone)').matches ||
+			document.referrer.includes('android-app://');
+		console.log('isInStandaloneMode', isInStandaloneMode);
+
+		setTimeout(() => {
+			isLoading = false;
+		}, 600);
+
 		$user = data.user;
 		const osInstance = OverlayScrollbars(mainArea, {
 			overflow: {
@@ -59,8 +75,6 @@
 			await fetchFriends();
 		}
 	});
-
-	$: loggedIn = $user != null || data.user != null;
 
 	$: if (disableModals.includes($page.url.pathname)) {
 		$openSidebar = false;
@@ -83,121 +97,133 @@
 		document.location.href = $page.url.search.replace('?redirect=', '');
 	}
 
-  $: if (data.user) {
-    $user = data.user;
-  }
+	$: if (data.user) {
+		$user = data.user;
+	}
 </script>
 
 <title>Gamenight</title>
 
 <div class="flex h-full w-full flex-col">
-  {#if isLoading}
-    <div class="absolute top-0 left-0 z-50 w-full h-full flex items-center justify-center p-32 bg-slate-800 fade-out">
-        <LogoNoBackground class="scale-up-center"/>
-    </div>
-  {/if}
-  {#if isOnline}
-     <!-- Nav -->
-	<div class="cshadow !z-40 flex h-16 w-full shrink-0 items-center justify-between">
-		<div class="flex items-center">
-			<button
-				class="ml-2 h-12 w-12 rounded-lg p-2 hover:bg-slate-700"
-				on:click={() => ($openSidebar = !$openSidebar)}
-			>
-				{#if $openSidebar}
-					<X class="h-8 w-8" />
-				{:else}
-					<AlignJustify class="h-8 w-8" />
-				{/if}
-			</button>
-
-			<a
-				href="/"
-				class="ml-1 hidden items-center rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700 logo:flex"
-			>
-				<Navlogo />
-				<Navtext class="ml-2" />
-			</a>
-			<div class="hidden mobile:flex">
-				<Navitems id={$page.url.pathname} {routes} />
-			</div>
-		</div>
-		<div class="flex items-center">
-			{#if loggedIn}
-				<button on:click={() => ($openChat = !$openChat)}>
-					<MessageCircle
-						class="m-1 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700 {$openChat
-							? 'fill-slate-50'
-							: ''}"
-					/>
-				</button>
-
-				<Bell
-					class="m-1 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700"
-				/>
-				<AccountDropdown user={$user} />
-			{:else}
-				<a href="/login">
-					<Button class="ml-1 mr-3 rounded-lg bg-sky-700 text-slate-50 hover:bg-sky-800">
-						Sign In <LogIn class="ml-2" />
-					</Button>
-				</a>
-			{/if}
-		</div>
-	</div>
-	<div
-		bind:this={mainArea}
-		class="relative flex h-full shrink grow-0 flex-col overflow-y-auto"
-		data-overlayscrollbars-initialize
-	>
-		<!-- Sidebar -->
-		<MenuSidebar>
-			<div class="flex h-full w-full flex-col p-4">
-				<a
-					href="/"
-					class=" mb-4 flex h-min justify-center rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700 logo:hidden"
-				>
-					<button
-						class="flex h-min max-w-full items-center"
-						on:click={() => ($openSidebar = false)}
-					>
-						<Navlogo class="h-min" />
-						<Navtext class="ml-2 h-min" />
-					</button>
-				</a>
-				<MenuSidebarTabs>
-					<div slot="news">
-						<!-- News -->
-						{#each News as news}
-							<NewsCard {news} />
-						{/each}
-					</div>
-					<div slot="leaderboard">
-						<p>Leaderboard</p>
-						<!-- TODO: implement -->
-					</div>
-				</MenuSidebarTabs>
-			</div>
-		</MenuSidebar>
-
-		<!-- Page -->
-		<slot />
-		<!-- Message Popup -->
-		<ChatPopup {loggedIn} />
-	</div>
-	{#if !($page.url.pathname + '/').startsWith('/game/')}
-		<!-- Footer for Mobile -->
+	{#if isLoading}
 		<div
-			class="fshadow !z-40 flex h-16 w-full shrink-0 items-center justify-between bg-slate-800 mobile:hidden"
+			class="fade-out absolute left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-slate-800"
 		>
-			<AllMobNavItems />
+			<LogoNoBackground class="scale-up-center h-[50vmin]" />
 		</div>
 	{/if}
-  
-  {:else}
-     offline
-  {/if}
-	
+	{#if isOnline}
+		<!-- Nav -->
+		<div class="cshadow !z-40 flex h-16 w-full shrink-0 items-center justify-between">
+			<div class="flex items-center">
+				<button
+					class="ml-2 h-12 w-12 rounded-lg p-2 hover:bg-slate-700"
+					on:click={() => ($openSidebar = !$openSidebar)}
+				>
+					{#if $openSidebar}
+						<X class="h-8 w-8" />
+					{:else}
+						<AlignJustify class="h-8 w-8" />
+					{/if}
+				</button>
+
+				<a
+					href="/"
+					class="ml-1 hidden items-center rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700 logo:flex"
+				>
+					<Navlogo />
+					<Navtext class="ml-2" />
+				</a>
+				<div class="hidden mobile:flex">
+					<Navitems id={$page.url.pathname} {routes} />
+				</div>
+			</div>
+			<div class="flex items-center">
+				{#if loggedIn}
+					<button on:click={() => ($openChat = !$openChat)}>
+						<MessageCircle
+							class="m-1 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700 {$openChat
+								? 'fill-slate-50'
+								: ''}"
+						/>
+					</button>
+
+					<Bell
+						class="m-1 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700"
+					/>
+					<AccountDropdown user={$user} {isInStandaloneMode}>
+						<User
+							class="m-1 mr-2 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700"
+						/>
+						{#if !isInStandaloneMode}
+							<div class="absolute right-3 top-2 z-30 h-3 w-3 rounded-full bg-sky-500"></div>
+						{/if}
+					</AccountDropdown>
+				{:else}
+					<a href="/install">
+						<Button class="mr-3 rounded-lg bg-sky-700 p-2 pl-3 text-slate-50 hover:bg-sky-800">
+							Install <ArrowDownToLine class="ml-1" />
+						</Button>
+					</a>
+					<a href="/login">
+						<Button class="mr-3 rounded-lg bg-sky-700 text-slate-50 hover:bg-sky-800">
+							Sign In <LogIn class="ml-2" />
+						</Button>
+					</a>
+				{/if}
+			</div>
+		</div>
+		<div
+			bind:this={mainArea}
+			class="relative flex h-full shrink grow-0 flex-col overflow-y-auto"
+			data-overlayscrollbars-initialize
+		>
+			<!-- Sidebar -->
+			<MenuSidebar>
+				<div class="flex h-full w-full flex-col p-4">
+					<a
+						href="/"
+						class=" mb-4 flex h-min justify-center rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700 logo:hidden"
+					>
+						<button
+							class="flex h-min max-w-full items-center"
+							on:click={() => ($openSidebar = false)}
+						>
+							<Navlogo class="h-min" />
+							<Navtext class="ml-2 h-min" />
+						</button>
+					</a>
+					<MenuSidebarTabs>
+						<div slot="news">
+							<!-- News -->
+							{#each News as news}
+								<NewsCard {news} />
+							{/each}
+						</div>
+						<div slot="leaderboard">
+							<p>Leaderboard</p>
+							<!-- TODO: implement -->
+						</div>
+					</MenuSidebarTabs>
+				</div>
+			</MenuSidebar>
+
+			<!-- Page -->
+			<slot />
+			<!-- Message Popup -->
+			<ChatPopup {loggedIn} />
+		</div>
+		{#if !($page.url.pathname + '/').startsWith('/game/')}
+			<!-- Footer for Mobile -->
+			<div
+				class="fshadow !z-40 flex h-16 w-full shrink-0 items-center justify-between bg-slate-800 mobile:hidden"
+			>
+				<AllMobNavItems />
+			</div>
+		{/if}
+	{:else}
+		offline
+	{/if}
 </div>
 
 <style>
@@ -224,62 +250,57 @@
 		transition-duration: 150ms;
 	}
 
-  :global(.fade-out) {
-	-webkit-animation: fade-out 0.6s ease-out both;
-	        animation: fade-out 0.6s ease-out both;
-}
+	:global(.fade-out) {
+		-webkit-animation: fade-out 0.6s ease-out both;
+		animation: fade-out 0.6s ease-out both;
+	}
 
-  :global(.scale-up-center) {
-	-webkit-animation: scale-up-center 0.6s ease-in-out both;
-	        animation: scale-up-center 0.6s ease-in-out both;
-}
+	:global(.scale-up-center) {
+		-webkit-animation: scale-up-center 0.6s ease-in-out both;
+		animation: scale-up-center 0.6s ease-in-out both;
+	}
 
+	@-webkit-keyframes fade-out {
+		0% {
+			opacity: 1;
+		}
+		80% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0;
+		}
+	}
+	@keyframes fade-out {
+		0% {
+			opacity: 1;
+		}
+		80% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0;
+		}
+	}
 
-  @-webkit-keyframes fade-out {
-    0% {
-      opacity: 1;
-    }
-    80% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0;
-    }
-  }
-  @keyframes fade-out {
-    0% {
-      opacity: 1;
-    }
-    80% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0;
-    }
-  }
-
-
-
-
- @-webkit-keyframes scale-up-center {
-  0% {
-    -webkit-transform: scale(0.5);
-            transform: scale(0.5);
-  }
-  100% {
-    -webkit-transform: scale(1);
-            transform: scale(1);
-  }
-}
-  @keyframes scale-up-center {
-    0% {
-      -webkit-transform: scale(0.5);
-              transform: scale(0.5);
-    }
-    100% {
-      -webkit-transform: scale(1);
-              transform: scale(1);
-    }
-  }
-
+	@-webkit-keyframes scale-up-center {
+		0% {
+			-webkit-transform: scale(0.5);
+			transform: scale(0.5);
+		}
+		100% {
+			-webkit-transform: scale(1);
+			transform: scale(1);
+		}
+	}
+	@keyframes scale-up-center {
+		0% {
+			-webkit-transform: scale(0.5);
+			transform: scale(0.5);
+		}
+		100% {
+			-webkit-transform: scale(1);
+			transform: scale(1);
+		}
+	}
 </style>
