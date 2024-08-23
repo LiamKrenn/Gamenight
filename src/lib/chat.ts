@@ -1,8 +1,6 @@
 import {
-	openChat,
 	user,
 	chatAudioIsPlaying,
-	chatClient,
 	chatConnected,
 	chatCurrentChatId,
 	chatCurrentFriendId,
@@ -12,14 +10,13 @@ import {
 	chatLoading,
 	chatMessageInput,
 	chatMessages,
-	chatUserID
+	chatUserID,
+  friends
 } from '$lib/stores';
 import ChatClient from 'chat-client-delta';
-import { get, writable } from 'svelte/store';
-import type { User } from './types';
+import { get } from 'svelte/store';
 import { chatPORT, chatURL } from '$lib';
-import { getFriendsFromRequests } from './friends';
-import { browser } from '$app/environment';
+import { fetchFriends } from './friends';
 
 export type AudioData = any;
 export type ChatMessage = { message: string; chat_id: string; sender_id: string };
@@ -32,7 +29,7 @@ export class ChatClientSingleton {
 	messageCallbacks: ((message: ChatMessage) => void)[] = [];
 
 	constructor() {
-		chatUserID.set(get(user)?.username || '');
+		chatUserID.set(get(user)?._id || '');
 		chatMessageInput.set('');
 		chatFriendUserId.set('');
 		chatMessages.set([]);
@@ -52,6 +49,8 @@ export class ChatClientSingleton {
 	public async connectClient() {
 		chatLoading.set(true);
 		chatErrorConnectingClient.set(false);
+
+    friends.set(await fetchFriends() || []);
 
 		this.chatClient = new ChatClient(chatURL, chatPORT, get(chatUserID));
 		if (this.chatClient === null) return;

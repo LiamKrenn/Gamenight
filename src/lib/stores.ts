@@ -15,7 +15,7 @@ export const disableModals = ['/login', '/signup', '/forgot-password'];
 
 export const friends = writable<User[] | null>(null);
 
-export const chatUserID = writable<string>(get(user)?.username || '');
+export const chatUserID = writable<string>(get(user)?._id || '');
 export const chatMessageInput = writable<string>('');
 export const chatFriendUserId = writable<string>('');
 export const chatMessages = writable<ChatMessage[]>([]);

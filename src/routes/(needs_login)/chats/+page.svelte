@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import ChatClient from 'chat-client-delta';
+	import { user } from '$lib/stores';
 
 	type AudioData = any;
 	type ChatMessage = { message: string };
@@ -10,7 +11,7 @@
 
 	const ServerIP: string = '172.205.243.31';
 	const Port: number = 8081;
-	const UserID: string = 'Liam';
+	const UserID: string = $user?._id || '';
 
 	let chatClient: ChatClient;
 	let messageInput: string = '';

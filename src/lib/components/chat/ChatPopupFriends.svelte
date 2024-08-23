@@ -16,7 +16,7 @@
 	{:else}
 		<Button
 			on:click={async () => {
-				await $chatClient.startChat(friend.username);
+				await $chatClient.startChat(friend._id);
 				scrollToBottom();
 			}}
 			variant="outline"
