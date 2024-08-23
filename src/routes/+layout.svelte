@@ -109,7 +109,7 @@
 		<div
 			class="fade-out absolute left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-slate-800"
 		>
-			<LogoNoBackground class="scale-up-center h-[50vmin]" />
+			<LogoNoBackground class="scale-up-center h-[30%]" />
 		</div>
 	{/if}
 	{#if isOnline}
