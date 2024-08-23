@@ -1,0 +1,89 @@
+<head>
+  <link rel="preload" href="/SourceSans3-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin>
+</head>
+
+<div class="container">
+  <h1>You are offline!</h1>
+  <p>You need a internet connection in order to play on Gamenight!</p>
+  <button id="retryButton">Retry</button>
+</div>
+
+<script>
+  const retryButton = document.getElementById('retryButton');
+
+  function checkOnlineStatus() {
+    return window.navigator.onLine;
+  }
+
+  function handleRetry() {
+    if (checkOnlineStatus()) {
+      window.location.href = '/';
+    }
+  }
+
+  retryButton.addEventListener('click', handleRetry);
+
+  // Optional: Automatically check status when the browser detects a change in connectivity
+  window.addEventListener('online', () => {
+    handleRetry();
+  });
+</script>
+
+<style>
+  h1 {
+    font-weight: 500;
+    margin-bottom: 0;
+  }
+
+  button {
+    color: #1e293b;
+    width: 96px;
+    height: 32px;
+    font-weight: 700;
+    border-radius: 6px;
+    border: none;
+  }
+
+  button:hover {
+    opacity: 0.7;
+    cursor: pointer;
+  }
+  
+  button:active {
+    scale: 0.95;
+  }
+
+  body {
+    background-color: #1e293b;
+    overflow: hidden;
+    padding: 16px;
+  }
+  
+  p {
+    font-size: larger;
+    font-weight: 300;
+  }
+
+  * {
+    transition: all 150ms;
+    transition-duration: 150ms;
+    color: #f8fafc;
+    font-family: 'Source Sans 3', sans-serif;
+    text-align: center;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+  }
+
+  @font-face {
+    font-family: 'Source Sans 3';
+    src: url('/SourceSans3-VariableFont_wght.ttf') format('truetype');
+    font-display: swap;
+  }
+</style>
