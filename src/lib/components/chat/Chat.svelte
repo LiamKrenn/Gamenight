@@ -19,11 +19,10 @@
 		chatViewport.scrollTop = chatViewport.scrollHeight;
 	}
 
-	onMount(async () => {
-		if (!$chatConnected) {
-			await $chatClient.connectClient();
+	onMount(() => {
+		if (!$chatClient.messageCallbacks.includes(scrollToBottom)) {
+			$chatClient.addMessageCallback(scrollToBottom);
 		}
-		$chatClient.addMessageCallback(scrollToBottom);
 	});
 
 	$: if (chatArea != undefined) {

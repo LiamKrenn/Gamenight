@@ -1,14 +1,21 @@
 <script lang="ts">
 	import { Minus, UserPlus, X, ChevronRight, MessagesSquare } from 'lucide-svelte';
 
-	import { openChat } from '$lib/stores';
+	import { chatClient, chatConnected, openChat } from '$lib/stores';
 
 	import Chat from './Chat.svelte';
 	import type { User } from '$lib/types';
 	import * as Sheet from '$lib/components/ui/sheet/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
+	import { onMount } from 'svelte';
 
 	export let loggedIn: boolean;
+
+  onMount(async () => {
+		if (!$chatConnected) {
+			await $chatClient.connectClient();
+		}
+	});
 </script>
 
 <div

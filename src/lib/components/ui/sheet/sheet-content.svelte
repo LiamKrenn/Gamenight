@@ -1,29 +1,30 @@
 <script lang="ts">
-	import { Dialog as SheetPrimitive } from "bits-ui";
-	import X from "lucide-svelte/icons/x";
-	import { fly } from "svelte/transition";
+	import { Dialog as SheetPrimitive } from 'bits-ui';
+	import X from 'lucide-svelte/icons/x';
+	import { fly } from 'svelte/transition';
 	import {
 		SheetOverlay,
 		SheetPortal,
 		type Side,
 		sheetTransitions,
-		sheetVariants,
-	} from "./index.js";
-	import { cn } from "$lib/utils.js";
+		sheetVariants
+	} from './index.js';
+	import { cn } from '$lib/utils.js';
+	import SheetContentScroll from './sheet-content-scroll.svelte';
 
 	type $$Props = SheetPrimitive.ContentProps & {
 		side?: Side;
 	};
 
-	let className: $$Props["class"] = undefined;
-	export let side: $$Props["side"] = "right";
+	let className: $$Props['class'] = undefined;
+	export let side: $$Props['side'] = 'right';
 	export { className as class };
-	export let inTransition: $$Props["inTransition"] = fly;
-	export let inTransitionConfig: $$Props["inTransitionConfig"] =
-		sheetTransitions[side ?? "right"].in;
-	export let outTransition: $$Props["outTransition"] = fly;
-	export let outTransitionConfig: $$Props["outTransitionConfig"] =
-		sheetTransitions[side ?? "right"].out;
+	export let inTransition: $$Props['inTransition'] = fly;
+	export let inTransitionConfig: $$Props['inTransitionConfig'] =
+		sheetTransitions[side ?? 'right'].in;
+	export let outTransition: $$Props['outTransition'] = fly;
+	export let outTransitionConfig: $$Props['outTransitionConfig'] =
+		sheetTransitions[side ?? 'right'].out;
 </script>
 
 <SheetPortal>
@@ -33,8 +34,10 @@
 		{outTransition}
 		{outTransitionConfig}
 		class={cn(sheetVariants({ side }), className)}
-		{...$$restProps}    
+		{...$$restProps}
 	>
-		<slot />
+		<SheetContentScroll>
+			<slot />
+		</SheetContentScroll>
 	</SheetPrimitive.Content>
 </SheetPortal>
