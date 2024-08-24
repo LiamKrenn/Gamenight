@@ -2,14 +2,26 @@
 	import type Stripe from 'stripe';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { ShoppingBasket } from 'lucide-svelte';
+	import { ShoppingBasket, RefreshCw } from 'lucide-svelte';
 
 	export let product: Stripe.Product;
 	export let price: Stripe.Price;
 
 	let imageLoaded = false;
-
 	let dialogOpen = false;
+  let clicked = false;
+
+	async function checkout() {
+    clicked = true;
+    const client_secret = await fetch('/shop/create-checkout-session', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({items: [{price: price.id, quantity: 1}]}),
+    })
+    window.location.href = (await client_secret.json()).url;
+	}
 </script>
 
 <Dialog.Root bind:open={dialogOpen}>
@@ -25,15 +37,21 @@
 			<div class="px-2 py-1 xs:px-4 xs:py-2">
 				<div class="my-2 flex w-full items-center justify-between">
 					<h1 class="text-2xl font-semibold">{product.name}</h1>
-					<Button variant="secondary" class="bg-sky-700 p-2 hover:bg-sky-800"
-						><ShoppingBasket /></Button
+					<Button on:click={checkout} variant="secondary" class="bg-sky-700 p-2 hover:bg-sky-800"
+						>
+            {#if !clicked}
+            <ShoppingBasket />
+            {:else}
+            <RefreshCw class="animate-spin"/>
+            {/if}
+           </Button
 					>
 				</div>
-				<div class="flex h-fit w-full pb-1 items-end ">
+				<div class="flex h-fit w-full items-end pb-1">
 					<div class="w-full pr-1 text-left">
 						{product.description || ''}
 					</div>
-					<div class="flex h-full w-16 items-end justify-end p-1 ">
+					<div class="flex h-full w-16 items-end justify-end p-1">
 						<p class="text-2xl">{(price.unit_amount || 0) / 100}€</p>
 					</div>
 				</div>
@@ -68,9 +86,9 @@
 		{/if}
 	</div>
 
-	<div class="flex h-fulll w-full flex-col px-2 pb-1 text-start">
+	<div class="h-fulll flex w-full flex-col px-2 pb-1 text-start">
 		<h1 class="ml-0.5 mt-1 text-lg font-semibold">{product.name}</h1>
-		<div class="ml-0.5 flex w-full grow ">
+		<div class="ml-0.5 flex w-full grow">
 			<div class="card-description w-full pr-1 text-left text-sm">
 				{product.description || ''}
 			</div>
@@ -88,6 +106,5 @@
 		overflow: hidden;
 		-webkit-box-orient: vertical;
 		-webkit-line-clamp: 3; /* this can be any value you want */
-    
 	}
 </style>
