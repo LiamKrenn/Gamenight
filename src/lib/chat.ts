@@ -15,7 +15,7 @@ import {
 } from '$lib/stores';
 import ChatClient from 'chat-client-delta';
 import { get } from 'svelte/store';
-import { chatPORT, chatURL } from '$lib';
+import { chatURL } from '$lib';
 import { fetchFriends } from './friends';
 
 export type AudioData = any;
@@ -52,7 +52,7 @@ export class ChatClientSingleton {
 
     friends.set(await fetchFriends() || []);
 
-		this.chatClient = new ChatClient(chatURL, chatPORT, get(chatUserID));
+		this.chatClient = new ChatClient(chatURL, get(chatUserID));
 		if (this.chatClient === null) return;
 		this.chatClient
 			.connect()

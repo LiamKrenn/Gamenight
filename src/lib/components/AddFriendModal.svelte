@@ -6,7 +6,7 @@
 	import { page } from '$app/stores';
 
 	let username = '';
-	let open = $page.url.searchParams.get('open') === 'true';
+	let open = true || $page.url.searchParams.get('open') === 'true';
 	let errorMessage = '';
 	$: if (open) {
 		username = '';
@@ -50,7 +50,7 @@
 	<Dialog.Trigger>
 		<slot />
 	</Dialog.Trigger>
-	<Dialog.Content class="!w-96 !max-w-[90%] rounded-lg border-slate-700 bg-slate-800">
+	<Dialog.Content class="!w-96 !max-w-[90%] rounded-lg border-slate-700 bg-slate-800 p-4">
 		<Dialog.Header>
 			<Dialog.Title class=" text-start text-3xl 2xs:text-center">Add a Friend</Dialog.Title>
 		</Dialog.Header>

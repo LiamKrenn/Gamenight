@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import ChatClient from 'chat-client-delta';
 	import { user } from '$lib/stores';
+	import { chatURL } from '$lib';
 
 	type AudioData = any;
 	type ChatMessage = { message: string };
@@ -9,8 +10,6 @@
 	type NotificationChatIds = any;
 	type StartFriendChatResult = { chatId: string; oldMessages: ChatMessage[] };
 
-	const ServerIP: string = '172.205.243.31';
-	const Port: number = 8081;
 	const UserID: string = $user?._id || '';
 
 	let chatClient: ChatClient;
@@ -21,7 +20,7 @@
 	let current_match_chat_id: string | null = null;
 
 	onMount(() => {
-		chatClient = new ChatClient(ServerIP, Port, UserID);
+		chatClient = new ChatClient(chatURL, UserID);
 
 		chatClient
 			.connect()

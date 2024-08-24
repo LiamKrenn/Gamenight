@@ -3,7 +3,6 @@ import { mediaQuery } from 'svelte-legos';
 import { get, writable } from 'svelte/store';
 import type { User } from './types';
 import { ChatClientSingleton, type ChatMessage } from '$lib/chat';
-import type ChatClient from 'chat-client-delta';
 
 const isDesktop = mediaQuery('(min-width: 850px)');
 
