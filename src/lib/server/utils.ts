@@ -9,7 +9,7 @@ export let authorizedFetch = async (
 	method: 'GET' | 'POST' | 'PATCH' | 'DELETE' = 'GET'
 ) => {
   headers.cookie = `session=${event.cookies.get('session')}`;
-	return await event.fetch(AUTH_URL + route, {
+	return await event.fetch(PRIVATE_AUTH_URL + route, {
 		method: method,
 		credentials: 'include',
     body: body,

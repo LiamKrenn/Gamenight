@@ -21,7 +21,7 @@ export const actions: Actions = {
 			});
 		}
 
-		let response = await fetch(AUTH_URL + '/signup/confirm', {
+		let response = await fetch(PRIVATE_AUTH_URL + '/signup/confirm', {
 			method: 'POST',
 			headers: {
         'User-Agent': event.request.headers.get('User-Agent') || '',

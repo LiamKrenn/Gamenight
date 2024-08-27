@@ -24,7 +24,7 @@ export const actions: Actions = {
 			});
 		}
 
-		let response = await fetch(AUTH_URL + '/forgot-password', {
+		let response = await fetch(PRIVATE_AUTH_URL + '/forgot-password', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

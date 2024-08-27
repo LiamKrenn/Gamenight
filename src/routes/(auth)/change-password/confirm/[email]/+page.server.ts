@@ -22,7 +22,7 @@ export const actions: Actions = {
 			});
 		}
 
-		let response = await fetch(AUTH_URL + '/confirm-password', {
+		let response = await fetch(PRIVATE_AUTH_URL + '/confirm-password', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
