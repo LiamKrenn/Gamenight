@@ -3,7 +3,7 @@ import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { signupConfirmSchema, signupSchema } from '$lib/schemas';
 import { error, fail, redirect } from '@sveltejs/kit';
-import { AUTH_URL } from '$env/static/private';
+import { PRIVATE_AUTH_URL } from '$env/static/private';
 
 export const load = (async () => {
 	return {

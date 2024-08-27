@@ -1,4 +1,4 @@
-import { AUTH_URL } from '$env/static/private';
+import { PRIVATE_AUTH_URL } from '$env/static/private';
 import { authorizedFetch } from '$lib/server/utils';
 import type { Handle } from '@sveltejs/kit';
 

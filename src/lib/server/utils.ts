@@ -1,4 +1,4 @@
-import { AUTH_URL } from '$env/static/private';
+import { PRIVATE_AUTH_URL } from '$env/static/private';
 import type { RequestEvent, ServerLoadEvent } from '@sveltejs/kit';
 
 export let authorizedFetch = async (
