@@ -1,4 +1,4 @@
-import { AUTH_URL } from '$env/static/private';
+import { PUBLIC_AUTH_URL } from '$env/static/public';
 import { authorizedFetch } from '$lib/server/utils.js';
 import { redirect } from '@sveltejs/kit';
 

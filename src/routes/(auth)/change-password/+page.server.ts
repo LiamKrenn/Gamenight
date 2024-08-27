@@ -3,7 +3,7 @@ import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { forgotPasswordSchema, signupConfirmSchema, signupSchema } from '$lib/schemas';
 import { error, fail, redirect } from '@sveltejs/kit';
-import { AUTH_URL } from '$env/static/private';
+import { PUBLIC_AUTH_URL } from '$env/static/public';
 
 export const load = (async ({ locals }) => {
 	let forgotPassForm = await superValidate(zod(forgotPasswordSchema));
@@ -24,7 +24,7 @@ export const actions: Actions = {
 			});
 		}
 
-		let response = await fetch(AUTH_URL + '/forgot-password', {
+		let response = await fetch(PUBLIC_AUTH_URL + '/forgot-password', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'

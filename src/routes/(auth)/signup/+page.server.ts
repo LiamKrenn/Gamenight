@@ -3,7 +3,7 @@ import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { signupConfirmSchema, signupSchema } from '$lib/schemas';
 import { error, fail, redirect } from '@sveltejs/kit';
-import { AUTH_URL } from '$env/static/private';
+import { PUBLIC_AUTH_URL } from '$env/static/public';
 
 export const load = (async () => {
 	return {
@@ -21,7 +21,7 @@ export const actions: Actions = {
 			});
 		}
 
-		let response = await fetch(AUTH_URL + '/signup', {
+		let response = await fetch(PUBLIC_AUTH_URL + '/signup', {
 			method: 'POST',
 			headers: {
         'User-Agent': event.request.headers.get('User-Agent') || '',

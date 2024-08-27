@@ -3,7 +3,7 @@ import { superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { loginSchema } from '$lib/schemas';
 import { fail, redirect, type RequestHandler } from '@sveltejs/kit';
-import { AUTH_URL } from '$env/static/private';
+import { PUBLIC_AUTH_URL } from '$env/static/public';
 import { invalidateAll } from '$app/navigation';
 
 export const load = (async () => {
@@ -22,7 +22,7 @@ export const actions: Actions = {
 			});
 		}
 
-		let response = await fetch(AUTH_URL + '/login', {
+		let response = await fetch(PUBLIC_AUTH_URL + '/login', {
 			method: 'POST',
 			headers: {
 				'User-Agent': event.request.headers.get('User-Agent') || '',

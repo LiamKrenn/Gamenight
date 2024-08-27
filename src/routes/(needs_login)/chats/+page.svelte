@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import ChatClient from 'chat-client-delta';
 	import { user } from '$lib/stores';
-	import { chatURL } from '$lib';
+	import { PUBLIC_CHAT_URL } from '$env/static/public';
 
 	type AudioData = any;
 	type ChatMessage = { message: string };
@@ -20,7 +20,7 @@
 	let current_match_chat_id: string | null = null;
 
 	onMount(() => {
-		chatClient = new ChatClient(chatURL, UserID);
+		chatClient = new ChatClient(PUBLIC_CHAT_URL, UserID);
 
 		chatClient
 			.connect()

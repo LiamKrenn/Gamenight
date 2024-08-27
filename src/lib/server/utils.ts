@@ -1,4 +1,4 @@
-import { AUTH_URL } from '$env/static/private';
+import { PUBLIC_AUTH_URL } from '$env/static/public';
 import type { RequestEvent, ServerLoadEvent } from '@sveltejs/kit';
 
 export let authorizedFetch = async (
@@ -9,7 +9,7 @@ export let authorizedFetch = async (
 	method: 'GET' | 'POST' | 'PATCH' | 'DELETE' = 'GET'
 ) => {
   headers.cookie = `session=${event.cookies.get('session')}`;
-	return await event.fetch(AUTH_URL + route, {
+	return await event.fetch(PUBLIC_AUTH_URL + route, {
 		method: method,
 		credentials: 'include',
     body: body,
