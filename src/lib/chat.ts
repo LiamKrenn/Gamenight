@@ -11,7 +11,7 @@ import {
 	chatMessageInput,
 	chatMessages,
 	chatUserID,
-  friends
+	friends
 } from '$lib/stores';
 import ChatClient from 'chat-client-delta';
 import { get } from 'svelte/store';
@@ -50,7 +50,7 @@ export class ChatClientSingleton {
 		chatLoading.set(true);
 		chatErrorConnectingClient.set(false);
 
-    friends.set(await fetchFriends() || []);
+		friends.set(await fetchFriends() || []);
 
 		this.chatClient = new ChatClient(PUBLIC_CHAT_URL, get(chatUserID));
 		if (this.chatClient === null) return;
@@ -87,17 +87,17 @@ export class ChatClientSingleton {
 				chatLoading.set(false);
 				console.error('Failed to connect chat client:', err);
 			});
-      
-      setTimeout(() => {
-        if (!get(chatConnected)) {
-          // Timeout
-          // Real timeout takes waayy too long
-          chatErrorConnectingClient.set(true);
-          chatLoading.set(false);
-        }
-      }, 5000)
-      // Do something after 5 seconds
-      
+
+		setTimeout(() => {
+			if (!get(chatConnected)) {
+				// Timeout
+				// Real timeout takes waayy too long
+				chatErrorConnectingClient.set(true);
+				chatLoading.set(false);
+			}
+		}, 5000)
+		// Do something after 5 seconds
+
 	}
 
 	public startAudioCapture(): void {
@@ -142,7 +142,7 @@ export class ChatClientSingleton {
 		}
 	}
 
-	public sendMessage(): void {
+	public async sendMessage(): Promise<void> {
 		if (this.chatClient) {
 			this.chatClient.sendFriendMessage(get(chatCurrentChatId), get(chatMessageInput));
 			chatMessageInput.set('');
