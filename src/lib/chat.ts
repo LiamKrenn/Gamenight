@@ -47,10 +47,11 @@ export class ChatClientSingleton {
 	}
 
 	public async connectClient() {
+		if (get(chatLoading)) return;
 		chatLoading.set(true);
 		chatErrorConnectingClient.set(false);
 
-		friends.set(await fetchFriends() || []);
+		friends.set((await fetchFriends()) || []);
 
 		await updateUserStore();
 		chatUserID.set(get(user)?._id || '');
@@ -71,7 +72,9 @@ export class ChatClientSingleton {
 					this.chatClient.setOnChatMessageReceived((data: ChatMessage) => {
 						console.log('New message received:', data);
 						chatMessages.set([...get(chatMessages), data]);
-						this.messageCallbacks.forEach((callback) => callback(data));
+						setTimeout(() => {
+							this.messageCallbacks.forEach((callback) => callback(data));
+						}, 25);
 					});
 
 					this.chatClient.setOnMatchChat((data: MatchChatData) => {
@@ -97,9 +100,8 @@ export class ChatClientSingleton {
 				chatErrorConnectingClient.set(true);
 				chatLoading.set(false);
 			}
-		}, 5000)
+		}, 5000);
 		// Do something after 5 seconds
-
 	}
 
 	public startAudioCapture(): void {
@@ -146,10 +148,10 @@ export class ChatClientSingleton {
 
 	public async sendMessage(): Promise<void> {
 		if (this.chatClient) {
-      if (get(chatMessageInput).replaceAll(' ', '') === '') {
-        chatMessageInput.set('');
-        return;
-      }
+			if (get(chatMessageInput).replaceAll(' ', '') === '') {
+				chatMessageInput.set('');
+				return;
+			}
 			this.chatClient.sendFriendMessage(get(chatCurrentChatId), get(chatMessageInput));
 			chatMessageInput.set('');
 		}
