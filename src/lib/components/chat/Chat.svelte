@@ -4,7 +4,7 @@
 	import ChatMessages from './ChatMessages.svelte';
 	import { onMount } from 'svelte';
 	import { friends, openChat } from '$lib/stores';
-	import { ChevronRight, UserPlus, X } from 'lucide-svelte';
+	import { ChevronLeft, ChevronRight, UserPlus, X } from 'lucide-svelte';
 	import { OverlayScrollbars } from 'overlayscrollbars';
 	import { chatClient, chatConnected, chatFriendUserId } from '$lib/stores';
 	import ChatLoading from './ChatLoading.svelte';
@@ -38,18 +38,44 @@
 {#if sidebar}
 	<ChatLoading>
 		<div class="mt-4 space-y-2">
-			{#each $friends || [] as friend}
-				<Button
-					variant="outline"
-					class="h-12 w-full justify-start rounded-lg border-slate-700 bg-slate-800 py-0 pl-2 pr-0 text-slate-100 hover:bg-slate-700"
-				>
-					<p class="w-24 shrink-0 xs:w-32">{friend.username}</p>
-					<p class="w-full overflow-hidden overflow-ellipsis text-left text-slate-500">
-						Last message bla bla bla bla bla bla bla bla
-					</p>
-					<ChevronRight class="h-10 w-10 shrink-0 rounded-lg stroke-slate-300 p-2" />
-				</Button>
-			{/each}
+			{#if !$chatFriendUserId}
+				{#each $friends || [] as friend}
+					<Button
+						variant="outline"
+						class="h-12 w-full justify-start rounded-lg border-slate-700 bg-slate-800 py-0 pl-2 pr-0 text-slate-100 hover:bg-slate-700"
+						on:click={async () => {
+							await $chatClient.startChat(friend._id);
+							scrollToBottom();
+						}}
+					>
+						<p class="w-24 shrink-0 xs:w-32">{friend.username}</p>
+						<p class="w-full overflow-hidden overflow-ellipsis text-left text-slate-500">
+							Last message bla bla bla bla bla bla bla bla
+						</p>
+						<ChevronRight class="h-10 w-10 shrink-0 rounded-lg stroke-slate-300 p-2" />
+					</Button>
+				{/each}
+			{/if}
+			{#if $chatFriendUserId}
+				<div class="flex h-[74vh] flex-col justify-between">
+					<button
+						on:click={() => {
+							chatFriendUserId.set('');
+						}}
+					>
+						<ChevronLeft class="m-3" />
+					</button>
+
+					<div bind:this={chatArea} class="h-full px-2 pb-3 pt-2">
+						<div class="space-y-2">
+							<ChatMessages />
+						</div>
+					</div>
+					<div>
+						<ChatInput />
+					</div>
+				</div>
+			{/if}
 		</div>
 	</ChatLoading>
 {:else}
