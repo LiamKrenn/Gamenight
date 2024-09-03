@@ -166,11 +166,13 @@
 						{/if}
 					</AccountDropdown>
 				{:else}
-					<a href="/install">
-						<Button class="mr-3 rounded-lg bg-sky-700 p-2 pl-3 text-slate-50 hover:bg-sky-800">
-							Install <ArrowDownToLine class="ml-1" />
-						</Button>
-					</a>
+					{#if !isInStandaloneMode}
+						<a href="/install">
+							<Button class="mr-3 rounded-lg bg-sky-700 p-2 pl-3 text-slate-50 hover:bg-sky-800">
+								Install <ArrowDownToLine class="ml-1" />
+							</Button>
+						</a>
+					{/if}
 					<a href="/login">
 						<Button class="mr-3 rounded-lg bg-sky-700 text-slate-50 hover:bg-sky-800">
 							Sign In <LogIn class="ml-2" />
