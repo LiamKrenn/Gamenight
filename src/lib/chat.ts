@@ -17,6 +17,7 @@ import ChatClient from 'chat-client-delta';
 import { get } from 'svelte/store';
 import { fetchFriends } from './friends';
 import { PUBLIC_CHAT_URL } from '$env/static/public';
+import { updateUserStore } from './user';
 
 export type AudioData = any;
 export type ChatMessage = { message: string; chat_id: string; sender_id: string };
@@ -29,7 +30,6 @@ export class ChatClientSingleton {
 	messageCallbacks: ((message: ChatMessage) => void)[] = [];
 
 	constructor() {
-		chatUserID.set(get(user)?._id || '');
 		chatMessageInput.set('');
 		chatFriendUserId.set('');
 		chatMessages.set([]);
@@ -52,6 +52,8 @@ export class ChatClientSingleton {
 
 		friends.set(await fetchFriends() || []);
 
+		await updateUserStore();
+		chatUserID.set(get(user)?._id || '');
 		this.chatClient = new ChatClient(PUBLIC_CHAT_URL, get(chatUserID));
 		if (this.chatClient === null) return;
 		this.chatClient
