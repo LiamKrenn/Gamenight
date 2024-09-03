@@ -1,4 +1,5 @@
 <script lang="ts">
+	import ChatSidebarFriends from './ChatSidebarFriends.svelte';
 	import ChatPopupFriends from './ChatPopupFriends.svelte';
 	import ChatInput from './ChatInput.svelte';
 	import ChatMessages from './ChatMessages.svelte';
@@ -39,25 +40,7 @@
 	<ChatLoading>
 		<div class="mb-2 mt-3 h-full max-h-full space-y-2 overflow-hidden">
 			{#if !$chatFriendUserId}
-				<div class="mx-4 space-y-2">
-					{#each $friends || [] as friend}
-						<Button
-							variant="outline"
-							class="h-12 w-full justify-start rounded-lg border-slate-700 bg-slate-800 py-0 pl-2 pr-0 text-slate-100 hover:bg-slate-700"
-							on:click={async () => {
-								$chatFriendName = friend.username;
-								await $chatClient.startChat(friend._id);
-								scrollToBottom();
-							}}
-						>
-							<p class="w-24 shrink-0 xs:w-32">{friend.username}</p>
-							<p class="w-full overflow-hidden overflow-ellipsis text-left text-slate-500">
-								Last message bla bla bla bla bla bla bla bla
-							</p>
-							<ChevronRight class="h-10 w-10 shrink-0 rounded-lg stroke-slate-300 p-2" />
-						</Button>
-					{/each}
-				</div>
+				<ChatSidebarFriends {scrollToBottom} />
 			{/if}
 			{#if $chatFriendUserId}
 				<div class="flex h-full flex-col justify-between">
@@ -90,7 +73,9 @@
 	</ChatLoading>
 {:else}
 	<div class="flex h-full">
-		<div class="h-full w-32 shrink-0 space-y-2 border-r-[1px] border-slate-600 p-2">
+		<div
+			class="h-[444px] max-h-[444px] w-32 shrink-0 overflow-hidden border-r-[1px] border-slate-600"
+		>
 			<ChatPopupFriends {scrollToBottom} />
 		</div>
 		<div class="flex h-full w-full grow-0 flex-col justify-between p-0">
