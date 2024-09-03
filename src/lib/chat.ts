@@ -146,6 +146,10 @@ export class ChatClientSingleton {
 
 	public async sendMessage(): Promise<void> {
 		if (this.chatClient) {
+      if (get(chatMessageInput).replaceAll(' ', '') === '') {
+        chatMessageInput.set('');
+        return;
+      }
 			this.chatClient.sendFriendMessage(get(chatCurrentChatId), get(chatMessageInput));
 			chatMessageInput.set('');
 		}

@@ -3,7 +3,7 @@
 	import ChatInput from './ChatInput.svelte';
 	import ChatMessages from './ChatMessages.svelte';
 	import { onMount } from 'svelte';
-	import { friends, openChat } from '$lib/stores';
+	import { chatFriendName, friends, openChat } from '$lib/stores';
 	import { ChevronLeft, ChevronRight, UserPlus, X } from 'lucide-svelte';
 	import { OverlayScrollbars } from 'overlayscrollbars';
 	import { chatClient, chatConnected, chatFriendUserId } from '$lib/stores';
@@ -37,41 +37,51 @@
 
 {#if sidebar}
 	<ChatLoading>
-		<div class="mt-4 space-y-2">
+		<div class="mb-2 mt-3 h-full max-h-full space-y-2 overflow-hidden">
 			{#if !$chatFriendUserId}
-				{#each $friends || [] as friend}
-					<Button
-						variant="outline"
-						class="h-12 w-full justify-start rounded-lg border-slate-700 bg-slate-800 py-0 pl-2 pr-0 text-slate-100 hover:bg-slate-700"
-						on:click={async () => {
-							await $chatClient.startChat(friend._id);
-							scrollToBottom();
-						}}
-					>
-						<p class="w-24 shrink-0 xs:w-32">{friend.username}</p>
-						<p class="w-full overflow-hidden overflow-ellipsis text-left text-slate-500">
-							Last message bla bla bla bla bla bla bla bla
-						</p>
-						<ChevronRight class="h-10 w-10 shrink-0 rounded-lg stroke-slate-300 p-2" />
-					</Button>
-				{/each}
+				<div class="mx-4 space-y-2">
+					{#each $friends || [] as friend}
+						<Button
+							variant="outline"
+							class="h-12 w-full justify-start rounded-lg border-slate-700 bg-slate-800 py-0 pl-2 pr-0 text-slate-100 hover:bg-slate-700"
+							on:click={async () => {
+								$chatFriendName = friend.username;
+								await $chatClient.startChat(friend._id);
+								scrollToBottom();
+							}}
+						>
+							<p class="w-24 shrink-0 xs:w-32">{friend.username}</p>
+							<p class="w-full overflow-hidden overflow-ellipsis text-left text-slate-500">
+								Last message bla bla bla bla bla bla bla bla
+							</p>
+							<ChevronRight class="h-10 w-10 shrink-0 rounded-lg stroke-slate-300 p-2" />
+						</Button>
+					{/each}
+				</div>
 			{/if}
 			{#if $chatFriendUserId}
-				<div class="flex h-[74vh] flex-col justify-between">
-					<button
-						on:click={() => {
-							chatFriendUserId.set('');
-						}}
-					>
-						<ChevronLeft class="m-3" />
-					</button>
+				<div class="flex h-full flex-col justify-between">
+					<div class="mx-4">
+						<button
+							class="flex w-full items-center justify-between rounded-lg border border-slate-700 p-2 hover:bg-slate-700"
+							on:click={() => {
+								chatFriendUserId.set('');
+								$chatFriendName = '';
+							}}
+						>
+							<ChevronLeft />
+							<p class="text-slate-100">{$chatFriendName}</p>
+							<ChevronLeft class="invisible" />
+						</button>
+					</div>
 
-					<div bind:this={chatArea} class="h-full px-2 pb-3 pt-2">
-						<div class="space-y-2">
+					<div bind:this={chatArea} class="mx-1 mt-2 h-full pt-2">
+						<div class="mx-3 h-full space-y-2">
 							<ChatMessages />
 						</div>
 					</div>
-					<div>
+
+					<div class="mx-2 mb-2">
 						<ChatInput />
 					</div>
 				</div>

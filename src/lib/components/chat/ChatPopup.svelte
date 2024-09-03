@@ -11,7 +11,7 @@
 
 	export let loggedIn: boolean;
 
-  onMount(async () => {
+	onMount(async () => {
 		if (!$chatConnected) {
 			await $chatClient.connectClient();
 		}
@@ -60,12 +60,12 @@
 		<Button builders={[builder]} variant="outline" class="hidden"></Button>
 	</Sheet.Trigger>
 	<Sheet.Content
-		class="!z-10 mt-16 flex h-[calc(100%-64px)] w-full max-w-full border-r-0 border-slate-700 bg-slate-800 p-0 xs:w-96 xs:border-r-2 mobile:hidden"
+		class="!z-10 mt-16 flex h-[calc(100%-128px)] w-full max-w-full border-r-0 border-slate-700 bg-slate-800 p-0 xs:w-96 xs:border-r-2 mobile:hidden mobile:h-[calc(100%-64px)]"
 		side={'left'}
 	>
 		{#if loggedIn}
-			<div class="flex h-full w-full flex-col p-2 3xs:p-3 2xs:p-4">
-				<div class=" flex w-full shrink-0 items-center justify-between pl-2">
+			<div class="flex h-full w-full flex-col pt-4">
+				<div class=" flex w-full shrink-0 items-center justify-between pl-4 pr-3">
 					<h2 class="text-xl font-semibold 3xs:text-2xl">Chats</h2>
 					<div class="flex">
 						<a on:click={() => ($openChat = false)} href="/friends/requests?open=true">
