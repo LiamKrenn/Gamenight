@@ -6,7 +6,7 @@
 	import { page } from '$app/stores';
 
 	let username = '';
-	let open = true || $page.url.searchParams.get('open') === 'true';
+	let open = false || $page.url.searchParams.get('open') === 'true';
 	let errorMessage = '';
 	$: if (open) {
 		username = '';
