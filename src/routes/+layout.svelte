@@ -5,7 +5,15 @@
 	import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	import 'overlayscrollbars/overlayscrollbars.css';
-	import { disableModals, friends, openChat, openSidebar, user } from '$lib/stores';
+	import {
+		chatClient,
+		chatErrorConnectingClient,
+		disableModals,
+		friends,
+		openChat,
+		openSidebar,
+		user
+	} from '$lib/stores';
 	import Navlogo from '$lib/icons/nav/navlogo.svelte';
 	import Navtext from '$lib/icons/nav/navtext.svelte';
 	import { OverlayScrollbars } from 'overlayscrollbars';
@@ -63,6 +71,15 @@
 	onMount(async () => {
 		isInStandaloneMode = isPwa();
 
+		user.subscribe(async (value) => {
+			if (value) {
+				if ($friends === null || $friends.length === 0) {
+					await fetchFriends();
+				}
+				await $chatClient.connectClient();
+			}
+		});
+
 		setTimeout(() => {
 			isLoading = false;
 		}, 600);
@@ -77,7 +94,7 @@
 				theme: 'os-theme-default'
 			}
 		});
-		if ($friends === null) {
+		if ($friends === null || $friends.length === 0) {
 			await fetchFriends();
 		}
 	});

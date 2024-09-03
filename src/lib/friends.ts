@@ -4,6 +4,7 @@ import type { Request, User } from './types';
 
 export function getFriendsFromRequests(requests: Request[]): User[] {
 	let friends: User[] = [];
+
 	for (let request of requests) {
 		let realFriend =
 			request != null && (request.receiver.username === get(user)?.username || '')
@@ -15,7 +16,7 @@ export function getFriendsFromRequests(requests: Request[]): User[] {
 }
 
 export async function fetchFriends(): Promise<User[] | null> {
-  if (get(user) == null) return null;
+	if (get(user) == null) return null;
 	let friendRequests = await fetch('/friends');
 	friends.set(getFriendsFromRequests(await friendRequests.json()));
 	return get(friends);
