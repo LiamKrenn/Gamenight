@@ -2,7 +2,7 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import type { Request, User } from '$lib/types';
 	import { ArrowLeft, MessageCircle, Trash2, UserMinus } from 'lucide-svelte';
-	import { chatClient, openChat } from '$lib/stores';
+	import { chatClient, chatFriendName, openChat } from '$lib/stores';
 
 	export let friend: Request;
 	export let user: User | null;
@@ -66,7 +66,8 @@
 			<Button
 				on:click={() => {
 					$openChat = true;
-					$chatClient.startChat(realFriend.username);
+					$chatClient.startChat(realFriend._id);
+					$chatFriendName = realFriend.username;
 				}}
 				variant="ghost"
 				class="absolute right-12 p-2 hover:bg-slate-600 "
