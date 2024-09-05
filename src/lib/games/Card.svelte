@@ -3,7 +3,7 @@
 	import { cn } from '$lib/utils';
 	import { draggable } from '@neodrag/svelte';
 	import { tweened } from 'svelte/motion';
-	import { getBB, within } from './schnopsn/SchnopsnAnimation';
+	import { getBB, wait, within } from './schnopsn/SchnopsnAnimation';
 	import { playCardDropzoneDiv, cancelDropzoneDiv, stackDropzoneDiv } from './schnopsn/Schnopsn';
 
 	export let card: CardType;
@@ -30,29 +30,54 @@
 	let frontCardValue = hidden ? 'Back' : (card.color || 'U').slice(0, 1).toUpperCase() + card.value;
 
 	export let rotate = 0;
-	const rotation = tweened(rotate, { duration: 150 });
+	export let rotation = tweened(rotate, { duration: 150 });
+
+	let parent2 = '';
+	export const reset = async (rotate2: number) => {
+		parent2 = '!duration-0 !invisible';
+		rotation.set(rotate2, { duration: 0 });
+		parent2 = '!duration-0';
+		position = { x: 0, y: 0 };
+		await wait(10);
+		parent2 = '';
+		rotation.set(rotate);
+	};
+
+	$: if (card) {
+		frontCardValue = hidden ? 'Back' : (card.color || 'U').slice(0, 1).toUpperCase() + card.value;
+	}
+
+	$: if (rotate || !rotate) {
+		rotation.set(rotate);
+	}
 
 	let backCard = '';
 	let frontCard = '';
 	let drag = false;
 	$: parent = drag
-		? '!duration-0 cursor-grab z-10'
-		: '!duration-150 ' + (isDraggable ? 'cursor-pointer' : 'cursor-default');
+		? 'duration-0 cursor-grab !z-20'
+		: 'duration-150 ' + (isDraggable ? 'cursor-pointer' : 'cursor-default');
+
+	async function flipClose() {
+		frontCard = 'flipClose';
+		await wait(100);
+		backCard = 'flipOpen';
+		frontCardValue = hidden ? 'Back' : (card.color || 'U').slice(0, 1).toUpperCase() + card.value;
+		await wait(100);
+	}
+
+	async function flipOpen() {
+		backCard = 'flipClose';
+		await wait(100);
+		frontCard = 'flipOpen';
+		frontCardValue = hidden ? 'Back' : (card.color || 'U').slice(0, 1).toUpperCase() + card.value;
+		await wait(100);
+	}
 
 	$: if (hidden) {
-		frontCard = 'flipClose';
-		setTimeout(() => {
-			backCard = 'flipOpen';
-			frontCardValue = hidden ? 'Back' : (card.color || 'U').slice(0, 1).toUpperCase() + card.value;
-			setTimeout(() => {}, 100);
-		}, 100);
+		flipClose();
 	} else {
-		backCard = 'flipClose';
-		setTimeout(() => {
-			frontCard = 'flipOpen';
-			frontCardValue = hidden ? 'Back' : (card.color || 'U').slice(0, 1).toUpperCase() + card.value;
-			setTimeout(() => {}, 100);
-		}, 100);
+		flipOpen();
 	}
 
 	let scale = tweened(1, { duration: 150 });
@@ -60,7 +85,7 @@
 
 <div
 	bind:this={cardDiv}
-	class={cn('relative h-fit rounded-2xl', parent, parentClass)}
+	class={cn('relative h-fit rounded-2xl', parent, parent2, parentClass)}
 	style="width: {width}px;"
 	use:draggable={{
 		position,

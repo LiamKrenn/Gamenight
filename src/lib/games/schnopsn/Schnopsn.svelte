@@ -21,10 +21,18 @@
 		ownPlayedCardDiv,
 		cancelDropzoneDiv,
 		stackDropzoneDiv,
-		playCardDropzoneDiv
+		playCardDropzoneDiv,
+		stackCardDiv,
+		stackCardWrapperDiv
 	} from './Schnopsn';
 	import SchnopsnLayout from './SchnopsnLayout.svelte';
-	import { goto, within } from './SchnopsnAnimation';
+	import { getBB, goto, gotoCoords, wait, within } from './SchnopsnAnimation';
+	import { tweened } from 'svelte/motion';
+
+	let stackCardPos = { x: 0, y: 0 };
+	let stackClasses = '';
+	let stackCardRotation = 90;
+	let resetStack: (rotate: number) => void = () => {};
 
 	let currentlyPlayingAnimation = false;
 	async function dragCallback(
@@ -50,7 +58,33 @@
 			console.log('withinCancel', withinCancel);
 			console.log('withinPlayCard', withinPlayCard);
 
-			if (withinStack) {
+			if (withinStack && $stackCardDiv && $stackCardWrapperDiv) {
+				const stackBB = getBB($stackCardDiv);
+				const cardBB = getBB($ownHandDivs[index]);
+
+				stackCardRotation = 0;
+				$stackCardDiv.style.zIndex = '20';
+				stackCardPos = { x: cardBB.x - stackBB.x, y: cardBB.y - stackBB.y };
+
+				let newPosition = (await goto($ownHandDivs[index], $stackCardWrapperDiv, 150, {
+					beforeAnimation: () => {},
+					afterAnimation: async () => {
+						if (!$stackCardDiv) return;
+						const playedCard = $ownHand[index];
+						$ownHand[index] = $stackCard;
+						stackCardRotation = 0;
+						$stackCard = playedCard;
+						resetStack(90);
+						stackCardRotation = 90;
+					},
+					returnNewPosition: true
+				})) || { x: 0, y: 0 };
+
+				return {
+					x: newPosition.x,
+					y: newPosition.y,
+					rotate: 90
+				};
 			} else if (withinCancel) {
 				return;
 			} else if (withinPlayCard) {
@@ -58,13 +92,12 @@
 					beforeAnimation: () => {
 						$ownPlayedCard = null;
 					},
-					afterAnimation: () => {
+					afterAnimation: async () => {
 						$ownPlayedCard = $ownHand[index];
 						$ownHand.splice(index, 1);
 						$ownHand = [...$ownHand];
-						setTimeout(() => {
-							currentlyPlayingAnimation = false;
-						}, 100);
+						await wait(100);
+						currentlyPlayingAnimation = false;
 					},
 					returnNewPosition: true
 				})) || { x: 0, y: 0 };
@@ -115,23 +148,43 @@
 
 	<!-- Stack -->
 	<svelte:fragment slot="stack">
-		<div class="absolute left-[54%] mt-3">
-			<Card card={$stackCard} draggable={false} width={$cardSizeX} rotate={90} />
+		<div
+			bind:this={$stackCardWrapperDiv}
+			style="height: {$cardSizeY}px; width: {$cardSizeX}px; left: 54%;"
+			class="absolute z-20 mt-3"
+		>
+			<div bind:this={$stackCardDiv}>
+				<Card
+					bind:reset={resetStack}
+					card={$stackCard}
+					draggable={false}
+					position={stackCardPos}
+					width={$cardSizeX}
+					rotate={stackCardRotation}
+					class={stackClasses}
+				/>
+			</div>
 		</div>
 		<Card
-			parentClass="absolute top-4"
+			parentClass="absolute top-4 z-50"
 			card={$stackEmptyCard}
 			draggable={false}
 			width={$cardSizeX}
 		/>
 		<Card
 			shadow={false}
-			parentClass="absolute top-2"
+			parentClass="absolute top-2 z-50"
 			card={$stackEmptyCard}
 			draggable={false}
 			width={$cardSizeX}
 		/>
-		<Card shadow={false} card={$stackEmptyCard} draggable={false} width={$cardSizeX} />
+		<Card
+			parentClass="z-50"
+			shadow={false}
+			card={$stackEmptyCard}
+			draggable={false}
+			width={$cardSizeX}
+		/>
 	</svelte:fragment>
 
 	<!-- Own Hand -->

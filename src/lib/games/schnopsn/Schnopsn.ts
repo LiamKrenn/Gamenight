@@ -94,6 +94,8 @@ export const opponentPlayedCard = writable<CardType | null>(null);
 export const cardSizeX = writable(0);
 export const cardSizeY = writable(0);
 
+export const stackCardDiv = writable<HTMLDivElement | null>(null);
+export const stackCardWrapperDiv = writable<HTMLDivElement | null>(null);
 export const ownHandDivs = writable<HTMLDivElement[]>([]);
 export const opponentHandDivs = writable<HTMLDivElement[]>([]);
 
