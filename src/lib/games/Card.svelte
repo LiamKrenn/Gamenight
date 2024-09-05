@@ -3,7 +3,7 @@
 	import { cn } from '$lib/utils';
 	import { draggable } from '@neodrag/svelte';
 	import { tweened } from 'svelte/motion';
-	import { getBB, wait, within } from './schnopsn/SchnopsnAnimation';
+	import { getBB, wait, isWithin } from './schnopsn/SchnopsnAnimation';
 	import { playCardDropzoneDiv, cancelDropzoneDiv, stackDropzoneDiv } from './schnopsn/Schnopsn';
 
 	export let card: CardType;
@@ -93,16 +93,15 @@
 		onDrag: ({ offsetX, offsetY }) => {
 			position = { x: offsetX, y: offsetY };
 			if (cardDiv) {
-				const withinPlayDropzone = within(cardDiv, $playCardDropzoneDiv || new HTMLDivElement());
-				const withinCancelDropzone = within(cardDiv, $cancelDropzoneDiv || new HTMLDivElement());
-				const withinStackDropzone = within(cardDiv, $stackDropzoneDiv || new HTMLDivElement());
+				const withinPlayDropzone = isWithin(cardDiv, $playCardDropzoneDiv || new HTMLDivElement());
+				const withinCancelDropzone = isWithin(cardDiv, $cancelDropzoneDiv || new HTMLDivElement());
+				const withinStackDropzone = isWithin(cardDiv, $stackDropzoneDiv || new HTMLDivElement());
 
 				if (withinStackDropzone) {
 					rotation.set(15);
 				} else {
 					rotation.set(0);
 					if (withinPlayDropzone && !withinCancelDropzone) {
-						console.log(withinPlayDropzone && !withinCancelDropzone);
 						scale.set(1.2);
 					} else {
 						scale.set(1);
@@ -111,8 +110,6 @@
 			}
 		},
 		onDragStart: () => {
-			console.log(getBB($stackDropzoneDiv || new HTMLDivElement()));
-
 			drag = true;
 		},
 		onDragEnd: async () => {

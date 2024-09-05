@@ -1,23 +1,5 @@
 import { get } from 'svelte/store';
-import {
-	opponentEmptyCard,
-	opponentHand,
-	opponentPlayedCard,
-	opponentSkin,
-	ownEmptyCard,
-	ownHand,
-	ownPlayedCard,
-	ownSkin,
-	stackCard,
-	stackClosed,
-	stackEmptyCard,
-	cardSizeX,
-	cardSizeY,
-	opponentHandDivs,
-	opponentPlayedCardDiv,
-	ownHandDivs,
-	ownPlayedCardDiv
-} from './Schnopsn';
+import * as stores from './Schnopsn';
 import { browser } from '$app/environment';
 
 export const wait = async (t: number) => {
@@ -30,7 +12,7 @@ export function getBB(element: HTMLElement): DOMRect {
 	return element.getBoundingClientRect();
 }
 
-export function within(
+export function isWithin(
 	source: HTMLElement,
 	target: HTMLElement,
 	offset: null | { x: number; y: number } = null
@@ -48,7 +30,7 @@ export function within(
 	return withinX && withinY;
 }
 
-export async function goto(
+export async function gotoElement(
 	source: HTMLElement,
 	target: HTMLElement,
 	duration: number = 150,
