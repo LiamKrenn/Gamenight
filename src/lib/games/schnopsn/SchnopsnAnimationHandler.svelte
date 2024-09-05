@@ -28,11 +28,11 @@
 	import { getBB, gotoElement, wait, isWithin } from './SchnopsnAnimation';
 	import SchnopsnLayout from './SchnopsnLayout.svelte';
 
-	export const swapCardCallback: (index: number) => Promise<boolean> = () => {
+	export let swapCardCallback: (index: number) => Promise<boolean> = () => {
 		return Promise.resolve(true);
 	};
 
-	export const playedCardCallback: (index: number) => Promise<boolean> = () => {
+	export let playedCardCallback: (index: number) => Promise<boolean> = () => {
 		return Promise.resolve(true);
 	};
 
