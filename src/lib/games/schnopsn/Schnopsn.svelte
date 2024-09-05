@@ -1,226 +1,142 @@
 <script lang="ts">
-	import type { CardType } from '$lib/types';
 	import { flip } from 'svelte/animate';
 	import Card from '../Card.svelte';
-	import { onMount } from 'svelte';
+	import {
+		opponentEmptyCard,
+		opponentHand,
+		opponentPlayedCard,
+		opponentSkin,
+		ownEmptyCard,
+		ownHand,
+		ownPlayedCard,
+		ownSkin,
+		stackCard,
+		stackClosed,
+		stackEmptyCard,
+		cardSizeX,
+		cardSizeY,
+		opponentHandDivs,
+		opponentPlayedCardDiv,
+		ownHandDivs,
+		ownPlayedCardDiv,
+		cancelDropzoneDiv,
+		stackDropzoneDiv,
+		playCardDropzoneDiv
+	} from './Schnopsn';
+	import SchnopsnLayout from './SchnopsnLayout.svelte';
+	import { goto, within } from './SchnopsnAnimation';
 
-	const defaultSkin = 'default';
+	let currentlyPlayingAnimation = false;
+	async function dragCallback(
+		index: number,
+		position: { x: number; y: number }
+	): Promise<{ x: number; y: number; rotate: number } | void> {
+		if (
+			currentlyPlayingAnimation ||
+			!$ownPlayedCardDiv ||
+			!$cancelDropzoneDiv ||
+			!$stackDropzoneDiv ||
+			!$playCardDropzoneDiv
+		)
+			return;
+		currentlyPlayingAnimation = true;
 
-	let ownSkin = 'default';
-	let opponentSkin = 'default';
+		const withinStack = within($ownHandDivs[index], $stackDropzoneDiv, position);
+		const withinCancel = within($ownHandDivs[index], $cancelDropzoneDiv, position);
+		const withinPlayCard = within($ownHandDivs[index], $playCardDropzoneDiv, position);
 
-	let ownHand: CardType[] = [
-		{
-			color: 'hearts',
-			value: 11,
-			skin: ownSkin
-		},
-		{
-			color: 'hearts',
-			value: 4,
-			skin: ownSkin
-		},
-		{
-			color: 'clubs',
-			value: 3,
-			skin: ownSkin
-		},
-		{
-			color: 'clubs',
-			value: 4,
-			skin: ownSkin
-		},
-		{
-			color: 'spades',
-			value: 11,
-			skin: ownSkin
+		console.log('withinStack', withinStack);
+		console.log('withinCancel', withinCancel);
+		console.log('withinPlayCard', withinPlayCard);
+
+		if (withinStack) {
+		} else if (withinCancel) {
+		} else if (withinPlayCard) {
+			let newPosition = (await goto($ownHandDivs[index], $ownPlayedCardDiv, 150, {
+				beforeAnimation: () => {
+					$ownPlayedCard = null;
+				},
+				afterAnimation: () => {
+					$ownPlayedCard = $ownHand[index];
+					$ownHand.splice(index, 1);
+					$ownHand = [...$ownHand];
+					setTimeout(() => {
+						currentlyPlayingAnimation = false;
+					}, 100);
+				},
+				returnNewPosition: true
+			})) || { x: 0, y: 0 };
+			return {
+				x: newPosition.x,
+				y: newPosition.y,
+				rotate: 0
+			};
 		}
-	];
 
-	let opponentHand: CardType[] = [
-		{
-			skin: opponentSkin,
-			color: undefined,
-			value: undefined
-		},
-		{
-			skin: opponentSkin,
-			color: undefined,
-			value: undefined
-		},
-		{
-			skin: opponentSkin,
-			color: undefined,
-			value: undefined
-		},
-		{
-			skin: opponentSkin,
-			color: undefined,
-			value: undefined
-		},
-		{
-			skin: opponentSkin,
-			color: undefined,
-			value: undefined
-		}
-	];
-
-	let ownEmptyCard: CardType = {
-		skin: ownSkin,
-		color: undefined,
-		value: undefined
-	};
-
-	let opponentEmptyCard: CardType = {
-		skin: opponentSkin,
-		color: undefined,
-		value: undefined
-	};
-
-	let stackEmptyCard: CardType = {
-		skin: defaultSkin,
-		color: undefined,
-		value: undefined
-	};
-
-	let stackCard: CardType = {
-		skin: defaultSkin,
-		color: 'spades',
-		value: 2
-	};
-
-	let stackClosed: boolean = false;
-
-	let ownPlayedCard: CardType | null = null;
-	let opponentPlayedCard: CardType | null = null;
-
-	let ownHandDivs: HTMLDivElement[] = [];
-	let opponentHandDivs: HTMLDivElement[] = [];
-
-	let ownPlayedCardDiv: HTMLDivElement;
-	let opponentPlayedCardDiv: HTMLDivElement;
-	let playingAreaDiv: HTMLDivElement;
-
-	function getOwnPlayedCardBB(): DOMRect {
-		return ownPlayedCardDiv.getBoundingClientRect();
+		currentlyPlayingAnimation = false;
 	}
-
-  let currentlyPlayingAnimation = false;
-	function dragCallback(index: number, position: { x: number; y: number }) {
-    if (currentlyPlayingAnimation) return {x: 0, y: 0};
-    currentlyPlayingAnimation = true;
-		try {
-			const target = getOwnPlayedCardBB();
-			const curCoords = ownHandDivs[index].getBoundingClientRect();
-			ownPlayedCard = null;
-			return { x: target.x - curCoords.x, y: target.y - curCoords.y };
-		} finally {
-			setTimeout(() => {
-				ownPlayedCard = ownHand[index];
-				setTimeout(() => {
-					ownHand.splice(index, 1);
-					ownHand = [...ownHand];
-          setTimeout(() => {
-            currentlyPlayingAnimation = false;
-          }, 100);
-				}, 100);
-			}, 150);
-		}
-	}
-
-	let handWidth = 0;
-	$: cardSizeX = handWidth / 4;
-	$: cardSizeY = cardSizeX * 1.39;
 </script>
 
-<div class="relative flex h-full w-full items-center justify-center overflow-hidden p-0">
-	<div bind:this={playingAreaDiv} class="flex h-full w-full flex-col items-center justify-between">
-		<!-- Opponent Hand -->
-		<div
-			class="w-[60vmin] h-[{cardSizeY}px] flex max-w-[57%] -space-x-[6%]"
-			style="margin-top: -{cardSizeY / 2.4}px"
-		>
-			{#each opponentHand as card, i}
-				<Card
-					bind:cardDiv={opponentHandDivs[i]}
-					index={i}
-					{dragCallback}
-					{card}
-					draggable={false}
-					width={cardSizeX}
-				/>
-			{/each}
+<SchnopsnLayout>
+	<!-- Opponent Hand -->
+	<svelte:fragment slot="opponentHand">
+		{#each $opponentHand as card, i}
+			<Card
+				bind:cardDiv={$opponentHandDivs[i]}
+				index={i}
+				{dragCallback}
+				{card}
+				draggable={false}
+				width={$cardSizeX}
+			/>
+		{/each}
+	</svelte:fragment>
+
+	<!-- Opponent Played Card -->
+	<svelte:fragment slot="opponentPlayedCard">
+		{#if $opponentPlayedCard}
+			<Card card={$opponentPlayedCard} draggable={false} width={$cardSizeX} />
+		{:else}
+			<p class="opacity-10">Opp.</p>
+		{/if}
+	</svelte:fragment>
+
+	<!-- Own Played Card -->
+	<svelte:fragment slot="ownPlayedCard">
+		{#if $ownPlayedCard}
+			<Card card={$ownPlayedCard} draggable={false} width={$cardSizeX} />
+		{:else}
+			<p class="opacity-10">Own</p>
+		{/if}
+	</svelte:fragment>
+
+	<!-- Stack -->
+	<svelte:fragment slot="stack">
+		<div class="absolute left-[54%] mt-3">
+			<Card card={$stackCard} draggable={false} width={$cardSizeX} rotate={90} />
 		</div>
+		<Card
+			parentClass="absolute top-4"
+			card={$stackEmptyCard}
+			draggable={false}
+			width={$cardSizeX}
+		/>
+		<Card
+			shadow={false}
+			parentClass="absolute top-2"
+			card={$stackEmptyCard}
+			draggable={false}
+			width={$cardSizeX}
+		/>
+		<Card shadow={false} card={$stackEmptyCard} draggable={false} width={$cardSizeX} />
+	</svelte:fragment>
 
-		<!-- Played Cards -->
-		<div class="relative flex w-full justify-center space-x-6">
-			<div
-				bind:this={opponentPlayedCardDiv}
-				class="flex items-center justify-center rounded-sm bg-slate-700/20"
-				style="height: {cardSizeY}px; width: {cardSizeX}px"
-			>
-				{#if opponentPlayedCard}
-					<Card card={opponentPlayedCard} draggable={false} width={cardSizeX} />
-				{:else}
-					<p class="opacity-10">Opp.</p>
-				{/if}
+	<!-- Own Hand -->
+	<svelte:fragment slot="ownHand">
+		{#each $ownHand as card, i (card.value + (card.color || 'U'))}
+			<div bind:this={$ownHandDivs[i]} animate:flip={{ duration: 250 }}>
+				<Card index={i} {dragCallback} {card} draggable={true} width={$cardSizeX} />
 			</div>
-			<div
-				bind:this={ownPlayedCardDiv}
-				class="flex items-center justify-center rounded-sm bg-slate-700/20"
-				style="height: {cardSizeY}px; width: {cardSizeX}px"
-			>
-				{#if ownPlayedCard}
-					<Card card={ownPlayedCard} draggable={false} width={cardSizeX} />
-				{:else}
-					<p class="opacity-10">Own</p>
-				{/if}
-			</div>
-
-			<!-- Stack -->
-			<div class="absolute mobile:left-[4%]" style="left: -{cardSizeX / 2}px; ">
-				<div class="absolute left-[54%] mt-3 rotate-90">
-					<Card
-						style="left: {cardSizeY / 2.55}px"
-						card={stackCard}
-						draggable={false}
-						width={cardSizeX}
-					/>
-				</div>
-				<Card
-					parentClass="absolute top-4"
-					card={stackEmptyCard}
-					draggable={false}
-					width={cardSizeX}
-				/>
-				<Card
-					shadow={false}
-					parentClass="absolute top-2"
-					card={stackEmptyCard}
-					draggable={false}
-					width={cardSizeX}
-				/>
-				<Card shadow={false} card={stackEmptyCard} draggable={false} width={cardSizeX} />
-			</div>
-		</div>
-
-		<!-- Own Hand -->
-		<div
-			bind:clientWidth={handWidth}
-			class="mb-[2%] flex w-[60vmin] max-w-[57%] justify-center -space-x-[6%]"
-			style="height: {cardSizeY}px"
-		>
-			{#each ownHand as card, i (card.value + (card.color || 'U'))}
-				<div bind:this={ownHandDivs[i]} animate:flip={{ duration: 250 }}>
-					<Card index={i} {dragCallback} {card} draggable={true} width={cardSizeX} />
-				</div>
-			{/each}
-		</div>
-	</div>
-</div>
-
-<style>
-	:global(body) {
-		overscroll-behavior-y: contain;
-	}
-</style>
+		{/each}
+	</svelte:fragment>
+</SchnopsnLayout>

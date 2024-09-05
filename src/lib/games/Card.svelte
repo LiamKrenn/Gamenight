@@ -2,6 +2,7 @@
 	import type { CardType } from '$lib/types';
 	import { cn } from '$lib/utils';
 	import { draggable } from '@neodrag/svelte';
+	import { tweened } from 'svelte/motion';
 
 	export let card: CardType;
 	let isDraggable = false;
@@ -15,13 +16,19 @@
 	export { className as class };
 	export let position = { x: 0, y: 0 };
 
-  export let cardDiv: HTMLDivElement | null = null;
-  export let index: number = -1;
-  export let dragCallback: (index: number, position: {x: number, y: number}) => {x: number, y: number} | void = () => {};
+	export let cardDiv: HTMLDivElement | null = null;
+	export let index: number = -1;
+	export let dragCallback: (
+		index: number,
+		position: { x: number; y: number }
+	) => Promise<{ x: number; y: number; rotate: number } | void> = async () => {};
 
 	let hidden = card.value == undefined || card.color == undefined;
 
 	let frontCardValue = hidden ? 'Back' : (card.color || 'U').slice(0, 1).toUpperCase() + card.value;
+
+	export let rotate = 0;
+	const rotation = tweened(rotate, { duration: 150 });
 
 	let backCard = '';
 	let frontCard = '';
@@ -48,8 +55,8 @@
 </script>
 
 <div
-  bind:this={cardDiv}
-	class={cn('relative h-fit rounded-2xl', parent, parentClass, shadow ? 'cshadow' : '')}
+	bind:this={cardDiv}
+	class={cn('relative h-fit rounded-2xl', parent, parentClass)}
 	style="width: {width}px"
 	use:draggable={{
 		position,
@@ -60,20 +67,30 @@
 		onDragStart: () => {
 			drag = true;
 		},
-		onDragEnd: () => {
+		onDragEnd: async () => {
 			drag = false;
-      position = dragCallback(index, position) || {x: 0, y: 0};
+			let result = (await dragCallback(index, position)) || { x: 0, y: 0, rotate: 0 };
+			position = { x: result.x, y: result.y };
+			rotation.set(result.rotate);
 		}
 	}}
 >
 	<img
-		class={cn('absolute', frontCard, className)}
+		class={cn(
+			'absolute duration-0',
+			frontCard,
+			className,
+			shadow ? 'cshadow rounded-2xl' : '',
+			hidden ? '-z-10' : 'z-10'
+		)}
+		style="transform: rotate({$rotation}deg)"
 		src="/card_skins/{card.skin}/{frontCardValue}.svg"
 		alt="{card.color} {card.value}"
 		inert
 	/>
 	<img
-		class={cn(backCard, className)}
+		class={cn(backCard, className, 'duration-0')}
+		style="transform: rotate({$rotation}deg)"
 		src="/card_skins/{card.skin}/Back.svg"
 		alt="Hidden Card"
 		inert
