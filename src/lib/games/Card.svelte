@@ -101,20 +101,20 @@
 >
 	<img
 		class={cn(
-			'absolute h-full w-full object-contain duration-0',
+			'absolute h-full w-full object-contain !duration-0',
 			frontCard,
 			className,
 			shadow ? 'cshadow rounded-[7%]' : '',
 			hidden ? '-z-10' : 'z-10'
 		)}
-		style="transform: rotate({$rotation}deg);  scale: {$scale}"
+		style="transform: rotate({$rotation}deg); scale: {$scale}"
 		src="/card_skins/{card.skin}/{frontCardValue}.svg"
 		alt="{card.color} {card.value}"
 		inert
 	/>
 	<img
-		class={cn(backCard, className, 'h-full w-full object-contain duration-0')}
-		style="transform: rotate({$rotation}deg);  scale: {$scale}"
+		class={cn(backCard, className, 'h-full w-full object-contain !duration-0')}
+		style="transform: rotate({$rotation}deg); scale: {$scale}"
 		src="/card_skins/{card.skin}/Back.svg"
 		alt="Hidden Card"
 		inert
