@@ -86,7 +86,7 @@
 <div
 	bind:this={cardDiv}
 	class={cn('relative h-fit rounded-2xl', parent, parent2, parentClass)}
-	style="width: {width}px;"
+	style="width: {width}px; {styleString}"
 	use:draggable={{
 		position,
 		disabled: !isDraggable,
@@ -125,23 +125,22 @@
 	}}
 >
 	<img
+		class={cn(backCard, className, 'absolute h-full w-full object-contain !duration-0')}
+		style="transform: rotate({$rotation}deg); scale: {$scale}"
+		src="/card_skins/{card.skin}/Back.svg"
+		alt="Hidden Card"
+		inert
+	/>
+	<img
 		class={cn(
-			'absolute h-full w-full object-contain !duration-0',
+			' h-full w-full object-contain !duration-0',
 			frontCard,
 			className,
-			shadow ? 'cshadow rounded-[7%]' : '',
-			hidden ? '-z-10' : 'z-10'
+			shadow ? 'cshadow rounded-[7%]' : ''
 		)}
 		style="transform: rotate({$rotation}deg); scale: {$scale}"
 		src="/card_skins/{card.skin}/{frontCardValue}.svg"
 		alt="{card.color} {card.value}"
-		inert
-	/>
-	<img
-		class={cn(backCard, className, 'h-full w-full object-contain !duration-0')}
-		style="transform: rotate({$rotation}deg); scale: {$scale}"
-		src="/card_skins/{card.skin}/Back.svg"
-		alt="Hidden Card"
 		inert
 	/>
 </div>

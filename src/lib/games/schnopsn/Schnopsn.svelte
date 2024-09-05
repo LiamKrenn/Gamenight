@@ -30,9 +30,9 @@
 	import { tweened } from 'svelte/motion';
 
 	let stackCardPos = { x: 0, y: 0 };
-	let stackClasses = '';
+	let stackStyles = '';
 	let stackCardRotation = 90;
-	let resetStack: (rotate: number) => void = () => {};
+	let resetStack: (rotate: number) => Promise<void> = async () => {};
 
 	let currentlyPlayingAnimation = false;
 	async function dragCallback(
@@ -63,7 +63,7 @@
 				const cardBB = getBB($ownHandDivs[index]);
 
 				stackCardRotation = 0;
-				$stackCardDiv.style.zIndex = '20';
+				stackStyles = 'z-index: ' + index + ';';
 				stackCardPos = { x: cardBB.x - stackBB.x, y: cardBB.y - stackBB.y };
 
 				let newPosition = (await goto($ownHandDivs[index], $stackCardWrapperDiv, 150, {
@@ -76,6 +76,7 @@
 						$stackCard = playedCard;
 						resetStack(90);
 						stackCardRotation = 90;
+						stackStyles = '';
 					},
 					returnNewPosition: true
 				})) || { x: 0, y: 0 };
@@ -151,7 +152,7 @@
 		<div
 			bind:this={$stackCardWrapperDiv}
 			style="height: {$cardSizeY}px; width: {$cardSizeX}px; left: 54%;"
-			class="absolute z-20 mt-3"
+			class="absolute mt-3"
 		>
 			<div bind:this={$stackCardDiv}>
 				<Card
@@ -161,7 +162,7 @@
 					position={stackCardPos}
 					width={$cardSizeX}
 					rotate={stackCardRotation}
-					class={stackClasses}
+					style={stackStyles}
 				/>
 			</div>
 		</div>
@@ -191,7 +192,14 @@
 	<svelte:fragment slot="ownHand">
 		{#each $ownHand as card, i (card.value + (card.color || 'U'))}
 			<div bind:this={$ownHandDivs[i]} animate:flip={{ duration: 250 }}>
-				<Card index={i} {dragCallback} {card} draggable={true} width={$cardSizeX} />
+				<Card
+					style="z-index: {i};"
+					index={i}
+					{dragCallback}
+					{card}
+					draggable={true}
+					width={$cardSizeX}
+				/>
 			</div>
 		{/each}
 	</svelte:fragment>
