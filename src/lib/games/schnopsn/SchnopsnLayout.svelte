@@ -14,27 +14,23 @@
 	$: if (handWidth) {
 		$cardSizeX = handWidth / 4;
 		$cardSizeY = $cardSizeX * 1.39;
-		console.log('handWidth', $cardSizeX);
 	}
 </script>
 
 <div class="relative flex h-full w-full items-center justify-center overflow-hidden p-0">
 	<div class="flex h-full w-full flex-col items-center justify-between">
 		<!-- Card Drop Zones -->
-		<div class="absolute left-0 top-0 flex h-full w-full items-center bg-red-500/10">
-			<div
-				bind:this={$playCardDropzoneDiv}
-				class="absolute bottom-0 h-full w-full bg-green-500/30"
-			></div>
+		<div class="absolute left-0 top-0 flex h-full w-full items-center">
+			<div bind:this={$playCardDropzoneDiv} class="absolute bottom-0 h-full w-full"></div>
 			<div
 				bind:this={$stackDropzoneDiv}
-				class="absolute h-[50%] w-[30%] bg-yellow-500/30"
+				class="absolute h-[50%] w-[30%]"
 				style="max-width: {1.5 * $cardSizeY}px; margin-top: -{$cardSizeY /
 					2.4}px; max-height: {2.5 * $cardSizeY}px;"
 			></div>
 			<div
 				bind:this={$cancelDropzoneDiv}
-				class="absolute bottom-0 h-[30%] w-full bg-red-500/30"
+				class="absolute bottom-0 h-[30%] w-full"
 				style="min-height: {$cardSizeY * 1.1}px; max-height: {$cardSizeY * 1.5}px;"
 			></div>
 		</div>
