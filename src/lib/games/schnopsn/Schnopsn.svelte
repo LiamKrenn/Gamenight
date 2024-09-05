@@ -31,49 +31,52 @@
 		index: number,
 		position: { x: number; y: number }
 	): Promise<{ x: number; y: number; rotate: number } | void> {
-		if (
-			currentlyPlayingAnimation ||
-			!$ownPlayedCardDiv ||
-			!$cancelDropzoneDiv ||
-			!$stackDropzoneDiv ||
-			!$playCardDropzoneDiv
-		)
-			return;
-		currentlyPlayingAnimation = true;
+		try {
+			if (
+				currentlyPlayingAnimation ||
+				!$ownPlayedCardDiv ||
+				!$cancelDropzoneDiv ||
+				!$stackDropzoneDiv ||
+				!$playCardDropzoneDiv
+			)
+				return;
+			currentlyPlayingAnimation = true;
 
-		const withinStack = within($ownHandDivs[index], $stackDropzoneDiv, position);
-		const withinCancel = within($ownHandDivs[index], $cancelDropzoneDiv, position);
-		const withinPlayCard = within($ownHandDivs[index], $playCardDropzoneDiv, position);
+			const withinStack = within($ownHandDivs[index], $stackDropzoneDiv, position);
+			const withinCancel = within($ownHandDivs[index], $cancelDropzoneDiv, position);
+			const withinPlayCard = within($ownHandDivs[index], $playCardDropzoneDiv, position);
 
-		console.log('withinStack', withinStack);
-		console.log('withinCancel', withinCancel);
-		console.log('withinPlayCard', withinPlayCard);
+			console.log('withinStack', withinStack);
+			console.log('withinCancel', withinCancel);
+			console.log('withinPlayCard', withinPlayCard);
 
-		if (withinStack) {
-		} else if (withinCancel) {
-		} else if (withinPlayCard) {
-			let newPosition = (await goto($ownHandDivs[index], $ownPlayedCardDiv, 150, {
-				beforeAnimation: () => {
-					$ownPlayedCard = null;
-				},
-				afterAnimation: () => {
-					$ownPlayedCard = $ownHand[index];
-					$ownHand.splice(index, 1);
-					$ownHand = [...$ownHand];
-					setTimeout(() => {
-						currentlyPlayingAnimation = false;
-					}, 100);
-				},
-				returnNewPosition: true
-			})) || { x: 0, y: 0 };
-			return {
-				x: newPosition.x,
-				y: newPosition.y,
-				rotate: 0
-			};
+			if (withinStack) {
+			} else if (withinCancel) {
+				return;
+			} else if (withinPlayCard) {
+				let newPosition = (await goto($ownHandDivs[index], $ownPlayedCardDiv, 150, {
+					beforeAnimation: () => {
+						$ownPlayedCard = null;
+					},
+					afterAnimation: () => {
+						$ownPlayedCard = $ownHand[index];
+						$ownHand.splice(index, 1);
+						$ownHand = [...$ownHand];
+						setTimeout(() => {
+							currentlyPlayingAnimation = false;
+						}, 100);
+					},
+					returnNewPosition: true
+				})) || { x: 0, y: 0 };
+				return {
+					x: newPosition.x,
+					y: newPosition.y,
+					rotate: 0
+				};
+			}
+		} finally {
+			currentlyPlayingAnimation = false;
 		}
-
-		currentlyPlayingAnimation = false;
 	}
 </script>
 

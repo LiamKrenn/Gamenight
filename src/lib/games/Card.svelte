@@ -3,6 +3,8 @@
 	import { cn } from '$lib/utils';
 	import { draggable } from '@neodrag/svelte';
 	import { tweened } from 'svelte/motion';
+	import { getBB, within } from './schnopsn/SchnopsnAnimation';
+	import { playCardDropzoneDiv, cancelDropzoneDiv, stackDropzoneDiv } from './schnopsn/Schnopsn';
 
 	export let card: CardType;
 	let isDraggable = false;
@@ -52,23 +54,45 @@
 			setTimeout(() => {}, 100);
 		}, 100);
 	}
+
+	let scale = tweened(1, { duration: 150 });
 </script>
 
 <div
 	bind:this={cardDiv}
 	class={cn('relative h-fit rounded-2xl', parent, parentClass)}
-	style="width: {width}px"
+	style="width: {width}px;"
 	use:draggable={{
 		position,
 		disabled: !isDraggable,
 		onDrag: ({ offsetX, offsetY }) => {
 			position = { x: offsetX, y: offsetY };
+			if (cardDiv) {
+				const withinPlayDropzone = within(cardDiv, $playCardDropzoneDiv || new HTMLDivElement());
+				const withinCancelDropzone = within(cardDiv, $cancelDropzoneDiv || new HTMLDivElement());
+				const withinStackDropzone = within(cardDiv, $stackDropzoneDiv || new HTMLDivElement());
+
+				if (withinStackDropzone) {
+					rotation.set(15);
+				} else {
+					rotation.set(0);
+					if (withinPlayDropzone && !withinCancelDropzone) {
+						console.log(withinPlayDropzone && !withinCancelDropzone);
+						scale.set(1.2);
+					} else {
+						scale.set(1);
+					}
+				}
+			}
 		},
 		onDragStart: () => {
+			console.log(getBB($stackDropzoneDiv || new HTMLDivElement()));
+
 			drag = true;
 		},
 		onDragEnd: async () => {
 			drag = false;
+			scale.set(1);
 			let result = (await dragCallback(index, position)) || { x: 0, y: 0, rotate: 0 };
 			position = { x: result.x, y: result.y };
 			rotation.set(result.rotate);
@@ -83,14 +107,14 @@
 			shadow ? 'cshadow rounded-[7%]' : '',
 			hidden ? '-z-10' : 'z-10'
 		)}
-		style="transform: rotate({$rotation}deg)"
+		style="transform: rotate({$rotation}deg);  scale: {$scale}"
 		src="/card_skins/{card.skin}/{frontCardValue}.svg"
 		alt="{card.color} {card.value}"
 		inert
 	/>
 	<img
 		class={cn(backCard, className, 'h-full w-full object-contain duration-0')}
-		style="transform: rotate({$rotation}deg)"
+		style="transform: rotate({$rotation}deg);  scale: {$scale}"
 		src="/card_skins/{card.skin}/Back.svg"
 		alt="Hidden Card"
 		inert
