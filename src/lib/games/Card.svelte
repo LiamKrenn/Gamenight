@@ -5,6 +5,8 @@
 	import { tweened } from 'svelte/motion';
 	import { getBB, wait, isWithin } from './schnopsn/SchnopsnAnimation';
 	import { playCardDropzoneDiv, cancelDropzoneDiv, stackDropzoneDiv } from './schnopsn/Schnopsn';
+	import { onMount } from 'svelte';
+	import mapTouchToMouseFor from './touchToMouse';
 
 	export let card: CardType;
 	let isDraggable = false;
@@ -81,11 +83,15 @@
 	}
 
 	let scale = tweened(1, { duration: 150 });
+
+	onMount(() => {
+		mapTouchToMouseFor('.touch');
+	});
 </script>
 
 <div
 	bind:this={cardDiv}
-	class={cn('relative h-fit rounded-2xl', parent, parent2, parentClass)}
+	class={cn('touch relative h-fit rounded-2xl', parent, parent2, parentClass)}
 	style="width: {width}px; {styleString}"
 	use:draggable={{
 		position,
@@ -143,6 +149,11 @@
 </div>
 
 <style>
+	.touch {
+		-webkit-touch-callout: none;
+		-ms-touch-action: none;
+		touch-action: none;
+	}
 	:global(.flipClose) {
 		transition-duration: 100ms;
 		transition-timing-function: ease-in;
