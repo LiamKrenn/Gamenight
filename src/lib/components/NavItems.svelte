@@ -8,8 +8,9 @@
 {#each routes as route}
 	<a href={route[1]}>
 		{#if id == route[1]}
-			<Button variant="outline" class="mx-2 h-10 w-24 border-slate-700 bg-slate-700 hover:bg-slate-700"
-				>{route[0]}</Button
+			<Button
+				variant="outline"
+				class="mx-2 h-10 w-24 border-slate-700 bg-slate-700 hover:bg-slate-700">{route[0]}</Button
 			>
 		{:else}
 			<Button

@@ -1,17 +1,16 @@
 <script lang="ts">
-  let className: string = "";
-  export { className as class };
+	let className: string = '';
+	export { className as class };
 </script>
 
 <svg
 	xmlns="http://www.w3.org/2000/svg"
 	version="1.1"
 	xmlns:xlink="http://www.w3.org/1999/xlink"
-	xmlns:svgjs="http://svgjs.dev/svgjs"
 	width="1500"
 	height="1500"
 	viewBox="0 0 1500 1500"
-  class="{className}"
+	class={className}
 	><rect width="1500" height="1500" fill="#000000"></rect><g
 		transform="matrix(0.6666666666666666,0,0,0.6666666666666666,249.39393939393938,435.99032258064517)"
 		><svg
@@ -26,7 +25,7 @@
 				><svg viewBox="0 0 395.52 247.2" height="247.2" width="395.52"
 					><g><svg></svg></g><g
 						><svg viewBox="0 0 395.52 247.2" height="247.2" width="395.52"
-							><mask id="23ac1633-bf1a-4be9-93d9-007c6493345a"
+							><mask id="asdf"
 								><rect width="640" height="400" fill="white"></rect><rect
 									width="348.05760000000004"
 									height="58.53049765741386"
@@ -94,7 +93,7 @@
 										></g
 									></svg
 								></g
-							><g mask="url(#23ac1633-bf1a-4be9-93d9-007c6493345a)"
+							><g mask="url(#asdf)"
 								><g
 									transform="matrix(2.4519997187461544, 0, 0, 2.4519997187461544, 118.32378677014961, 0.9999999999999858)"
 									><svg

@@ -125,8 +125,6 @@
 	}
 </script>
 
-<title>Gamenight</title>
-
 <div class="flex h-full w-full flex-col">
 	{#if isLoading}
 		<div
