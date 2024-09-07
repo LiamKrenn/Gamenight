@@ -91,6 +91,17 @@ export const stackClosed = writable(false);
 export const ownPlayedCard = writable<CardType | null>(null);
 export const opponentPlayedCard = writable<CardType | null>(null);
 
+export const ownTrick1 = writable<CardType | null>({
+	skin: defaultSkin,
+	color: 'hearts',
+	value: 3
+});
+export const ownTrick2 = writable<CardType | null>({
+	skin: defaultSkin,
+	color: 'hearts',
+	value: 2
+});
+
 export const cardSizeX = writable(0);
 export const cardSizeY = writable(0);
 

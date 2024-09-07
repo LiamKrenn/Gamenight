@@ -104,7 +104,7 @@
 				const withinStackDropzone = isWithin(cardDiv, $stackDropzoneDiv || new HTMLDivElement());
 
 				if (withinStackDropzone) {
-					rotation.set(15);
+					rotation.set(20);
 				} else {
 					rotation.set(0);
 					if (withinPlayDropzone && !withinCancelDropzone) {
