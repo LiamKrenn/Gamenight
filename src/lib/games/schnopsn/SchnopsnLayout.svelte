@@ -9,8 +9,9 @@
 		stackDropzoneDiv,
 		cancelDropzoneDiv,
 		playCardDropzoneDiv,
-		ownTrick1,
-		ownTrick2
+		ownTricks,
+		opponentTricks,
+		ownEmptyCard
 	} from './Schnopsn';
 	import { ZoomIn } from 'lucide-svelte';
 
@@ -101,27 +102,53 @@
 		</div>
 
 		<!-- Own Trick -->
-		{#if $ownTrick1 && $ownTrick2}
+		{#if $ownTricks[0] && $ownTricks[1]}
 			<div
-				class="absolute right-[8vmin] flex opacity-75 duration-0 mobile:right-16 2xl:right-32"
+				class="absolute right-[10vmin] flex opacity-75 duration-0 mobile:right-16 lg:right-24 2xl:right-40"
 				style="bottom: {$isMobile
 					? `calc(5vmin - ${($cardSizeY - $cardSizeX) / 4}px)`
 					: ` calc(13vmin + ${$cardSizeY}px)`};"
 			>
 				<div class="rotate-90">
-					<Card card={$ownTrick1} width={$cardSizeX / 2} />
+					<Card card={$ownTricks[0]} width={$cardSizeX / 2} />
 				</div>
 				<div
-					class="absolute rotate-[9deg]"
-					style="left: -{$cardSizeX / 6}px; top: -{$cardSizeX / 8}px;"
+					class="absolute rotate-[-20deg]"
+					style="right: -{$cardSizeX / 8}px; top: -{$cardSizeX / 4}px;"
 				>
-					<Card card={$ownTrick2} width={$cardSizeX / 2} />
+					<Card card={$ownTricks[1]} width={$cardSizeX / 2} />
+				</div>
+				<div class="absolute" style="right: -{$cardSizeX / 4}px; top: -{$cardSizeX / 10}px;">
+					<Card card={$ownEmptyCard} width={$cardSizeX / 2} />
 				</div>
 				<ZoomIn
 					class="absolute opacity-80"
-					style="right: -{$cardSizeX / 12}px; top: -{$cardSizeX / 10}px; height: {$cardSizeX /
+					style="right: -{$cardSizeX / 4.5}px; top: -{$cardSizeX / 3.5}px; height: {$cardSizeX /
 						6}px; width: {$cardSizeX / 6}px;"
 				/>
+			</div>
+		{/if}
+
+		<!-- Opponent Tricks -->
+		{#if $opponentTricks[0] && $opponentTricks[1]}
+			<div
+				class="absolute right-[10vmin] flex opacity-75 duration-0 mobile:right-16 lg:right-24 2xl:right-40"
+				style="top: {$isMobile
+					? `calc(3vmin - ${($cardSizeY - $cardSizeX) / 4}px)`
+					: ` calc(-9vmin + ${$cardSizeY}px)`};"
+			>
+				<div class="rotate-90">
+					<Card card={$opponentTricks[0]} width={$cardSizeX / 2} />
+				</div>
+				<div
+					class="absolute rotate-[20deg]"
+					style="right: -{$cardSizeX / 8}px; bottom: -{$cardSizeX / 4}px;"
+				>
+					<Card card={$opponentTricks[1]} width={$cardSizeX / 2} />
+				</div>
+				<div class="absolute" style="right: -{$cardSizeX / 4}px; bottom: -{$cardSizeX / 10}px;">
+					<Card card={$ownEmptyCard} width={$cardSizeX / 2} />
+				</div>
 			</div>
 		{/if}
 	</div>

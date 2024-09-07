@@ -91,16 +91,43 @@ export const stackClosed = writable(false);
 export const ownPlayedCard = writable<CardType | null>(null);
 export const opponentPlayedCard = writable<CardType | null>(null);
 
-export const ownTrick1 = writable<CardType | null>({
-	skin: defaultSkin,
-	color: 'hearts',
-	value: 3
-});
-export const ownTrick2 = writable<CardType | null>({
-	skin: defaultSkin,
-	color: 'hearts',
-	value: 2
-});
+export const ownTricks = writable<CardType[]>([
+	{
+		skin: defaultSkin,
+		color: 'hearts',
+		value: 3
+	},
+	{
+		skin: defaultSkin,
+		color: 'hearts',
+		value: 2
+	},
+	{
+		skin: defaultSkin,
+		color: 'spades',
+		value: 2
+	},
+	{
+		skin: defaultSkin,
+		color: 'clubs',
+		value: 11
+	}
+]);
+
+export const opponentTricks = writable<CardType[]>([
+	{
+		skin: defaultSkin,
+		color: 'spades',
+		value: 2
+	},
+	{
+		skin: defaultSkin,
+		color: 'clubs',
+		value: 11
+	},
+	get(opponentEmptyCard),
+	get(opponentEmptyCard)
+]);
 
 export const cardSizeX = writable(0);
 export const cardSizeY = writable(0);
