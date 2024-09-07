@@ -25,6 +25,7 @@
 	import {
 		AlignJustify,
 		ArrowDownToLine,
+		ArrowLeft,
 		Bell,
 		LogIn,
 		MessageCircle,
@@ -123,131 +124,147 @@
 	$: if (data.user) {
 		$user = data.user;
 	}
+
+	$: hideNav = $page.url.href.includes('/game/');
 </script>
 
-<div class="flex h-full w-full flex-col">
-	{#if isLoading}
-		<div
-			class="fade-out absolute left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-slate-800"
-		>
-			<LogoNoBackground class="scale-up-center h-[30%]" />
-		</div>
-	{/if}
-	{#if isOnline}
-		<!-- Nav -->
-		<div class="cshadow !z-40 flex h-16 w-full shrink-0 items-center justify-between">
-			<div class="flex items-center">
-				<button
-					class="ml-2 h-12 w-12 rounded-lg p-2 hover:bg-slate-700"
-					on:click={() => ($openSidebar = !$openSidebar)}
-				>
-					{#if $openSidebar}
-						<X class="h-8 w-8" />
-					{:else}
-						<AlignJustify class="h-8 w-8" />
-					{/if}
-				</button>
-
-				<a
-					href="/"
-					class="ml-1 hidden items-center rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700 logo:flex"
-				>
-					<Navlogo />
-					<Navtext class="ml-2" />
-				</a>
-				<div class="hidden mobile:flex">
-					<Navitems id={$page.url.pathname} {routes} />
-				</div>
+{#if !hideNav}
+	<div class="flex h-full w-full flex-col">
+		{#if isLoading}
+			<div
+				class="fade-out absolute left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-slate-800"
+			>
+				<LogoNoBackground class="scale-up-center h-[30%]" />
 			</div>
-			<div class="flex items-center">
-				{#if loggedIn}
-					<button on:click={() => ($openChat = !$openChat)}>
-						<MessageCircle
-							class="m-1 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700 {$openChat
-								? 'fill-slate-50'
-								: ''}"
-						/>
+		{/if}
+		{#if isOnline}
+			<!-- Nav -->
+			<div class="cshadow !z-40 flex h-16 w-full shrink-0 items-center justify-between">
+				<div class="flex items-center">
+					<button
+						class="ml-2 h-12 w-12 rounded-lg p-2 hover:bg-slate-700"
+						on:click={() => ($openSidebar = !$openSidebar)}
+					>
+						{#if $openSidebar}
+							<X class="h-8 w-8" />
+						{:else}
+							<AlignJustify class="h-8 w-8" />
+						{/if}
 					</button>
 
-					<Bell
-						class="m-1 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700"
-					/>
-					<AccountDropdown user={$user} {isInStandaloneMode}>
-						<User
-							class="m-1 mr-2 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700"
+					<a
+						href="/"
+						class="ml-1 hidden items-center rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700 logo:flex"
+					>
+						<Navlogo />
+						<Navtext class="ml-2" />
+					</a>
+					<div class="hidden mobile:flex">
+						<Navitems id={$page.url.pathname} {routes} />
+					</div>
+				</div>
+				<div class="flex items-center">
+					{#if loggedIn}
+						<button on:click={() => ($openChat = !$openChat)}>
+							<MessageCircle
+								class="m-1 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700 {$openChat
+									? 'fill-slate-50'
+									: ''}"
+							/>
+						</button>
+
+						<Bell
+							class="m-1 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700"
 						/>
+						<AccountDropdown user={$user} {isInStandaloneMode}>
+							<User
+								class="m-1 mr-2 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700"
+							/>
+							{#if !isInStandaloneMode}
+								<div class="absolute right-3 top-2 z-30 h-3 w-3 rounded-full bg-sky-500"></div>
+							{/if}
+						</AccountDropdown>
+					{:else}
 						{#if !isInStandaloneMode}
-							<div class="absolute right-3 top-2 z-30 h-3 w-3 rounded-full bg-sky-500"></div>
+							<a href="/install">
+								<Button class="mr-3 rounded-lg bg-sky-700 p-2 pl-3 text-slate-50 hover:bg-sky-800">
+									Install <ArrowDownToLine class="ml-1" />
+								</Button>
+							</a>
 						{/if}
-					</AccountDropdown>
-				{:else}
-					{#if !isInStandaloneMode}
-						<a href="/install">
-							<Button class="mr-3 rounded-lg bg-sky-700 p-2 pl-3 text-slate-50 hover:bg-sky-800">
-								Install <ArrowDownToLine class="ml-1" />
+						<a href="/login">
+							<Button class="mr-3 rounded-lg bg-sky-700 text-slate-50 hover:bg-sky-800">
+								Sign In <LogIn class="ml-2" />
 							</Button>
 						</a>
 					{/if}
-					<a href="/login">
-						<Button class="mr-3 rounded-lg bg-sky-700 text-slate-50 hover:bg-sky-800">
-							Sign In <LogIn class="ml-2" />
-						</Button>
-					</a>
-				{/if}
-			</div>
-		</div>
-		<div
-			bind:this={mainArea}
-			class="relative flex h-full shrink grow-0 flex-col overflow-y-auto"
-			data-overlayscrollbars-initialize
-		>
-			<!-- Sidebar -->
-			<MenuSidebar>
-				<div class="flex h-full w-full flex-col p-4">
-					<a
-						href="/"
-						class=" mb-4 flex h-min justify-center rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700 logo:hidden"
-					>
-						<button
-							class="flex h-min max-w-full items-center"
-							on:click={() => ($openSidebar = false)}
-						>
-							<Navlogo class="h-min" />
-							<Navtext class="ml-2 h-min" />
-						</button>
-					</a>
-					<MenuSidebarTabs>
-						<div slot="news">
-							<!-- News -->
-							{#each News as news}
-								<NewsCard {news} />
-							{/each}
-						</div>
-						<div slot="leaderboard">
-							<p>Leaderboard</p>
-							<!-- TODO: implement -->
-						</div>
-					</MenuSidebarTabs>
 				</div>
-			</MenuSidebar>
-
-			<!-- Page -->
-			<slot />
-			<!-- Message Popup -->
-			<ChatPopup {loggedIn} />
-		</div>
-		{#if !($page.url.pathname + '/').startsWith('/game/')}
-			<!-- Footer for Mobile -->
-			<div
-				class="fshadow !z-40 flex h-16 w-full shrink-0 items-center justify-between bg-slate-800 mobile:hidden"
-			>
-				<AllMobNavItems />
 			</div>
+			<div
+				bind:this={mainArea}
+				class="relative flex h-full shrink grow-0 flex-col overflow-y-auto"
+				data-overlayscrollbars-initialize
+			>
+				<!-- Sidebar -->
+				<MenuSidebar>
+					<div class="flex h-full w-full flex-col p-4">
+						<a
+							href="/"
+							class=" mb-4 flex h-min justify-center rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700 logo:hidden"
+						>
+							<button
+								class="flex h-min max-w-full items-center"
+								on:click={() => ($openSidebar = false)}
+							>
+								<Navlogo class="h-min" />
+								<Navtext class="ml-2 h-min" />
+							</button>
+						</a>
+						<MenuSidebarTabs>
+							<div slot="news">
+								<!-- News -->
+								{#each News as news}
+									<NewsCard {news} />
+								{/each}
+							</div>
+							<div slot="leaderboard">
+								<p>Leaderboard</p>
+								<!-- TODO: implement -->
+							</div>
+						</MenuSidebarTabs>
+					</div>
+				</MenuSidebar>
+
+				<!-- Page -->
+				<slot />
+				<!-- Message Popup -->
+				<ChatPopup {loggedIn} />
+			</div>
+			{#if !($page.url.pathname + '/').startsWith('/game/')}
+				<!-- Footer for Mobile -->
+				<div
+					class="fshadow !z-40 flex h-16 w-full shrink-0 items-center justify-between bg-slate-800 mobile:hidden"
+				>
+					<AllMobNavItems />
+				</div>
+			{/if}
+		{:else}
+			offline
 		{/if}
-	{:else}
-		offline
-	{/if}
-</div>
+	</div>
+{:else}
+	<div class="relative h-full w-full">
+		<Button
+			class="absolute left-2 top-2 z-50 rounded-lg bg-slate-800/50 p-2 outline outline-2 outline-slate-700 hover:bg-slate-700/50"
+			variant="secondary"
+			href="/login"
+			on:click={() => window.history.back()}
+		>
+			<ArrowLeft />
+		</Button>
+		<slot />
+	</div>
+{/if}
 
 <style>
 	:global(.cshadow) {

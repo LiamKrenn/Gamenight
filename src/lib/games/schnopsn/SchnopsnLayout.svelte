@@ -15,6 +15,7 @@
 	import { ZoomIn } from 'lucide-svelte';
 
 	let handWidth = 0;
+	let screenHeight = 0;
 
 	$: if (handWidth) {
 		$cardSizeX = handWidth / 4;
@@ -22,8 +23,10 @@
 	}
 
 	const isMobile = mediaQuery('(min-width: 850px)');
+	$: isHighScreen = screenHeight > 600;
 </script>
 
+<svelte:window bind:innerHeight={screenHeight} />
 <div class="relative flex h-full w-full items-center justify-center overflow-hidden p-0">
 	<div class="flex h-full w-full flex-col items-center justify-between">
 		<!-- Card Drop Zones -->
@@ -44,30 +47,35 @@
 
 		<!-- Opponent Hand -->
 		<div
-			class="mobile:w-[60vmin] mobile:max-w-[57%] h-[{$cardSizeY}px] flex w-[80%] max-w-[80%] -space-x-[6%]"
-			style="margin-top: -{$cardSizeY / 2.4}px"
+			class="flex w-[80vmin] max-w-[80%] -space-x-[6%] mobile:w-[60vmin] mobile:max-w-[57%]"
+			style="margin-top: -{$cardSizeY / 2.4}px; height: {$cardSizeY}px;"
 		>
 			<slot name="opponentHand" />
 		</div>
 
 		<!-- Played Cards -->
-		<div class="relative flex w-full items-center justify-center space-x-6">
+		<div class="relative flex w-full items-center justify-center">
 			<div
-				class="relative flex space-x-6"
-				style="height: {$cardSizeY * (!$isMobile ? 1.5 : 1)}px; width: {!$isMobile
+				class="relative flex"
+				style="height: {$cardSizeY *
+					(isHighScreen && !$isMobile ? 1.5 : 1)}px; width: {isHighScreen && !$isMobile
 					? `${$cardSizeX * 1.5}px`
 					: 'auto'};"
 			>
 				<div
 					bind:this={$opponentPlayedCardDiv}
-					class="absolute left-0 top-0 flex items-center justify-center rounded-sm bg-slate-700/20 mobile:static"
-					style="height: {$cardSizeY}px; width: {$cardSizeX}px"
+					class=" {!isHighScreen && !$isMobile
+						? 'static'
+						: 'absolute'} left-0 top-0 flex items-center justify-center rounded-sm bg-slate-700/20 mobile:static"
+					style="height: {$cardSizeY}px; width: {$cardSizeX}px; margin-right: {$cardSizeX / 4}px;"
 				>
 					<slot name="opponentPlayedCard" />
 				</div>
 				<div
 					bind:this={$ownPlayedCardDiv}
-					class="absolute bottom-0 right-0 flex items-center justify-center rounded-sm bg-slate-700/20 mobile:static"
+					class=" bottom-0 right-0 {!isHighScreen && !$isMobile
+						? 'static'
+						: 'absolute'} flex items-center justify-center rounded-sm bg-slate-700/20 mobile:static"
 					style="height: {$cardSizeY}px; width: {$cardSizeX}px"
 				>
 					<slot name="ownPlayedCard" />
@@ -95,10 +103,10 @@
 		<!-- Own Trick -->
 		{#if $ownTrick1 && $ownTrick2}
 			<div
-				class="absolute left-[8vmin] flex opacity-75 duration-0 mobile:left-16 2xl:left-32"
+				class="absolute right-[8vmin] flex opacity-75 duration-0 mobile:right-16 2xl:right-32"
 				style="bottom: {$isMobile
 					? `calc(5vmin - ${($cardSizeY - $cardSizeX) / 4}px)`
-					: ` calc(14vmin + ${$cardSizeY}px)`};"
+					: ` calc(13vmin + ${$cardSizeY}px)`};"
 			>
 				<div class="rotate-90">
 					<Card card={$ownTrick1} width={$cardSizeX / 2} />
