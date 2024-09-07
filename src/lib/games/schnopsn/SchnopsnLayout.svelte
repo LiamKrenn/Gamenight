@@ -126,6 +126,11 @@
 					style="right: -{$cardSizeX / 4.5}px; top: -{$cardSizeX / 3.5}px; height: {$cardSizeX /
 						6}px; width: {$cardSizeX / 6}px;"
 				/>
+				<button
+					class="absolute z-50 rounded-lg hover:bg-slate-700/20"
+					style="left: -{$cardSizeX / 5.8}px; top: -{$cardSizeX /
+						3}px; height: {$cardSizeX}px; width: {$cardSizeX / 1}px;"
+				></button>
 			</div>
 		{/if}
 
