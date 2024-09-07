@@ -12,6 +12,7 @@
 		ownTrick1,
 		ownTrick2
 	} from './Schnopsn';
+	import { ZoomIn } from 'lucide-svelte';
 
 	let handWidth = 0;
 
@@ -108,6 +109,11 @@
 				>
 					<Card card={$ownTrick2} width={$cardSizeX / 2} />
 				</div>
+				<ZoomIn
+					class="absolute opacity-80"
+					style="right: -{$cardSizeX / 12}px; top: -{$cardSizeX / 10}px; height: {$cardSizeX /
+						6}px; width: {$cardSizeX / 6}px;"
+				/>
 			</div>
 		{/if}
 	</div>
