@@ -1,5 +1,6 @@
 import type { CardType } from '$lib/types';
-import { get, writable } from 'svelte/store';
+import { derived, get, writable } from 'svelte/store';
+import { wait } from './SchnopsnAnimation';
 
 const defaultSkin = 'default';
 
@@ -33,6 +34,8 @@ export const ownHand = writable<CardType[]>([
 		skin: get(ownSkin)
 	}
 ]);
+
+export const ownHandSorted = writable<CardType[]>(get(ownHand));
 
 export const opponentHand = writable<CardType[]>([
 	{

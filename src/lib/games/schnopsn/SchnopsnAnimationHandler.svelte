@@ -8,6 +8,7 @@
 		opponentSkin,
 		ownEmptyCard,
 		ownHand,
+		ownHandSorted,
 		ownPlayedCard,
 		ownSkin,
 		stackCard,
@@ -27,6 +28,7 @@
 	} from './Schnopsn';
 	import { getBB, gotoElement, wait, isWithin } from './SchnopsnAnimation';
 	import SchnopsnLayout from './SchnopsnLayout.svelte';
+	import type { CardType } from '$lib/types';
 
 	export let swapCardCallback: (index: number) => Promise<boolean> = () => {
 		return Promise.resolve(true);
@@ -72,6 +74,7 @@
 						afterAnimation: async () => {
 							if (!$stackCardDiv) return;
 							const playedCard = $ownHand[index];
+							$ownHandSorted[index] = $stackCard;
 							$ownHand[index] = $stackCard;
 							stackCardRotation = 0;
 							$stackCard = playedCard;
@@ -117,6 +120,20 @@
 		} finally {
 			currentlyPlayingAnimation = false;
 		}
+	}
+
+	const colorSort = ['hearts', 'diamonds', 'clubs', 'spades'];
+	$: if ($ownHand) {
+		setTimeout(() => {
+			$ownHandSorted = $ownHand.sort((a, b) => {
+				const colorComparison =
+					colorSort.indexOf(a.color || 'hearts') - colorSort.indexOf(b.color || 'hearts');
+				if (colorComparison !== 0) {
+					return colorComparison;
+				}
+				return (a.value || 0) - (b.value || 0);
+			});
+		}, 150);
 	}
 </script>
 
@@ -196,7 +213,7 @@
 
 	<!-- Own Hand -->
 	<svelte:fragment slot="ownHand">
-		{#each $ownHand as card, i (card.value + (card.color || 'U'))}
+		{#each $ownHandSorted as card, i (card.value + (card.color || 'U'))}
 			<div bind:this={$ownHandDivs[i]} animate:flip={{ duration: 250 }}>
 				<Card
 					style="z-index: {i};"
