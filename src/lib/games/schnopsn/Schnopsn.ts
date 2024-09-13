@@ -146,3 +146,5 @@ export const opponentPlayedCardDiv = writable<HTMLDivElement | null>(null);
 export const cancelDropzoneDiv = writable<HTMLDivElement | null>(null);
 export const playCardDropzoneDiv = writable<HTMLDivElement | null>(null);
 export const stackDropzoneDiv = writable<HTMLDivElement | null>(null);
+
+export const currentlyDragging = writable<number | null>(null);

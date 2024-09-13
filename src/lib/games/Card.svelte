@@ -3,8 +3,17 @@
 	import { cn } from '$lib/utils';
 	import { draggable } from '@neodrag/svelte';
 	import { tweened } from 'svelte/motion';
-	import { getBB, wait, isWithin } from './schnopsn/SchnopsnAnimation';
-	import { playCardDropzoneDiv, cancelDropzoneDiv, stackDropzoneDiv } from './schnopsn/Schnopsn';
+	import { getBB, wait, isWithin, gotoElement } from './schnopsn/SchnopsnAnimation';
+	import {
+		playCardDropzoneDiv,
+		cancelDropzoneDiv,
+		stackDropzoneDiv,
+		currentlyDragging,
+		ownHandDivs,
+		ownHand,
+		cardSizeX,
+		cardSizeY
+	} from './schnopsn/Schnopsn';
 	import { onMount } from 'svelte';
 	import mapTouchToMouseFor from './touchToMouse';
 
@@ -87,6 +96,61 @@
 	onMount(() => {
 		mapTouchToMouseFor('.touch');
 	});
+
+	$: disabled = !isDraggable || $currentlyDragging != null;
+
+	let combiData = {
+		deltaX: 0,
+		deltaY: 0,
+		value: 0,
+		index: -1
+	};
+
+	function getCombiTranslate(offsetX: number, offsetY: number) {
+		const x = combiData.deltaX + offsetX + $cardSizeX / (combiData.value == 4 ? 2 : -2);
+		const y = combiData.deltaY + offsetY + $cardSizeY / 4;
+		return `translate(${x}px, ${y}px)`;
+	}
+
+	async function setupForCombi() {
+		if (card.value == 4 || card.value == 3) {
+			const combiValue = card.value == 4 ? 3 : 4;
+			const combiIndex = $ownHand.findIndex((c) => card.color == c.color && combiValue == c.value);
+			if (combiIndex != -1) {
+				let bb = getBB($ownHandDivs[combiIndex]);
+				let own_bb = getBB($ownHandDivs[index]);
+				const x = own_bb.left - bb.left;
+				const y = own_bb.top - bb.top;
+				$ownHandDivs[combiIndex].classList.remove('duration-150');
+				$ownHandDivs[combiIndex].classList.add('duration-50');
+				$ownHandDivs[combiIndex].style.transform =
+					`translate(${x + $cardSizeX / (combiValue == 4 ? 2 : -2)}px, ${y + $cardSizeY / 4}px)`;
+
+				await wait(50);
+				$ownHandDivs[combiIndex].classList.remove('duration-50');
+				$ownHandDivs[combiIndex].classList.add('duration-0');
+				combiData = {
+					deltaX: x,
+					deltaY: y,
+					value: combiValue,
+					index: combiIndex
+				};
+			}
+		}
+	}
+
+	function resetCombi() {
+		if (combiData.index == -1) return;
+		$ownHandDivs[combiData.index].classList.remove('duration-0');
+		$ownHandDivs[combiData.index].classList.add('duration-150');
+		$ownHandDivs[combiData.index].style.transform = '';
+		combiData = {
+			deltaX: 0,
+			deltaY: 0,
+			value: 0,
+			index: -1
+		};
+	}
 </script>
 
 <div
@@ -95,9 +159,13 @@
 	style="width: {width}px; {styleString}"
 	use:draggable={{
 		position,
-		disabled: !isDraggable,
+		disabled,
 		onDrag: ({ offsetX, offsetY }) => {
 			position = { x: offsetX, y: offsetY };
+			if (combiData.index != -1) {
+				$ownHandDivs[combiData.index].style.transform = getCombiTranslate(offsetX, offsetY);
+			}
+
 			if (cardDiv) {
 				const withinPlayDropzone = isWithin(cardDiv, $playCardDropzoneDiv || new HTMLDivElement());
 				const withinCancelDropzone = isWithin(cardDiv, $cancelDropzoneDiv || new HTMLDivElement());
@@ -115,8 +183,10 @@
 				}
 			}
 		},
-		onDragStart: () => {
+		onDragStart: async () => {
 			drag = true;
+			$currentlyDragging = index;
+			setupForCombi();
 		},
 		onDragEnd: async () => {
 			drag = false;
@@ -124,6 +194,8 @@
 			let result = (await dragCallback(index, position)) || { x: 0, y: 0, rotate: 0 };
 			position = { x: result.x, y: result.y };
 			rotation.set(result.rotate);
+			$currentlyDragging = null;
+			resetCombi();
 		}
 	}}
 >
