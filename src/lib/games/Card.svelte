@@ -128,8 +128,7 @@
 
 				for (let i = 0; i < $ownHandDivs.length; i++) {
 					if (i != combiIndex && i != index) {
-						const div = $ownHandDivs[i];
-						div.classList.add('!z-0');
+						$ownHandDivs[i].classList.add('!z-0');
 					}
 				}
 
@@ -151,12 +150,13 @@
 		$ownHandDivs[combiData.index].classList.remove('duration-0');
 		$ownHandDivs[combiData.index].classList.add('duration-150');
 		$ownHandDivs[combiData.index].style.transform = '';
+
 		for (let i = 0; i < $ownHandDivs.length; i++) {
 			if (i != combiData.index && i != index) {
-				const div = $ownHandDivs[i];
-				div.classList.remove('!z-0');
+				$ownHandDivs[i].classList.remove('!z-0');
 			}
 		}
+
 		combiData = {
 			deltaX: 0,
 			deltaY: 0,
@@ -168,7 +168,7 @@
 
 <div
 	bind:this={cardDiv}
-	class={cn('touch relative h-fit rounded-2xl', parent, parent2, parentClass)}
+	class={cn('touch relative z-20 h-fit rounded-2xl', parent, parent2, parentClass)}
 	style="width: {width}px; {styleString}"
 	use:draggable={{
 		position,

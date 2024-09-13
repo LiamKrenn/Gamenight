@@ -215,15 +215,13 @@
 	<!-- Own Hand -->
 	<svelte:fragment slot="ownHand">
 		{#each $ownHandSorted as card, i (card.value + (card.color || 'U'))}
-			<div class="duration-150" bind:this={$ownHandDivs[i]} animate:flip={{ duration: 250 }}>
-				<Card
-					style="z-index: {i};"
-					index={i}
-					{dragCallback}
-					{card}
-					draggable={true}
-					width={$cardSizeX}
-				/>
+			<div
+				class="duration-150"
+				style="z-index: {i};"
+				bind:this={$ownHandDivs[i]}
+				animate:flip={{ duration: 250 }}
+			>
+				<Card index={i} {dragCallback} {card} draggable={true} width={$cardSizeX} />
 			</div>
 		{/each}
 	</svelte:fragment>
