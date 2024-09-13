@@ -126,6 +126,13 @@
 				$ownHandDivs[combiIndex].style.transform =
 					`translate(${x + $cardSizeX / (combiValue == 4 ? 2 : -2)}px, ${y + $cardSizeY / 4}px)`;
 
+				for (let i = 0; i < $ownHandDivs.length; i++) {
+					if (i != combiIndex && i != index) {
+						const div = $ownHandDivs[i];
+						div.classList.add('!z-0');
+					}
+				}
+
 				await wait(50);
 				$ownHandDivs[combiIndex].classList.remove('duration-50');
 				$ownHandDivs[combiIndex].classList.add('duration-0');
@@ -144,6 +151,12 @@
 		$ownHandDivs[combiData.index].classList.remove('duration-0');
 		$ownHandDivs[combiData.index].classList.add('duration-150');
 		$ownHandDivs[combiData.index].style.transform = '';
+		for (let i = 0; i < $ownHandDivs.length; i++) {
+			if (i != combiData.index && i != index) {
+				const div = $ownHandDivs[i];
+				div.classList.remove('!z-0');
+			}
+		}
 		combiData = {
 			deltaX: 0,
 			deltaY: 0,
