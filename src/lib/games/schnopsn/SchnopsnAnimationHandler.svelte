@@ -40,7 +40,7 @@
 	};
 
 	let stackCardPos = { x: 0, y: 0 };
-	let stackStyles = '';
+	let stackStyles = 'z-index: 0;';
 	let stackCardRotation = 90;
 	let resetStack: (rotate: number) => Promise<void> = async () => {};
 
@@ -81,7 +81,7 @@
 							$stackCard = playedCard;
 							resetStack(90);
 							stackCardRotation = 90;
-							stackStyles = '';
+							stackStyles = 'z-index: 0;';
 						},
 						returnNewPosition: true
 					})) || { x: 0, y: 0 };
@@ -215,12 +215,7 @@
 	<!-- Own Hand -->
 	<svelte:fragment slot="ownHand">
 		{#each $ownHandSorted as card, i (card.value + (card.color || 'U'))}
-			<div
-				class="duration-150"
-				style="z-index: {i};"
-				bind:this={$ownHandDivs[i]}
-				animate:flip={{ duration: 250 }}
-			>
+			<div class="duration-150" bind:this={$ownHandDivs[i]} animate:flip={{ duration: 250 }}>
 				<Card index={i} {dragCallback} {card} draggable={true} width={$cardSizeX} />
 			</div>
 		{/each}

@@ -123,14 +123,9 @@
 				const y = own_bb.top - bb.top;
 				$ownHandDivs[combiIndex].classList.remove('duration-150');
 				$ownHandDivs[combiIndex].classList.add('duration-50');
+				$ownHandDivs[combiIndex].classList.add('!z-10');
 				$ownHandDivs[combiIndex].style.transform =
 					`translate(${x + $cardSizeX / (combiValue == 4 ? 2 : -2)}px, ${y + $cardSizeY / 4}px)`;
-
-				for (let i = 0; i < $ownHandDivs.length; i++) {
-					if (i != combiIndex && i != index) {
-						$ownHandDivs[i].classList.add('!z-0');
-					}
-				}
 
 				await wait(50);
 				$ownHandDivs[combiIndex].classList.remove('duration-50');
@@ -150,12 +145,7 @@
 		$ownHandDivs[combiData.index].classList.remove('duration-0');
 		$ownHandDivs[combiData.index].classList.add('duration-150');
 		$ownHandDivs[combiData.index].style.transform = '';
-
-		for (let i = 0; i < $ownHandDivs.length; i++) {
-			if (i != combiData.index && i != index) {
-				$ownHandDivs[i].classList.remove('!z-0');
-			}
-		}
+		$ownHandDivs[combiData.index].classList.remove('!z-10');
 
 		combiData = {
 			deltaX: 0,
@@ -168,7 +158,7 @@
 
 <div
 	bind:this={cardDiv}
-	class={cn('touch relative z-20 h-fit rounded-2xl', parent, parent2, parentClass)}
+	class={cn('touch relative h-fit rounded-2xl', parent, parent2, parentClass)}
 	style="width: {width}px; {styleString}"
 	use:draggable={{
 		position,
