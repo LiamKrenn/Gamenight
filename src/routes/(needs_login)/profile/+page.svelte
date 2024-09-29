@@ -9,8 +9,11 @@
 	import { profileSchema } from '$lib/schemas';
 	import { Save, CircleUserRound, KeyRound, MonitorCog, Pencil, X } from 'lucide-svelte';
 	import { goto } from '$app/navigation';
+	import ProfilePicture from './ProfilePicture.svelte';
 
 	export let data: PageData;
+
+	console.log(data);
 
 	const form = superForm(data.profileForm, {
 		validators: zodClient(profileSchema),
@@ -32,7 +35,9 @@
 	<h1 class="my-6 text-5xl font-semibold">Profile</h1>
 
 	<div class="mt-2 w-[90%] max-w-64">
-		<p class="text-lg font-semibold">Email</p>
+		<ProfilePicture {data} />
+
+		<p class="mt-4 text-lg font-semibold">Email</p>
 		<Input
 			class="focusring !mt-1 rounded-lg bg-slate-900 text-base"
 			inert

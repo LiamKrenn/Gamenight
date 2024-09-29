@@ -4,9 +4,12 @@
 declare let self: ServiceWorkerGlobalScope;
 
 import { build, files, version } from '$service-worker';
+import { PUBLIC_AUTH_URL } from '$env/static/public';
 
 // Create a unique cache name for this deployment
 const CACHE = `cache-${version}`;
+
+const EXCLUDED_ROUTES = [PUBLIC_AUTH_URL + '/cdn/'];
 
 const ASSETS = [
 	...build, // the app itself
@@ -39,6 +42,13 @@ self.addEventListener('fetch', (event) => {
 	if (event.request.method !== 'GET') return;
 
 	async function respond() {
+		// check if the request is for an excluded route
+		for (const route of EXCLUDED_ROUTES) {
+			if (event.request.url.startsWith(route)) {
+				return fetch(event.request);
+			}
+		}
+
 		const url = new URL(event.request.url);
 		const cache = await caches.open(CACHE);
 

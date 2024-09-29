@@ -6,6 +6,7 @@ import { zod } from 'sveltekit-superforms/adapters';
 import { profileSchema } from '$lib/schemas';
 import type { Actions } from '@sveltejs/kit';
 import { fail, redirect, type RequestHandler } from '@sveltejs/kit';
+import { PUBLIC_AUTH_URL } from '$env/static/public';
 
 export const load = (async (event) => {
 	const profile = event.locals.user;
@@ -15,10 +16,19 @@ export const load = (async (event) => {
 	const profileForm = await superValidate(zod(profileSchema));
 	profileForm.data = profile;
 
+	// Check if Profile Picture Available
+	const pic_available =
+		(
+			await fetch(`${PUBLIC_AUTH_URL}/cdn/${profile._id}.webp`, {
+				method: 'GET'
+			})
+		).status === 200;
+
 	return {
 		profile: profile,
 		joinDate: new Date(profile.createdAt).toISOString().slice(0, 10).split('-').reverse().join('/'),
-		profileForm: profileForm
+		profileForm: profileForm,
+		pic_available: pic_available
 	};
 }) satisfies PageServerLoad;
 
