@@ -40,6 +40,7 @@
 	import { onlineStore } from 'svelte-legos';
 	import LogoNoBackground from '$lib/icons/logo-no-background.svelte';
 	import { set } from 'zod';
+	import ProfilePicture from '$lib/components/ProfilePicture.svelte';
 
 	export let data: PageData;
 
@@ -177,9 +178,12 @@
 							class="m-1 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700"
 						/>
 						<AccountDropdown user={$user} {isInStandaloneMode}>
-							<User
-								class="m-1 mr-2 h-12 w-12 rounded-lg p-2 duration-150 hover:cursor-pointer hover:bg-slate-700"
-							/>
+							<div
+								class="m-2 h-12 w-12 rounded-lg p-1.5 duration-150 hover:cursor-pointer hover:bg-slate-700"
+							>
+								<ProfilePicture id={data.user?._id || 'default'} class="rounded-full " />
+							</div>
+
 							{#if !isInStandaloneMode}
 								<div class="absolute right-3 top-2 z-30 h-3 w-3 rounded-full bg-sky-500"></div>
 							{/if}

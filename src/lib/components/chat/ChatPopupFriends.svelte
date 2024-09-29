@@ -29,7 +29,7 @@
 					scrollToBottom();
 				}}
 				variant="outline"
-				class="w-full justify-start border-slate-600  px-1 text-slate-100 hover:bg-slate-600 {friend._id ===
+				class="w-full justify-start border-slate-600 px-1 text-slate-100 hover:bg-slate-600 {friend._id ===
 				$chatFriendUserId
 					? 'bg-slate-600'
 					: 'bg-slate-700'}"
