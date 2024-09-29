@@ -56,7 +56,7 @@
 					class:droppable
 					class=" absolute flex aspect-square h-full flex-col items-center justify-center rounded-xl bg-slate-900/70 outline-dashed outline-2 outline-slate-600"
 				>
-					<p class="text-center">Change profile picture</p>
+					<p class="mx-2 text-center">Change profile picture</p>
 					<Upload class="mt-2" />
 					<div
 						class:droppable
