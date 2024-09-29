@@ -38,12 +38,12 @@
 
 				<td class="-3xs:table-ellipsis pr-2">
 					<div>
-						<p class=" ">{friend.username.replace('m', 'mmmmmmm')}</p>
+						<p>{friend.username}</p>
 					</div>
 				</td>
 
 				<td class="table-ellipsis hidden !h-full !w-full 3xs:table-cell">
-					<div class="">
+					<div>
 						<p class="text-slate-500">Last message bla bla bla bla bla bla bla bla</p>
 					</div>
 				</td>
