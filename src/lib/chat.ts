@@ -11,7 +11,8 @@ import {
 	chatMessageInput,
 	chatMessages,
 	chatUserID,
-	friends
+	friends,
+	chatFriendName
 } from '$lib/stores';
 import ChatClient from 'chat-client-delta';
 import { get } from 'svelte/store';
@@ -139,6 +140,10 @@ export class ChatClientSingleton {
 					await this.chatClient.startFriendChat(friendId);
 				chatCurrentChatId.set(chatId);
 				chatFriendUserId.set(friendId);
+				chatFriendName.set(get(friends)?.find((friend) => friend._id === friendId)?.username || '');
+
+				console.log(get(chatFriendName));
+
 				chatMessages.set(oldMessages);
 			} catch (err) {
 				console.error('Failed to start friend chat:', err);

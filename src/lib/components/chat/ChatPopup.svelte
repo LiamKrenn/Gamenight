@@ -16,15 +16,19 @@
 			await $chatClient.connectClient();
 		}
 	});
+
+	const width = 520;
 </script>
 
 <div
-	class="fixed bottom-0 right-0 hidden h-[520px] w-[420px] overflow-hidden mobile:flex {$openChat
+	class="fixed bottom-0 right-0 hidden h-[520px] overflow-hidden mobile:flex {$openChat
 		? ''
 		: `bottom-[-520px]`}"
+	style="width: {width}px;"
 >
 	<div
-		class="absolute left-1 top-1 flex h-[500px] w-[400px] flex-col rounded-lg bg-slate-700 outline outline-1 outline-slate-600"
+		class="absolute left-1 top-1 flex h-[500px] w-[500px] flex-col rounded-lg bg-slate-700 outline outline-1 outline-slate-600"
+		style="width: calc({width}px - 20px);"
 	>
 		<div class="cshadow flex h-14 w-full shrink-0 items-center justify-between pl-4 pr-2">
 			<!-- Header -->

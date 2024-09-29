@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { User, LogIn, LogOut, UserPlus, List, ArrowDownToLine } from 'lucide-svelte';
+	import { User, LogIn, LogOut, UserPlus, List, ArrowDownToLine, UserPen } from 'lucide-svelte';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	export let user;
 	export let isInStandaloneMode;
@@ -31,12 +31,12 @@
 			{:else}
 				<a href="/profile">
 					<DropdownMenu.Item class="rounded bg-slate-800 duration-150 hover:!bg-slate-700"
-						><User class="mr-2" /> Profile</DropdownMenu.Item
+						><UserPen class="mr-2" /> Profile</DropdownMenu.Item
 					>
 				</a>
 				<a href="/friends/requests">
 					<DropdownMenu.Item class="rounded bg-slate-800 duration-150 hover:!bg-slate-700"
-						><List class="mr-2" /> Friend Requests</DropdownMenu.Item
+						><UserPlus class="mr-2" /> Friend Requests</DropdownMenu.Item
 					>
 				</a>
 				<a

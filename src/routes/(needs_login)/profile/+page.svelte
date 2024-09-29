@@ -9,7 +9,7 @@
 	import { profileSchema } from '$lib/schemas';
 	import { Save, CircleUserRound, KeyRound, MonitorCog, Pencil, X } from 'lucide-svelte';
 	import { goto } from '$app/navigation';
-	import ProfilePicture from './ProfilePicture.svelte';
+	import ProfilePictureEdit from './ProfilePictureEdit.svelte';
 
 	export let data: PageData;
 
@@ -35,7 +35,7 @@
 	<h1 class="my-6 text-5xl font-semibold">Profile</h1>
 
 	<div class="mt-2 w-[90%] max-w-64">
-		<ProfilePicture {data} />
+		<ProfilePictureEdit {data} />
 
 		<p class="mt-4 text-lg font-semibold">Email</p>
 		<Input

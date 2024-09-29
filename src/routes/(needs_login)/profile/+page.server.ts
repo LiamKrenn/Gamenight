@@ -16,19 +16,10 @@ export const load = (async (event) => {
 	const profileForm = await superValidate(zod(profileSchema));
 	profileForm.data = profile;
 
-	// Check if Profile Picture Available
-	const pic_available =
-		(
-			await fetch(`${PUBLIC_AUTH_URL}/cdn/${profile._id}.webp`, {
-				method: 'GET'
-			})
-		).status === 200;
-
 	return {
 		profile: profile,
 		joinDate: new Date(profile.createdAt).toISOString().slice(0, 10).split('-').reverse().join('/'),
-		profileForm: profileForm,
-		pic_available: pic_available
+		profileForm: profileForm
 	};
 }) satisfies PageServerLoad;
 

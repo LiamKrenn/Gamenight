@@ -10,6 +10,7 @@
 	import { chatClient, chatConnected, chatFriendUserId } from '$lib/stores';
 	import ChatLoading from './ChatLoading.svelte';
 	import Button from '../ui/button/button.svelte';
+	import ProfilePicture from '../ProfilePicture.svelte';
 
 	export let sidebar: boolean = false;
 
@@ -53,7 +54,10 @@
 							}}
 						>
 							<ChevronLeft />
-							<p class="text-slate-100">{$chatFriendName}</p>
+							<div class="flex items-center">
+								<ProfilePicture id={$chatFriendUserId} class=" mr-2 h-6 w-6 rounded-full" />
+								<p class="text-slate-100">{$chatFriendName}</p>
+							</div>
 							<ChevronLeft class="invisible" />
 						</button>
 					</div>
@@ -74,7 +78,7 @@
 {:else}
 	<div class="flex h-full">
 		<div
-			class="h-[444px] max-h-[444px] w-32 shrink-0 overflow-hidden border-r-[1px] border-slate-600"
+			class="h-[444px] max-h-[444px] w-40 shrink-0 overflow-hidden border-r-[1px] border-slate-600"
 		>
 			<ChatPopupFriends {scrollToBottom} />
 		</div>
@@ -83,8 +87,8 @@
 				<!-- Chat -->
 				{#if $chatFriendUserId}
 					<div class="h-full max-h-full w-full">
-						<div bind:this={chatArea} class=" h-[388px] max-h-[388px] max-w-[272px] px-2 pt-2">
-							<div class="max-w-[272px] space-y-2">
+						<div bind:this={chatArea} class=" h-[388px] max-h-[388px] px-2 pt-2">
+							<div class="space-y-2">
 								<ChatMessages />
 							</div>
 						</div>

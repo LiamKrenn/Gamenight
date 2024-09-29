@@ -6,6 +6,7 @@
 	import { FileDrop } from 'svelte-droplet';
 	import { ArrowLeft, Edit, Save, Trash2, Upload, RefreshCw } from 'lucide-svelte';
 	import { Button } from '$lib/components/ui/button';
+	import ProfilePicture from '$lib/components/ProfilePicture.svelte';
 
 	export let data: PageData;
 
@@ -36,7 +37,6 @@
 			});
 
 			if (response.status === 200) {
-				data.pic_available = true;
 				location.reload();
 			} else {
 				uploadedFile = null;
@@ -48,17 +48,20 @@
 	let croppedImage: string;
 </script>
 
-<div class="relative flex h-40 w-full justify-center">
+<div class="relative flex h-48 w-full justify-center">
 	{#if !uploadedFile}
-		{#if data.pic_available}
+		<div class="relative mt-8">
 			<FileDrop let:droppable {handleFiles} acceptedMimes={['image/*']} max={1}>
 				<div
 					class:droppable
-					class=" absolute flex aspect-square h-full flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-600 bg-slate-900/70"
+					class=" absolute flex aspect-square h-full flex-col items-center justify-center rounded-xl bg-slate-900/70 outline-dashed outline-2 outline-slate-600"
 				>
 					<p class="text-center">Change profile picture</p>
 					<Upload class="mt-2" />
-					<div class:droppable class="absolute -right-12 top-0 rounded-lg bg-slate-700 p-2">
+					<div
+						class:droppable
+						class="absolute -top-12 right-0 flex w-28 justify-center rounded-lg bg-slate-700 p-2"
+					>
 						<Edit />
 					</div>
 				</div>
@@ -70,27 +73,16 @@
 					// TODO: apply
 				}}
 				variant="secondary"
-				class="absolute left-0 top-0 !cursor-not-allowed bg-red-500/60 p-2 hover:bg-red-500/40"
+				class="absolute -top-12 left-0 !cursor-not-allowed bg-red-500/60 p-2 hover:bg-red-500/40"
 			>
 				<Trash2 />
 			</Button>
+		</div>
 
-			<img
-				src="{PUBLIC_AUTH_URL}/cdn/{data.profile._id}.webp"
-				alt="Profile"
-				class="aspect-square h-full rounded-xl bg-slate-600"
-			/>
-		{:else}
-			<FileDrop let:droppable {handleFiles} acceptedMimes={['image/*']} max={1}>
-				<div
-					class:droppable
-					class=" flex aspect-square h-full flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-600 bg-slate-900"
-				>
-					<p class="text-center">Upload a profile picture</p>
-					<Upload class="mt-2" />
-				</div>
-			</FileDrop>
-		{/if}
+		<ProfilePicture
+			id={data.profile._id}
+			class="mt-8 aspect-square h-40 w-40 min-w-40 shrink-0 rounded-xl bg-slate-400/30"
+		/>
 	{:else}
 		<div class="cropper relative aspect-square h-full !duration-0">
 			<Cropper

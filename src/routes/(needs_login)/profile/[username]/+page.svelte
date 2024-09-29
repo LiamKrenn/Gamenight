@@ -3,6 +3,7 @@
 	import { Gamepad2, Trophy, X, ArrowLeft } from 'lucide-svelte';
 	import type { PageData } from './$types';
 	import { Button } from '$lib/components/ui/button';
+	import ProfilePicture from '$lib/components/ProfilePicture.svelte';
 
 	export let data: PageData;
 
@@ -24,11 +25,7 @@
 			class="flex h-fit flex-col rounded-xl bg-slate-700 p-3 pb-2 xs:p-4 mobile:h-52 mobile:flex-row"
 		>
 			{#if data.pic_available}
-				<img
-					src="{PUBLIC_AUTH_URL}/cdn/{data.user._id}.webp"
-					alt="Profile"
-					class="aspect-square rounded-lg bg-slate-600"
-				/>
+				<ProfilePicture id={data.user._id} class="aspect-square rounded-lg bg-slate-400/30" />
 			{:else}
 				<img
 					src="/favicon.png"
