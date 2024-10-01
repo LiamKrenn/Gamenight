@@ -44,8 +44,11 @@
 		"cropperjs": "^1.6.2",
 		"dotenv": "^16.4.5",
 		"formsnap": "^1.0.1",
+		"gn-matchmaker-client": "^0.1.15",
+		"gn-schnapsen-client": "^0.1.5",
 		"lucide-svelte": "^0.414.0",
 		"overlayscrollbars": "^2.10.0",
+		"process": "^0.11.10",
 		"stripe": "^16.8.0",
 		"svelte-droplet": "^1.0.1",
 		"svelte-easy-crop": "^3.0.0",
@@ -54,6 +57,8 @@
 		"sveltekit-superforms": "^2.17.0",
 		"tailwind-merge": "^2.5.2",
 		"tailwind-variants": "^0.2.1",
+		"util": "^0.12.5",
+		"vite-plugin-node-polyfills": "^0.22.0",
 		"zod": "^3.23.8"
 	}
 }
