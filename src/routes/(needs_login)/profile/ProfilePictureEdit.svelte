@@ -16,6 +16,7 @@
 	let crop = { x: 0, y: 0 };
 	let zoom = 1;
 	let loading = false;
+	let gifloading = false;
 
 	async function handleFiles(files: File[]) {
 		if (files.length != 1) {
@@ -24,6 +25,7 @@
 			if (files[0].type !== 'image/gif') {
 				uploadedFile = files[0];
 			} else {
+				gifloading = true;
 				const formData = new FormData();
 				formData.append('pic', files[0], 'profile_picture');
 
@@ -36,6 +38,7 @@
 				if (response.status === 200) {
 					location.reload();
 				} else {
+					gifloading = false;
 					uploadedFile = null;
 					loading = false;
 				}
@@ -80,7 +83,11 @@
 						class:droppable
 						class="absolute -top-12 right-0 flex w-28 justify-center rounded-lg bg-slate-700 p-2"
 					>
-						<Edit />
+						{#if gifloading}
+							<RefreshCw class="animate-spin" />
+						{:else}
+							<Edit />
+						{/if}
 					</div>
 				</div>
 			</FileDrop>

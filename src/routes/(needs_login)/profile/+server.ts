@@ -22,11 +22,5 @@ export const GET: RequestHandler = async (event) => {
 
 export const POST: RequestHandler = async (event) => {
 	const formData = await event.request.formData();
-	let image = formData.get('pic');
-
-	if (!image || !(image instanceof Blob)) {
-		return new Response('Invalid image', { status: 400 });
-	}
-
 	return await authorizedFetch(event, '/profile/picture', formData, {}, 'POST');
 };
