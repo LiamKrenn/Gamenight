@@ -22,6 +22,9 @@
 		if (files.length != 1) {
 			throw new Error('Please upload only one file');
 		} else {
+			if (files[0].size > 8000000) {
+				throw new Error('File size too large');
+			}
 			if (files[0].type !== 'image/gif') {
 				uploadedFile = files[0];
 			} else {
