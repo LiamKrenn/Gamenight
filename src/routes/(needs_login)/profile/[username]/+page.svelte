@@ -6,8 +6,6 @@
 	import ProfilePicture from '$lib/components/ProfilePicture.svelte';
 
 	export let data: PageData;
-
-	console.log(data);
 </script>
 
 <div class="flex h-full w-full justify-center px-2 !pt-4 2xs:px-4 xs:p-8">
@@ -24,16 +22,11 @@
 		<div
 			class="flex h-fit flex-col rounded-xl bg-slate-700 p-3 pb-2 xs:p-4 mobile:h-52 mobile:flex-row"
 		>
-			{#if data.pic_available}
-				<ProfilePicture id={data.user._id} class="aspect-square rounded-lg bg-slate-400/30" />
-			{:else}
-				<img
-					src="/favicon.png"
-					alt="Profile"
-					height="100%"
-					class="aspect-square rounded-lg bg-slate-600 p-2"
-				/>
-			{/if}
+			<ProfilePicture
+				id={data.user._id}
+				class="!aspect-square w-56 rounded-lg  bg-slate-400/30 mobile:w-auto"
+			/>
+
 			<div class="mt-2 flex flex-col mobile:mx-4 mobile:mt-0">
 				<h1 class="text-xl font-bold 2xs:text-2xl xs:text-3xl mobile:text-4xl">
 					{data.user.username}
