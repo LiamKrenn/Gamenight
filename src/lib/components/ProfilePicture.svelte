@@ -5,7 +5,7 @@
 	let className = '';
 	export { className as class };
 
-	let rid = Math.random().toString(36);
+	let rid = crypto.randomUUID();
 </script>
 
 <img

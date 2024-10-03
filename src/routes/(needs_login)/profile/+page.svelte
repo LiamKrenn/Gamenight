@@ -37,7 +37,7 @@
 	<div class="mt-2 w-[90%] max-w-64">
 		<ProfilePictureEdit {data} />
 
-		<p class="mt-6 text-lg font-semibold">Email</p>
+		<p class="mt-4 text-lg font-semibold">Email</p>
 		<Input
 			class="focusring !mt-1 rounded-lg bg-slate-900 text-base"
 			inert
