@@ -4,7 +4,7 @@
 	import type { PageData } from './$types';
 	import getCroppedImg from '$lib/canvasUtils';
 	import { FileDrop } from 'svelte-droplet';
-	import { ArrowLeft, Edit, Save, Trash2, Upload, RefreshCw } from 'lucide-svelte';
+	import { ArrowLeft, Edit, Save, Trash2, Upload, RefreshCw, ImagePlay } from 'lucide-svelte';
 	import { Button } from '$lib/components/ui/button';
 	import ProfilePicture from '$lib/components/ProfilePicture.svelte';
 
@@ -22,6 +22,28 @@
 			throw new Error('Please upload only one file');
 		} else {
 			uploadedFile = files[0];
+		}
+	}
+
+	async function handleGIFFiles(files: File[]) {
+		if (files.length != 1) {
+			throw new Error('Please upload only one file');
+		} else {
+			const formData = new FormData();
+			formData.append('pic', files[0], 'profile_picture');
+
+			loading = true;
+			const response = await fetch('/profile', {
+				method: 'POST',
+				body: formData
+			});
+
+			if (response.status === 200) {
+				location.reload();
+			} else {
+				uploadedFile = null;
+				loading = false;
+			}
 		}
 	}
 
@@ -48,41 +70,47 @@
 	let croppedImage: string;
 </script>
 
-<div class="relative flex h-48 w-full justify-center">
+<div class="relative flex h-48 w-full flex-col items-center">
 	{#if !uploadedFile}
-		<div class="relative mt-8">
-			<FileDrop let:droppable {handleFiles} acceptedMimes={['image/*']} max={1}>
-				<div
-					class:droppable
-					class=" absolute flex aspect-square h-full flex-col items-center justify-center rounded-xl bg-slate-900/70 outline-dashed outline-2 outline-slate-600"
-				>
-					<p class="mx-2 text-center">Change profile picture</p>
-					<Upload class="mt-2" />
+		<div class="flex">
+			<div class="relative mt-8">
+				<FileDrop let:droppable {handleFiles} acceptedMimes={['image/*']} max={1}>
 					<div
 						class:droppable
-						class="absolute -top-12 right-0 flex w-28 justify-center rounded-lg bg-slate-700 p-2"
+						class=" absolute flex aspect-square h-full flex-col items-center justify-center rounded-xl bg-slate-900/70 outline-dashed outline-2 outline-slate-600"
 					>
-						<Edit />
+						<p class="mx-2 text-center">Change profile picture</p>
+						<Upload class="mt-2" />
+						<div
+							class:droppable
+							class="absolute -top-12 right-0 flex w-28 justify-center rounded-lg bg-slate-700 p-2"
+						>
+							<Edit />
+						</div>
 					</div>
-				</div>
-			</FileDrop>
-			<Button
-				on:click={() => {
-					// uploadedFile = null;
-					// data.pic_available = false;
-					// TODO: apply
-				}}
-				variant="secondary"
-				class="absolute -top-12 left-0 !cursor-not-allowed bg-red-500/60 p-2 hover:bg-red-500/40"
-			>
-				<Trash2 />
-			</Button>
+				</FileDrop>
+
+				<Button
+					on:click={() => {
+						// uploadedFile = null;
+						// data.pic_available = false;
+						// TODO: apply
+					}}
+					variant="secondary"
+					class="absolute -top-12 left-0 !cursor-not-allowed bg-red-500/60 p-2 hover:bg-red-500/40"
+				>
+					<Trash2 />
+				</Button>
+			</div>
+			<ProfilePicture
+				id={data.profile._id}
+				class="mt-8 aspect-square h-40 w-40 min-w-40 shrink-0 rounded-xl bg-slate-400/30"
+			/>
 		</div>
 
-		<ProfilePicture
-			id={data.profile._id}
-			class="mt-8 aspect-square h-40 w-40 min-w-40 shrink-0 rounded-xl bg-slate-400/30"
-		/>
+		<FileDrop let:droppable handleFiles={handleGIFFiles} acceptedMimes={['image/*']} max={1}>
+			<div class:droppable class=" flex w-28 justify-center p-1 text-sm">Upload GIF</div>
+		</FileDrop>
 	{:else}
 		<div class="cropper relative aspect-square h-full !duration-0">
 			<Cropper

@@ -38,10 +38,8 @@
 
 {#if !hide}
 	<div class="relative mb-2 flex h-12 w-full flex-row items-center rounded-lg bg-slate-700 text-lg">
-		<a
-			class="flex h-full w-full items-center underline underline-offset-2"
-			href="/profile/{realFriend.username}"
-			><ProfilePicture id={realFriend._id} class="mx-1.5 h-9 w-9 rounded-full" />
+		<a class="flex h-full w-full items-center" href="/profile/{realFriend.username}"
+			><ProfilePicture id={realFriend._id} class="ml-1.5 mr-2 h-9 w-9 rounded-full" />
 			{realFriend.username}</a
 		>
 
