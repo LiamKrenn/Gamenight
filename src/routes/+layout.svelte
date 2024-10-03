@@ -127,6 +127,20 @@
 	}
 
 	$: hideNav = $page.url.href.includes('/game/');
+
+	if (browser) {
+		window.onerror = function (message, source, lineno, colno, error) {
+			console.log('Error:', message, source, lineno, colno, error);
+		};
+
+		window.addEventListener('unhandledrejection', function (event) {
+			console.log('Promise Rejection:', event);
+		});
+
+		window.addEventListener('error', function (event) {
+			console.log('Error E:', event);
+		});
+	}
 </script>
 
 {#if !hideNav}
