@@ -23,78 +23,90 @@
 
 	import SchnapsenClient, { SchnapsenClientBuilder } from 'gn-schnapsen-client';
 	import { wait } from './SchnopsnAnimation';
+	import { browser } from '$app/environment';
+	import { cardToCardType, ownHand } from './Schnopsn';
 
-	let instance = new MatchMaker(
-		'https://matchmaking.jjhost.at',
-		'saus' + Math.random(),
-		new SchnapsenClientBuilder()
-	);
-	let info: SearchInfo = {
-		game: 'Schnapsen',
-		mode: {
-			name: 'duo',
-			player_count: 2,
-			computer_lobby: false
-		}
-	};
-	instance.search(info);
-
-	instance.on('_servers', (servers) => {
-		console.log(servers);
-	});
-
-	instance.on('match', (client: SchnapsenClient) => {
-		console.log('Match found');
-
-		let onActive = async () => {
-			console.log('Playing Card');
-
-			await wait(1000);
-
-			console.log('Availabel: ' + JSON.stringify(client.cardsAvailable));
-			console.log('Trump: ' + JSON.stringify(client.trump));
-			console.log('Playable: ' + JSON.stringify(client.cardsPlayable));
-			client.playCard(
-				client.cardsPlayable[Math.floor(Math.random() * client.cardsPlayable.length)]
-			);
+	if (browser) {
+		let instance = new MatchMaker(
+			'https://matchmaking.jjhost.at',
+			'saus' + Math.random(),
+			new SchnapsenClientBuilder()
+		);
+		let info: SearchInfo = {
+			game: 'Schnapsen',
+			mode: {
+				name: 'duo',
+				player_count: 2,
+				computer_lobby: false
+			}
 		};
+		instance.search(info);
 
-		client.on('self:allow_draw_card', async () => {
-			console.log('Drawing card');
-			await wait(1000);
-			client.drawCard();
+		instance.on('_servers', (servers) => {
+			console.log(servers);
 		});
 
-		client.on('self:allow_play_card', onActive);
+		instance.on('match', (client: SchnapsenClient) => {
+			console.log('Match found');
 
-		client.on('play_card', (event) => {
-			console.log(
-				`Player ${event.data.user_id} played ${event.data.card.suit} ${event.data.card.value}`
-			);
-		});
+			let onActive = async () => {
+				console.log('Playing Card');
 
-		client.on('self:trick', (trick) => {
-			console.log('Trick: ' + trick);
-		});
+				await wait(1000);
 
-		client.on('self:card_available', (event) => {
-			console.log(event);
-		});
+				setTimeout(() => {
+					let coolcards = cardToCardType(client.cardsAvailable);
+					console.log('Available: ' + coolcards);
+					$ownHand = coolcards;
+					console.log('ADAAFDSF', browser);
 
-		client.on('self:card_unavailable', (event) => {
-			console.log(event);
-		});
+					console.log('Trump: ' + JSON.stringify(client.trump));
+					console.log('Playable: ' + JSON.stringify(client.cardsPlayable));
+					client.playCard(
+						client.cardsPlayable[Math.floor(Math.random() * client.cardsPlayable.length)]
+					);
+				}, 1000);
+			};
 
-		client.on('final_result', (event) => {
-			console.log(event);
-		});
+			client.on('self:allow_draw_card', async () => {
+				console.log('Drawing card');
+				await wait(1000);
+				setTimeout(() => {
+					client.drawCard();
+				}, 1000);
+			});
 
-		client.on('round_result', (result) => {
-			client.disconnect();
-			console.log('Round Result');
-			console.log(result);
+			client.on('self:allow_play_card', onActive);
+
+			client.on('play_card', (event) => {
+				console.log(
+					`Player ${event.data.user_id} played ${event.data.card.suit} ${event.data.card.value}`
+				);
+			});
+
+			client.on('self:trick', (trick) => {
+				console.log('Trick: ' + trick);
+			});
+
+			client.on('self:card_available', (event) => {
+				// console.log(event);
+			});
+
+			client.on('self:card_unavailable', (event) => {
+				// console.log(event);
+			});
+
+			client.on('final_result', (event) => {
+				console.log(event);
+			});
+
+			client.on('round_result', (result) => {
+				client.disconnect();
+				console.log('Round Result');
+				console.log(result);
+			});
 		});
-	});
+	}
 </script>
 
 <!-- <button on:click={buttonClicked} class="bg-slate-600 p-2">Test</button> -->

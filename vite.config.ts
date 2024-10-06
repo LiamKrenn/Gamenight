@@ -6,7 +6,7 @@ export default defineConfig({
 	plugins: [
 		sveltekit(),
 		nodePolyfills({
-			include: ['util'],
+			include: ['util', 'net'],
 			protocolImports: true
 		})
 	],

@@ -148,3 +148,56 @@ export const playCardDropzoneDiv = writable<HTMLDivElement | null>(null);
 export const stackDropzoneDiv = writable<HTMLDivElement | null>(null);
 
 export const currentlyDragging = writable<number | null>(null);
+
+interface Card {
+	value: CardVal;
+	suit: CardSuit;
+}
+
+enum CardVal {
+	Ten = 'Ten',
+	Jack = 'Jack',
+	Queen = 'Queen',
+	King = 'King',
+	Ace = 'Ace'
+}
+
+enum CardSuit {
+	Hearts = 'Hearts',
+	Diamonds = 'Diamonds',
+	Clubs = 'Clubs',
+	Spades = 'Spades'
+}
+
+export function cardToCardType(card: Card[]): CardType[] {
+	return card.map((c) => {
+		let newValue: 2 | 3 | 4 | 10 | 11 | undefined = undefined;
+
+		switch (c.value) {
+			case CardVal.Ten:
+				newValue = 10;
+				break;
+			case CardVal.Jack:
+				newValue = 2;
+				break;
+			case CardVal.Queen:
+				newValue = 3;
+				break;
+			case CardVal.King:
+				newValue = 4;
+				break;
+			case CardVal.Ace:
+				newValue = 11;
+				break;
+			default:
+				newValue = undefined;
+				break;
+		}
+
+		return {
+			skin: 'default',
+			color: c.suit.toLowerCase() as 'hearts' | 'diamonds' | 'clubs' | 'spades',
+			value: newValue
+		};
+	});
+}
