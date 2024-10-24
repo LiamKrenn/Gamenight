@@ -8,12 +8,26 @@
 		opponentPlayedCardDiv,
 		stackDropzoneDiv,
 		cancelDropzoneDiv,
-		playCardDropzoneDiv,
-		ownTricks,
-		opponentTricks,
-		ownEmptyCard
-	} from './Schnopsn';
+		playCardDropzoneDiv
+	} from './SchnopsnUI';
 	import { ZoomIn } from 'lucide-svelte';
+	import schnopsn from './Schnopsn';
+
+	const {
+		opponentHand,
+		opponentPlayedCard,
+		opponentEmptyCard,
+		opponentSkin,
+		opponentTricks,
+		ownEmptyCard,
+		ownHandUnsorted,
+		ownPlayedCard,
+		ownSkin,
+		ownTricks,
+		stackCard,
+		stackClosed,
+		stackEmptyCard
+	} = schnopsn;
 
 	let handWidth = 0;
 	let screenHeight = 0;

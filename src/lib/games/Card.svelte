@@ -8,12 +8,11 @@
 		playCardDropzoneDiv,
 		cancelDropzoneDiv,
 		stackDropzoneDiv,
-		currentlyDragging,
 		ownHandDivs,
-		ownHand,
 		cardSizeX,
-		cardSizeY
-	} from './schnopsn/Schnopsn';
+		cardSizeY,
+		blockUI
+	} from './schnopsn/SchnopsnUI';
 	import { onMount } from 'svelte';
 	import mapTouchToMouseFor from './touchToMouse';
 
@@ -28,12 +27,14 @@
 	export { styleString as style };
 	export { className as class };
 	export let position = { x: 0, y: 0 };
+	export let ownHandUI: CardType[] = [];
 
 	export let cardDiv: HTMLDivElement | null = null;
 	export let index: number = -1;
 	export let dragCallback: (
 		index: number,
-		position: { x: number; y: number }
+		position: { x: number; y: number },
+		combi: boolean
 	) => Promise<{ x: number; y: number; rotate: number } | void> = async () => {};
 
 	let hidden = card.value == undefined || card.color == undefined;
@@ -97,7 +98,7 @@
 		mapTouchToMouseFor('.touch');
 	});
 
-	$: disabled = !isDraggable || $currentlyDragging != null;
+	$: disabled = !isDraggable;
 
 	let combiData = {
 		deltaX: 0,
@@ -115,7 +116,7 @@
 	async function setupForCombi() {
 		if (card.value == 4 || card.value == 3) {
 			const combiValue = card.value == 4 ? 3 : 4;
-			const combiIndex = $ownHand.findIndex((c) => card.color == c.color && combiValue == c.value);
+			const combiIndex = ownHandUI.findIndex((c) => card.color == c.color && combiValue == c.value);
 			if (combiIndex != -1) {
 				let bb = getBB($ownHandDivs[combiIndex]);
 				let own_bb = getBB($ownHandDivs[index]);
@@ -162,7 +163,7 @@
 	style="width: {width}px; {styleString}"
 	use:draggable={{
 		position,
-		disabled,
+		disabled: disabled || $blockUI,
 		onDrag: ({ offsetX, offsetY }) => {
 			position = { x: offsetX, y: offsetY };
 			if (combiData.index != -1) {
@@ -174,7 +175,7 @@
 				const withinCancelDropzone = isWithin(cardDiv, $cancelDropzoneDiv || new HTMLDivElement());
 				const withinStackDropzone = isWithin(cardDiv, $stackDropzoneDiv || new HTMLDivElement());
 
-				if (withinStackDropzone) {
+				if (withinStackDropzone && combiData.index == -1) {
 					rotation.set(20);
 				} else {
 					rotation.set(0);
@@ -188,16 +189,18 @@
 		},
 		onDragStart: async () => {
 			drag = true;
-			$currentlyDragging = index;
 			setupForCombi();
 		},
 		onDragEnd: async () => {
 			drag = false;
 			scale.set(1);
-			let result = (await dragCallback(index, position)) || { x: 0, y: 0, rotate: 0 };
+			let result = (await dragCallback(index, position, combiData.index != -1)) || {
+				x: 0,
+				y: 0,
+				rotate: 0
+			};
 			position = { x: result.x, y: result.y };
 			rotation.set(result.rotate);
-			$currentlyDragging = null;
 			resetCombi();
 		}
 	}}
